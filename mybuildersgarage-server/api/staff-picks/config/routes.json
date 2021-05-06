@@ -1,0 +1,28 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/staff-picks",
+      "handler": "staff-picks.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/staff-picks",
+      "handler": "staff-picks.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/staff-picks",
+      "handler": "staff-picks.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

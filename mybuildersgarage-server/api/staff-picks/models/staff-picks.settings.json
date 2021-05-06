@@ -1,0 +1,18 @@
+{
+  "kind": "singleType",
+  "collectionName": "staff_picks",
+  "info": {
+    "name": "StaffPicks"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "games": {
+      "collection": "game"
+    }
+  }
+}

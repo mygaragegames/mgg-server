@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "playlists",
+  "info": {
+    "name": "Playlist"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60
+    },
+    "games": {
+      "collection": "game"
+    },
+    "user": {
+      "via": "playlists",
+      "plugin": "users-permissions",
+      "model": "user"
+    }
+  }
+}

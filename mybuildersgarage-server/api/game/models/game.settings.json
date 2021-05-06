@@ -1,0 +1,79 @@
+{
+  "kind": "collectionType",
+  "collectionName": "games",
+  "info": {
+    "name": "Game",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "maxLength": 60,
+      "minLength": 3
+    },
+    "description": {
+      "type": "text"
+    },
+    "gameID": {
+      "type": "string",
+      "maxLength": 11,
+      "minLength": 11,
+      "default": "000-000-000"
+    },
+    "cover": {
+      "model": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": true,
+      "pluginOptions": {}
+    },
+    "screenshots": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "youtubeURL": {
+      "type": "string",
+      "maxLength": 512
+    },
+    "displayStatus": {
+      "type": "enumeration",
+      "enum": [
+        "Published",
+        "Hidden",
+        "Private"
+      ]
+    },
+    "createdDate": {
+      "type": "date",
+      "required": true
+    },
+    "updatedDate": {
+      "type": "date",
+      "required": true
+    },
+    "channels": {
+      "collection": "channel"
+    },
+    "creator_user": {
+      "via": "games",
+      "plugin": "users-permissions",
+      "model": "user"
+    }
+  }
+}
