@@ -1,36 +1,37 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
 const chalk = require('chalk');
 
 const { User } = require('../../sequelize');
+const { getAllUsers, getOneUser, createUser } = require('../../src/users');
 
 router.route('/')
-    .get(getHandler)
-    .post(postHandler)
-    .put(putHandler)
-    .delete(deleteHandler);
+    .get(getAllHandler)
+    .post(postOneHandler);
 
-function getHandler(req, res) {
+router.route('/:userid')
+    .get(getOneHandler)
+    .put(putOneHandler)
+    .delete(deleteOneHandler);
+
+async function getAllHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Users->Get"));
 
-    User.findAll().then((users) => {
-        let output = [];
-
-        users.forEach((user) => {
-            let publicUser = user;
-
-            // remove security related fields
-            publicUser.password = undefined;
-            publicUser.email = undefined;
-
-            output.push(publicUser);
-        });
-
-        res.json(output);
-    });
+    let users = await getAllUsers();
+    res.status(200).json(users);
 }
-function postHandler(req, res) {
+async function getOneHandler(req, res) {
+    console.log(chalk.grey("[mgg-server] Users->GetOne"));
+
+    if(req.params.userid == undefined) {
+        res.status(400).json({name: "MISSING_DATA", text: "Required parameter: userid"});
+        return;
+    }
+
+    let userData = await getOneUser({ id: req.params.userid });
+    res.status(200).json(userData);
+}
+async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Users->Post"));
     
     const data = {
@@ -45,35 +46,32 @@ function postHandler(req, res) {
     };
 
     if(data.username === '' || data.password === '' || data.email === '') {
-        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: username, password, email"});
+        res.status(400).json({name: "MISSING_DATA", text: "Required fields: username, password, email"});
         return;
     }
 
-    bcrypt.hash(data.password, 12)
-        .then(function(passwordHash) {
-            data.password = passwordHash;
+    let createUserResponse = await createUser( data );
 
-            User.create(data).then(() => {
-                res.status(201).json({name: "USER_CREATED", text: "User was created"});
-            }).catch(function(error) {
-                if(error.name === 'SequelizeUniqueConstraintError') {
-                    console.log("ERRRORRR");
-                    res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
-                } else {
-                    console.log(error);
-                    res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
-                }
-            });
-        });
+    switch(createUserResponse) {
+        case 409:
+            res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
+            break;
+        case 500:
+            res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+            break;
+        default:
+            res.status(201).json({name: "USER_CREATED", text: "User was created"});
+            break;
+    }
 }
-function putHandler(req, res) {
+function putOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Users->Put"));
 
     // TODO: Check for Authorization
 
     // TODO: Update User
 }
-function deleteHandler(req, res) {
+function deleteOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Users->Delete"));
 
     // TODO: Check for Authorization
