@@ -1,8 +1,8 @@
 {
   "kind": "collectionType",
-  "collectionName": "playlists",
+  "collectionName": "comments",
   "info": {
-    "name": "Playlist",
+    "name": "Comment",
     "description": ""
   },
   "options": {
@@ -12,18 +12,17 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "title": {
-      "type": "string",
-      "required": true,
-      "maxLength": 60
-    },
-    "games": {
-      "collection": "game"
-    },
-    "user": {
-      "via": "playlists",
+    "author_user": {
       "plugin": "users-permissions",
       "model": "user"
+    },
+    "comment": {
+      "type": "text",
+      "required": true
+    },
+    "createDate": {
+      "type": "date",
+      "required": true
     }
   }
 }

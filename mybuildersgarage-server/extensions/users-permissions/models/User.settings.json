@@ -78,8 +78,8 @@
       "collection": "game"
     },
     "playlists": {
-      "collection": "playlist",
-      "via": "user"
+      "via": "user",
+      "collection": "playlist"
     }
   }
 }

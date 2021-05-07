@@ -329,9 +329,7 @@
               "required": [
                 "id",
                 "title",
-                "cover",
-                "createdDate",
-                "updatedDate"
+                "createdDate"
               ],
               "properties": {
                 "id": {
@@ -379,9 +377,6 @@
                   }
                 },
                 "creator_user": {
-                  "type": "string"
-                },
-                "published_at": {
                   "type": "string"
                 },
                 "created_by": {

@@ -517,8 +517,7 @@
       "Channel": {
         "required": [
           "id",
-          "title",
-          "cover"
+          "title"
         ],
         "properties": {
           "id": {
@@ -596,10 +595,6 @@
                 "type": "string"
               }
             }
-          },
-          "published_at": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },
@@ -613,10 +608,6 @@
           },
           "description": {
             "type": "string"
-          },
-          "published_at": {
-            "type": "string",
-            "format": "date-time"
           },
           "created_by": {
             "type": "string"

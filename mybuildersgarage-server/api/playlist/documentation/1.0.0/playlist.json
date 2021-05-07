@@ -533,9 +533,7 @@
               "required": [
                 "id",
                 "title",
-                "cover",
-                "createdDate",
-                "updatedDate"
+                "createdDate"
               ],
               "properties": {
                 "id": {
@@ -583,9 +581,6 @@
                   }
                 },
                 "creator_user": {
-                  "type": "string"
-                },
-                "published_at": {
                   "type": "string"
                 },
                 "created_by": {
@@ -659,10 +654,6 @@
                 "type": "string"
               }
             }
-          },
-          "published_at": {
-            "type": "string",
-            "format": "date-time"
           }
         }
       },
@@ -683,10 +674,6 @@
           },
           "user": {
             "type": "string"
-          },
-          "published_at": {
-            "type": "string",
-            "format": "date-time"
           },
           "created_by": {
             "type": "string"

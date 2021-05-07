@@ -1,6 +1,6 @@
 {
   "paths": {
-    "/games": {
+    "/comments": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -12,7 +12,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/Game"
+                    "$ref": "#/components/schemas/Comment"
                   }
                 }
               }
@@ -51,7 +51,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Comment"
         ],
         "parameters": [
           {
@@ -201,7 +201,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/Comment"
                 }
               }
             }
@@ -239,7 +239,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Comment"
         ],
         "requestBody": {
           "description": "",
@@ -247,14 +247,14 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewGame"
+                "$ref": "#/components/schemas/NewComment"
               }
             }
           }
         }
       }
     },
-    "/games/count": {
+    "/comments/count": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -306,12 +306,12 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Comment"
         ],
         "parameters": []
       }
     },
-    "/games/{id}": {
+    "/comments/{id}": {
       "get": {
         "deprecated": false,
         "description": "",
@@ -321,7 +321,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/Comment"
                 }
               }
             }
@@ -359,7 +359,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Comment"
         ],
         "parameters": [
           {
@@ -383,7 +383,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Game"
+                  "$ref": "#/components/schemas/Comment"
                 }
               }
             }
@@ -421,7 +421,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Comment"
         ],
         "requestBody": {
           "description": "",
@@ -429,7 +429,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewGame"
+                "$ref": "#/components/schemas/NewComment"
               }
             }
           }
@@ -495,7 +495,7 @@
         },
         "summary": "",
         "tags": [
-          "Game"
+          "Comment"
         ],
         "parameters": [
           {
@@ -514,217 +514,17 @@
   },
   "components": {
     "schemas": {
-      "Game": {
+      "Comment": {
         "required": [
           "id",
-          "title",
-          "createdDate"
+          "comment",
+          "createDate"
         ],
         "properties": {
           "id": {
             "type": "string"
           },
-          "title": {
-            "type": "string",
-            "maxLength": 60,
-            "minLength": 3
-          },
-          "description": {
-            "type": "string"
-          },
-          "gameID": {
-            "type": "string",
-            "default": "000-000-000",
-            "maxLength": 11,
-            "minLength": 11
-          },
-          "cover": {
-            "required": [
-              "id",
-              "name",
-              "hash",
-              "mime",
-              "size",
-              "url",
-              "provider"
-            ],
-            "properties": {
-              "id": {
-                "type": "string"
-              },
-              "name": {
-                "type": "string"
-              },
-              "alternativeText": {
-                "type": "string"
-              },
-              "caption": {
-                "type": "string"
-              },
-              "width": {
-                "type": "integer"
-              },
-              "height": {
-                "type": "integer"
-              },
-              "formats": {
-                "type": "object"
-              },
-              "hash": {
-                "type": "string"
-              },
-              "ext": {
-                "type": "string"
-              },
-              "mime": {
-                "type": "string"
-              },
-              "size": {
-                "type": "number"
-              },
-              "url": {
-                "type": "string"
-              },
-              "previewUrl": {
-                "type": "string"
-              },
-              "provider": {
-                "type": "string"
-              },
-              "provider_metadata": {
-                "type": "object"
-              },
-              "related": {
-                "type": "string"
-              },
-              "created_by": {
-                "type": "string"
-              },
-              "updated_by": {
-                "type": "string"
-              }
-            }
-          },
-          "screenshots": {
-            "type": "array",
-            "items": {
-              "required": [
-                "id",
-                "name",
-                "hash",
-                "mime",
-                "size",
-                "url",
-                "provider"
-              ],
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "name": {
-                  "type": "string"
-                },
-                "alternativeText": {
-                  "type": "string"
-                },
-                "caption": {
-                  "type": "string"
-                },
-                "width": {
-                  "type": "integer"
-                },
-                "height": {
-                  "type": "integer"
-                },
-                "formats": {
-                  "type": "object"
-                },
-                "hash": {
-                  "type": "string"
-                },
-                "ext": {
-                  "type": "string"
-                },
-                "mime": {
-                  "type": "string"
-                },
-                "size": {
-                  "type": "number"
-                },
-                "url": {
-                  "type": "string"
-                },
-                "previewUrl": {
-                  "type": "string"
-                },
-                "provider": {
-                  "type": "string"
-                },
-                "provider_metadata": {
-                  "type": "object"
-                },
-                "related": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "youtubeURL": {
-            "type": "string",
-            "maxLength": 512
-          },
-          "displayStatus": {
-            "type": "string",
-            "enum": [
-              "Published",
-              "Hidden",
-              "Private"
-            ]
-          },
-          "createdDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "updatedDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "channels": {
-            "type": "array",
-            "items": {
-              "required": [
-                "id",
-                "title"
-              ],
-              "properties": {
-                "id": {
-                  "type": "string"
-                },
-                "title": {
-                  "type": "string"
-                },
-                "description": {
-                  "type": "string"
-                },
-                "cover": {
-                  "type": "string"
-                },
-                "created_by": {
-                  "type": "string"
-                },
-                "updated_by": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "creator_user": {
+          "author_user": {
             "required": [
               "id",
               "username",
@@ -786,57 +586,31 @@
                 "type": "string"
               }
             }
+          },
+          "comment": {
+            "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date"
           }
         }
       },
-      "NewGame": {
+      "NewComment": {
         "required": [
-          "title",
-          "createdDate"
+          "comment",
+          "createDate"
         ],
         "properties": {
-          "title": {
-            "type": "string",
-            "maxLength": 60,
-            "minLength": 3
-          },
-          "description": {
+          "author_user": {
             "type": "string"
           },
-          "gameID": {
-            "type": "string",
-            "default": "000-000-000",
-            "maxLength": 11,
-            "minLength": 11
-          },
-          "youtubeURL": {
-            "type": "string",
-            "maxLength": 512
-          },
-          "displayStatus": {
-            "type": "string",
-            "enum": [
-              "Published",
-              "Hidden",
-              "Private"
-            ]
-          },
-          "createdDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "updatedDate": {
-            "type": "string",
-            "format": "date"
-          },
-          "channels": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "creator_user": {
+          "comment": {
             "type": "string"
+          },
+          "createDate": {
+            "type": "string",
+            "format": "date"
           },
           "created_by": {
             "type": "string"
@@ -850,7 +624,7 @@
   },
   "tags": [
     {
-      "name": "Game"
+      "name": "Comment"
     }
   ]
 }

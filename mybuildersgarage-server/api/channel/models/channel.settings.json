@@ -8,7 +8,7 @@
   "options": {
     "increments": true,
     "timestamps": true,
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -26,7 +26,7 @@
         "images"
       ],
       "plugin": "upload",
-      "required": true,
+      "required": false,
       "pluginOptions": {}
     }
   }
