@@ -25,7 +25,7 @@ if(!isDev) {
 // Servers
 const httpServer = http.createServer(app);
 httpServer.listen(process.env.PORT_HTTP, () => {
-    console.log(chalk.green(`[mgg-server] HTTP server running.`));
+    console.log(chalk.green(`[mgg-server] HTTP server running on port ${process.env.PORT_HTTP}.`));
 });
 
 if(!isDev) {
@@ -40,7 +40,7 @@ if(!isDev) {
 
     const httpsServer = https.createServer(credentials, app);
     httpsServer.listen(process.env.PORT_HTTPS, () => {
-        console.log(chalk.green(`[mgg-server] HTTPS server running.`));
+        console.log(chalk.green(`[mgg-server] HTTPS server running on port ${process.env.PORT_HTTPS}.`));
     });
 } else {
     console.log(chalk.grey(`[mgg-server] HTTPS server disabled on development instances.`));
