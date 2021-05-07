@@ -1,5 +1,5 @@
 {
-  "name": "mybuildersgarage-server",
+  "name": "mgg-server",
   "private": true,
   "version": "0.1.0",
   "description": "A Strapi application",
@@ -26,7 +26,7 @@
     "strapi-utils": "3.6.1"
   },
   "author": {
-    "name": "A Strapi developer"
+    "name": "indiegesindel"
   },
   "strapi": {
     "uuid": "164920b9-a4f3-4974-8ea9-b2ee367d05a6"
