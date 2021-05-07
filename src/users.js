@@ -40,13 +40,17 @@ function createUser( data ) {
             .then(function(passwordHash) {
                 data.password = passwordHash;
 
-                User.create(data).then(() => {
-                    resolve(201);
+                User.create(data).then((userData) => {
+                    // remove security related fields
+                    userData.password = undefined;
+                    userData.email = undefined;
+
+                    resolve(userData);
                 }).catch(function(error) {
                     if(error.name === 'SequelizeUniqueConstraintError') {
-                        resolve(409);
+                        reject(409);
                     } else {
-                        resolve(500);
+                        reject(error);
                     }
                 });
             });

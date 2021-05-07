@@ -50,19 +50,17 @@ async function postOneHandler(req, res) {
         return;
     }
 
-    let createUserResponse = await createUser( data );
+    createUser( data ).then((user) => {
+        res.status(201).json(user);
+    }).catch((error) => {
+        console.error(error);
 
-    switch(createUserResponse) {
-        case 409:
+        if(error == 409) {
             res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
-            break;
-        case 500:
+        } else {
             res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
-            break;
-        default:
-            res.status(201).json({name: "USER_CREATED", text: "User was created"});
-            break;
-    }
+        }
+    });
 }
 function putOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Users->Put"));
