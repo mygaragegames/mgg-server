@@ -1,0 +1,32 @@
+{
+  "name": "mgg-comingsoon",
+  "version": "1.0.0",
+  "description": "Coming Soon page for MyGarage.games",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test:setup": "node tests/setup.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LauraWebdev/mgg-comingsoon.git"
+  },
+  "author": "indiegesindel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LauraWebdev/mgg-comingsoon/issues"
+  },
+  "homepage": "https://github.com/LauraWebdev/mgg-comingsoon#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "chalk": "^3.0.0",
+    "dotenv": "^9.0.0",
+    "express": "^4.17.1",
+    "express-force-https": "^1.0.0",
+    "http": "*",
+    "https": "^1.0.0",
+    "mysql2": "^2.2.5",
+    "nodemon": "^2.0.7",
+    "sequelize": "^6.6.2"
+  }
+}
