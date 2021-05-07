@@ -9,18 +9,14 @@ const { createUser } = require('../src/users');
 
 // Create Dummy Users
 for(var i = 0; i < 10; i++) {
-    let currentI = i;
-
     createUser({
-        "username": "taw" + currentI,
-        "password": "taw1337" + currentI,
-        "email": "taw" + currentI + "@mygarage.games"
-    }).then((responseCode) => {
-        if(responseCode == 201) {
-            console.log(chalk.green("[mgg-server] Created user 'taw" + currentI + "'"));
-        } else {
-            console.log(chalk.red("[mgg-server] 'taw" + currentI + "' could not be created! Error: " + responseCode));
-        }
+        "username": "taw" + i,
+        "password": "taw1337" + i,
+        "email": "taw" + i + "@mygarage.games"
+    }).then((userData) => {
+        console.log(chalk.green("[mgg-server] Created user '" + userData.username + "'"));
+    }).catch((error) => {
+        console.log(chalk.red("[mgg-server] Error during user creation: " + error));
     });
 }
 
