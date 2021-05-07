@@ -3,10 +3,7 @@
 ## Setup
 - Clone this repo
 - `npm install`
-- `yarn install`
+- Rename .env.example to .env and edit
 
-## Start Dev Server
-- `npm run develop`
-
-## Start Prod Server
+## Start Server
 - `npm run start`
