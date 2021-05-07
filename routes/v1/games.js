@@ -3,21 +3,35 @@ const router = express.Router();
 const chalk = require('chalk');
 
 const { Game } = require('../../sequelize');
+const { getAllGames, getOneGame, createGame } = require('../../src/games');
 
 router.route('/')
-    .get(getHandler)
-    .post(postHandler)
-    .put(putHandler)
-    .delete(deleteHandler);
+    .get(getAllHandler)
+    .post(postOneHandler);
 
-function getHandler(req, res) {
+router.route('/:gameid')
+    .get(getOneHandler)
+    .put(putOneHandler)
+    .delete(deleteOneHandler);
+
+async function getAllHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Get"));
 
-    Game.findAll().then((users) => {
-        res.json(users);
-    });
+    let games = await getAllGames();
+    res.status(200).json(games);
 }
-function postHandler(req, res) {
+async function getOneHandler(req, res) {
+    console.log(chalk.grey("[mgg-server] Games->Get"));
+
+    if(req.params.gameid == undefined) {
+        res.status(400).json({name: "MISSING_DATA", text: "Required parameter: gameid"});
+        return;
+    }
+
+    let gameData = await getOneGame({ id: req.params.gameid });
+    res.status(200).json(gameData);
+}
+async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Post"));
 
     // TODO: Check Authorization
@@ -36,26 +50,21 @@ function postHandler(req, res) {
         return;
     }
 
-    Game.create(data).then(() => {
-        res.status(201).json({name: "GAME_CREATED", text: "Game was created"});
-    }).catch(function(error) {
-        if(error.name === 'SequelizeUniqueConstraintError') {
-            console.log("ERRRORRR");
-            res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
-        } else {
-            console.log(error);
-            res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
-        }
+    createGame( data ).then((game) => {
+        res.status(201).json( game );
+    }).catch((error) => {
+        console.error(error);
+        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
     });
 }
-function putHandler(req, res) {
+async function putOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Put"));
 
     // TODO: Check Authorization
 
     // TODO: Update Game
 }
-function deleteHandler(req, res) {
+async function deleteOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Delete"));
 
     // TODO: Check Authorization
