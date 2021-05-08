@@ -76,3 +76,6 @@ typings/
 .fusebox/
 .env
 .env
+
+public/avatar/
+public/gameScreenshots/
