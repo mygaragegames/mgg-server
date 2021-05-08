@@ -4,6 +4,7 @@ const chalk = require('chalk');
 
 const { Game } = require('../../sequelize');
 const { getAllGames, getOneGame, createGame } = require('../../src/games');
+const { getGameScreenshots } = require('../../src/gameScreenshots');
 
 router.route('/')
     .get(getAllHandler)
@@ -28,7 +29,11 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let gameData = await getOneGame({ id: req.params.gameid });
+    let gameData = {
+        detail: await getOneGame({ id: parseInt(req.params.gameid) }),
+        screenshots: await getGameScreenshots({ gameId: parseInt(req.params.gameid) })
+    };
+
     res.status(200).json(gameData);
 }
 async function postOneHandler(req, res) {

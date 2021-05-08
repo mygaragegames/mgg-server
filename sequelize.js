@@ -7,12 +7,20 @@ const sequelize = new Sequelize(process.env.DATABASE_URL, {
 
 const UserModel = require('./models/user');
 const GameModel = require('./models/game');
+const GameScreenshotModel = require('./models/gameScreenshot');
 
 const User = UserModel(sequelize, Sequelize);
 const Game = GameModel(sequelize, Sequelize);
+const GameScreenshot = GameScreenshotModel(sequelize, Sequelize);
 
 User.hasMany(Game, { as: "games" });
 Game.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user"
+});
+
+Game.hasMany(GameScreenshot, { as: "screenshots" });
+GameScreenshot.belongsTo(Game, {
     foreignKey: "gameId",
     as: "game"
 })
@@ -23,5 +31,6 @@ sequelize.sync().then(() => {
 
 module.exports = {
     User,
-    Game
+    Game,
+    GameScreenshot
 };
