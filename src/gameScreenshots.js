@@ -64,24 +64,20 @@ function saveGameScreenshot( game, files ) {
     });
 }
 
-function deleteGameScreenshot( gameScreenshotID ) {
+function deleteGameScreenshot( gameScreenshot ) {
     return new Promise((resolve, reject) => {
-        getOneGameScreenshot( { id: gameScreenshotID }).then((data) => {
-            if(data === null) {
-                reject(404);
-                return;
-            }
+        if(gameScreenshot === null) {
+            reject(404);
+            return;
+        }
 
-            let imagePath = path.join("./public/gameScreenshots/" + data.fileName);
-            
-            // remove physical file
-            fs.unlinkSync(imagePath);
+        let imagePath = path.join("./public/gameScreenshots/" + gameScreenshot.fileName);
+        
+        // remove physical file
+        fs.unlinkSync(imagePath);
 
-            GameScreenshot.destroy( { where: { id: gameScreenshotID } } ).then(() => {
-                resolve();
-            }).catch((error) => {
-                reject(error);
-            });
+        gameScreenshot.destroy().then(() => {
+            resolve();
         }).catch((error) => {
             reject(error);
         });

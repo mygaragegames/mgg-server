@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
-
-const { Game } = require('../../sequelize');
+const auth = require('../../middlewares/auth');
+const { User, Game } = require('../../sequelize');
 const { getAllGames, getOneGame, createGame } = require('../../src/games');
 const { getGameScreenshots } = require('../../src/gameScreenshots');
 
 router.route('/')
     .get(getAllHandler)
-    .post(postOneHandler);
+    .post(auth.verifyToken, postOneHandler);
 
 router.route('/:gameid')
     .get(getOneHandler)
-    .put(putOneHandler)
-    .delete(deleteOneHandler);
+    .put(auth.verifyToken, putOneHandler)
+    .delete(auth.verifyToken, deleteOneHandler);
 
 async function getAllHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Get"));
@@ -39,15 +39,13 @@ async function getOneHandler(req, res) {
 async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Post"));
 
-    // TODO: Check Authorization
-
     const data = {
         title: req.body.title,
         ingameID: req.body.ingameID,
         description: req.body.description,
         youtubeID: req.body.youtubeID,
         displayStatus: req.body.displayStatus,
-        userId: 1
+        userId: req.user.id
     };
 
     if(data.title === '' || data.ingameID === '') {
@@ -64,8 +62,6 @@ async function postOneHandler(req, res) {
 }
 async function putOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Put"));
-
-    // TODO: Check Authorization
 
     // TODO: Update Game
 }

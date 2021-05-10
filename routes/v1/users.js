@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
-
+const auth = require('../../middlewares/auth');
 const { User } = require('../../sequelize');
 const { getAllUsers, getOneUser, createUser, setAvatar, removeAvatar } = require('../../src/users');
 
@@ -14,21 +14,28 @@ router.route('/')
 
 router.route('/:userid')
     .get(getOneHandler)
-    .put(putOneHandler)
-    .delete(deleteOneHandler);
+    .put(auth.verifyToken, putOneHandler)
+    .delete(auth.verifyToken, deleteOneHandler);
 
 router.route('/:userid/updateAvatar')
-    .put(upload.single('avatar'), putUpdateAvatarHandler)
-    .delete(deleteUpdateAvatarHandler)
+    .put(auth.verifyToken, upload.single('avatar'), putUpdateAvatarHandler)
+    .delete(auth.verifyToken, deleteUpdateAvatarHandler)
 
 async function getAllHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->Get"));
+    console.log(chalk.grey("[mgg-server] (Users) Users->Get"));
 
     let users = await getAllUsers();
+
+    users.forEach(user => {
+        // remove security related fields for return
+        user.password = undefined;
+        user.email = undefined;
+    });
+    
     res.status(200).json(users);
 }
 async function getOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->GetOne"));
+    console.log(chalk.grey("[mgg-server] (Users) Users->GetOne"));
 
     if(req.params.userid === undefined) {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: userid"});
@@ -42,11 +49,15 @@ async function getOneHandler(req, res) {
     } else if(userData === 404) {
         res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
     } else {
+        // remove security related fields for return
+        userData.password = undefined;
+        userData.email = undefined;
+
         res.status(200).json(userData);
     }
 }
 async function postOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->Post"));
+    console.log(chalk.grey("[mgg-server] (Users) Users->Post"));
     
     const data = {
         username: req.body.username,
@@ -64,8 +75,12 @@ async function postOneHandler(req, res) {
         return;
     }
 
-    createUser( data ).then((user) => {
-        res.status(201).json(user);
+    createUser( data ).then((userData) => {
+        // remove security related fields for return
+        userData.password = undefined;
+        userData.email = undefined;
+
+        res.status(201).json(userData);
     }).catch((error) => {
         console.error(error);
 
@@ -77,21 +92,17 @@ async function postOneHandler(req, res) {
     });
 }
 async function putOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->Put"));
-
-    // TODO: Check for Authorization
+    console.log(chalk.grey("[mgg-server] (Users) Users->Put"));
 
     // TODO: Update User
 }
 async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->Delete"));
-
-    // TODO: Check for Authorization
+    console.log(chalk.grey("[mgg-server] (Users) Users->Delete"));
 
     // TODO: Remove User
 }
 async function putUpdateAvatarHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->PutUpdateAvatar"));
+    console.log(chalk.grey("[mgg-server] (Users) Users->PutUpdateAvatar"));
 
     if(req.params.userid === '' || req.file === undefined) {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: userId, avatar"});
@@ -105,7 +116,11 @@ async function putUpdateAvatarHandler(req, res) {
         return;
     }
 
-    // TODO: Check for Authorization
+    // Check if user is owner or moderator/admin
+    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
     
     setAvatar(user, req.file).then(() => {
         res.status(201).json({name: "USER_AVATAR_UPDATED", text: "Avatar was updated."});
@@ -119,7 +134,7 @@ async function putUpdateAvatarHandler(req, res) {
     });
 }
 async function deleteUpdateAvatarHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Users->DeleteUpdateAvatar"));
+    console.log(chalk.grey("[mgg-server] (Users) Users->DeleteUpdateAvatar"));
 
     if(req.params.userid === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: userId"});
@@ -133,7 +148,11 @@ async function deleteUpdateAvatarHandler(req, res) {
         return;
     }
 
-    // TODO: Check for Authorization
+    // Check if user is owner or moderator/admin
+    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
 
     removeAvatar( user ).then(() => {
         res.status(200).json({name: "USER_AVATAR_UPDATED", text: "Avatar was removed."});

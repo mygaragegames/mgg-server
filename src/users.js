@@ -15,10 +15,6 @@ function getAllUsers() {
             users.forEach((user) => {
                 let publicUser = user;
 
-                // remove security related fields
-                publicUser.password = undefined;
-                publicUser.email = undefined;
-
                 output.push(publicUser);
             });
 
@@ -35,10 +31,6 @@ function getOneUser( searchOptions ) {
                 return;
             }
 
-            // remove security related fields
-            userData.password = undefined;
-            userData.email = undefined;
-
             resolve(userData);
         });
     });
@@ -46,24 +38,20 @@ function getOneUser( searchOptions ) {
 
 function createUser( data ) {
     return new Promise((resolve, reject) => {
-        bcrypt.hash(data.password, 12)
-            .then(function(passwordHash) {
-                data.password = passwordHash;
+        data.password = bcrypt.hashSync(data.password, 12);
 
-                User.create(data).then((userData) => {
-                    // remove security related fields
-                    userData.password = undefined;
-                    userData.email = undefined;
+        User.create(data).then((userData) => {
+            // Give user role
+            userData.setRoles([1]);
 
-                    resolve(userData);
-                }).catch(function(error) {
-                    if(error.name === 'SequelizeUniqueConstraintError') {
-                        reject(409);
-                    } else {
-                        reject(error);
-                    }
-                });
-            });
+            resolve(userData);
+        }).catch(function(error) {
+            if(error.name === 'SequelizeUniqueConstraintError') {
+                reject(409);
+            } else {
+                reject(error);
+            }
+        });
     });
 }
 
@@ -84,6 +72,13 @@ function setAvatar( user, avatarFile ) {
         if(user === null){
             reject(404);
             return;
+        }
+
+        // Remove previous avatars if existing
+        if(user.avatarFileName !== null) {
+            let imagePath = path.join("./public/avatars/" + user.avatarFileName);
+            fs.unlinkSync(imagePath);
+            user.avatarFile = null;
         }
 
         // Filetype Check

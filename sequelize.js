@@ -29,9 +29,9 @@ User.belongsToMany(UserRole, {
     foreignKey: "user_id",
 });
 UserRole.belongsToMany(User, {
-    through: "user_Roles",
+    through: "user_roles",
     as: "users",
-    foreignKey: "role_id",
+    foreignKey: "userRole_id",
 });
 
 Game.hasMany(GameScreenshot, { as: "screenshots" });
@@ -57,11 +57,14 @@ function createRoles() {
         id: 4,
         name: "admin"
     });
+
+    console.log(chalk.cyan('[mgg-server] (Sequelize) Created roles.'));
 }
 
-sequelize.sync({force: true}).then(() => {
-    console.log(chalk.grey('Sequelize updated database.'));
-    createRoles();
+let forceReset = false;
+sequelize.sync({ force: forceReset }).then(() => {
+    console.log(chalk.grey('[mgg-server] (Sequelize) Updated database.'));
+    if(forceReset) createRoles();
 });
 
 module.exports = {
