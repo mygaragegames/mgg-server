@@ -3,7 +3,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { User, Game } = require('../../sequelize');
-const { getAllGames, getOneGame, createGame } = require('../../src/games');
+const { getAllGames, getOneGame, createGame, deleteGame, updateGame } = require('../../src/games');
 const { getGameScreenshots } = require('../../src/gameScreenshots');
 
 router.route('/')
@@ -19,6 +19,13 @@ async function getAllHandler(req, res) {
     console.log(chalk.grey("[mgg-server] Games->Get"));
 
     let games = await getAllGames();
+    games.forEach((game) => {
+        // remove security related fields for return
+        game.user.password = undefined;
+        game.user.email = undefined;
+    
+    });
+
     res.status(200).json(games);
 }
 async function getOneHandler(req, res) {
@@ -62,16 +69,55 @@ async function postOneHandler(req, res) {
     });
 }
 async function putOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Games->Put"));
+    console.log(chalk.grey("[mgg-server] (Games) Games->Put"));
 
-    // TODO: Update Game
+    const data = {
+        title: req.body.title,
+        ingameID: req.body.ingameID,
+        description: req.body.description,
+        displayStatus: req.body.displayStatus,
+    };
+
+    let game = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
+    if(game === null) {
+        res.status(404).json({name: "GAME_NOT_FOUND", text: "There is no game with the id " + req.params.gameid});
+        return;
+    }
+
+    // Check if user is owner or moderator/admin
+    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    updateGame( game, data ).then((data) => {
+        res.status(201).json({name: "GAME_UPDATED", text: "Game was updated."});
+        return;
+    }).catch((error) => {
+        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+    });
 }
 async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Games->Delete"));
+    console.log(chalk.grey("[mgg-server] (Games) Games->Delete"));
 
-    // TODO: Check Authorization
+    let game = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
+    if(game === null) {
+        res.status(404).json({name: "GAME_NOT_FOUND", text: "There is no game with the id " + req.params.gameid});
+        return;
+    }
 
-    // TODO: Remove Game
+    // Check if user is owner or moderator/admin
+    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    deleteGame( game ).then((data) => {
+        res.status(200).json({name: "GAME_DELETED", text: "Game was deleted."});
+        return;
+    }).catch((error) => {
+        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+    });
 }
 
 module.exports = router;

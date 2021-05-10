@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 const chalk = require('chalk');
 const { Game, User, GameScreenshot } = require('../sequelize');
+const { deleteGameScreenshot } = require('./gameScreenshots');
 
 function getAllGames() {
     return new Promise((resolve, reject) => {
-        Game.findAll().then((games) => {
+        Game.findAll({ include: { model: User, as: "user" } }).then((games) => {
             resolve(games);
         });
     });
@@ -28,15 +29,32 @@ function createGame( data ) {
     });
 }
 
-function updateGame( gameID, data ) {
+function updateGame( game, newData ) {
     return new Promise((resolve, reject) => {
-        resolve();
+        game.update( newData ).then((newGame) => {
+            resolve(newGame);
+        }).catch((error) => {
+            reject(error);
+        });
     });
 }
 
-function deleteGame( gameID ) {
+function deleteGame( game ) {
     return new Promise((resolve, reject) => {
-        resolve();
+        // Remove Screenshots
+        game.screenshots.forEach((gameScreenshot) => {
+            deleteGameScreenshot(gameScreenshot);
+        });
+
+        // TODO: Remove Playlist Entries
+
+        // TODO: Remove Comments
+
+        game.destroy().then(() => {
+            resolve();
+        }).catch((error) => {
+            reject(error);
+        });
     });
 }
 
