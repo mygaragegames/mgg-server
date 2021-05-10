@@ -29,10 +29,11 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let gameData = {
-        detail: await getOneGame({ id: parseInt(req.params.gameid) }),
-        screenshots: await getGameScreenshots({ gameId: parseInt(req.params.gameid) })
-    };
+    let gameData = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
+    if(gameData === null) {
+        res.status(404).json({name: "GAME_NOT_FOUND", text: "There is no game with the id " + req.params.gameid});
+        return;
+    }
 
     res.status(200).json(gameData);
 }
