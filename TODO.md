@@ -5,7 +5,6 @@ Project Description
 ### Todo
 
 - [ ] [Model] Channel  
-- [ ] [Model] GameComment  
 - [ ] [Src] GetAllChannels()  
 - [ ] [Src] GetOneChannel( searchOptions )  
 - [ ] [Src] CreateChannel( channelData )  
@@ -14,19 +13,24 @@ Project Description
 - [ ] [Route] GetAllChannels  
 - [ ] [Route] GetOneChannel  
 - [ ] [Route] CreateChannel  
-- [ ] [Route] UpdateChannel  
 - [ ] [Route] DeleteChannel  
-- [ ] [Src] GetComments( game )  
-- [ ] [Src] CreateComment( game, text )  
-- [ ] [Src] UpdateComment( comment, newText )  
-- [ ] [Src] DeleteComment( comment )  
-- [ ] [Route] CreateComment  
-- [ ] [Route] UpdateComment  
-- [ ] [DeleteComment]  
+- [ ] [Route] UpdateChannel  
+- [ ] [Src] PlaylistAddGame( playlist, game )  
+- [ ] [Src] PlaylistRemoveGame( playlist, game )  
+- [ ] [Route] PlaylistAddGame  
+- [ ] [Route] PlaylistRemoveGame  
 
 ### In Progress
 
 
 ### Done ✓
 
+- [x] [Model] GameComment  
+- [x] [Src] CreateComment( game, text )  
+- [x] [Src] GetComments( game )  
+- [x] [Src] UpdateComment( comment, newText )  
+- [x] [Src] DeleteComment( comment )  
+- [x] [Route] CreateComment  
+- [x] [Route] DeleteComment  
+- [x] [Route] UpdateComment  
 
