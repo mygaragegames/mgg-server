@@ -5,7 +5,7 @@ const readChunk = require('read-chunk');
 const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
-const { User } = require('../sequelize');
+const { User, Playlist } = require('../sequelize');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@ function getAllUsers() {
 
 function getOneUser( searchOptions ) {
     return new Promise((resolve, reject) => {
-        User.findOne({ where: searchOptions}).then((userData) => {
+        User.findOne({ where: searchOptions, include: { model: Playlist, as: "playlists" }}).then((userData) => {
             if(userData === null){
                 reject(404);
                 return;
@@ -44,8 +44,15 @@ function createUser( data ) {
             // Give user role
             userData.setRoles([1]);
 
-            resolve(userData);
-        }).catch(function(error) {
+            Playlist.create({
+                title: "Play later",
+                userId: userData.id
+            }).then(() => {
+                resolve(userData);
+            }).catch((error) => {
+                reject(error);
+            });
+        }).catch((error) => {
             if(error.name === 'SequelizeUniqueConstraintError') {
                 reject(409);
             } else {
