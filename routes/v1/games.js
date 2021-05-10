@@ -32,7 +32,7 @@ async function getOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
 
     if(req.params.gameid == undefined) {
-        res.status(400).json({name: "MISSING_DATA", text: "Required parameter: gameid"});
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required parameter: gameid"});
         return;
     }
 
@@ -41,6 +41,12 @@ async function getOneHandler(req, res) {
         res.status(404).json({name: "GAME_NOT_FOUND", text: "There is no game with the id " + req.params.gameid});
         return;
     }
+
+    gameData.comments.forEach((comment) => {
+        // remove security related fields for return
+        comment.user.password = undefined;
+        comment.user.email = undefined;
+    });
 
     res.status(200).json(gameData);
 }
