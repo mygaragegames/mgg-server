@@ -9,12 +9,14 @@ const UserModel = require('./models/user');
 const UserRoleModel = require('./models/userRole');
 const GameModel = require('./models/game');
 const GameScreenshotModel = require('./models/gameScreenshot');
+const GameCommentModel = require('./models/gameComment');
 const PlaylistModel = require('./models/playlist');
 
 const User = UserModel(sequelize, Sequelize);
 const UserRole = UserRoleModel(sequelize, Sequelize);
 const Game = GameModel(sequelize, Sequelize);
 const GameScreenshot = GameScreenshotModel(sequelize, Sequelize);
+const GameComment = GameCommentModel(sequelize, Sequelize);
 const Playlist = PlaylistModel(sequelize, Sequelize);
 
 const ROLES = ["user", "supporter", "moderator", "admin"];
@@ -43,6 +45,20 @@ Game.hasMany(GameScreenshot, { as: "screenshots" });
 GameScreenshot.belongsTo(Game, {
     foreignKey: "gameId",
     as: "game"
+});
+
+// Game -> GameComment Relation
+Game.hasMany(GameComment, { as: "comments" });
+GameComment.belongsTo(Game, {
+    foreignKey: "gameId",
+    as: "game"
+});
+
+// GameComment -> User Relation
+User.hasMany(GameComment, { as: "comments" });
+GameComment.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user"
 });
 
 // Playlist -> User Relation
@@ -96,6 +112,7 @@ module.exports = {
     UserRole,
     Game,
     GameScreenshot,
+    GameComment,
     Playlist,
     ROLES
 };
