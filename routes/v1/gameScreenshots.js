@@ -15,7 +15,7 @@ router.route('/:gameid')
     .delete(auth.verifyToken, deleteOneHandler);
 
 async function postOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] GameScreenshots->Post"));
+    console.log(chalk.grey("[mgg-server] (GameScreenshots) GameScreenshots->Post"));
 
     if(req.params.gameid === '' || req.files.length < 1) {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId, screenshots"});
@@ -43,7 +43,7 @@ async function postOneHandler(req, res) {
     });
 }
 async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] GameScreenshots->Delete"));
+    console.log(chalk.grey("[mgg-server] (GameScreenshots) GameScreenshots->Delete"));
 
     if(req.params.gameid === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId"});

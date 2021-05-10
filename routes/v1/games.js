@@ -16,7 +16,7 @@ router.route('/:gameid')
     .delete(auth.verifyToken, deleteOneHandler);
 
 async function getAllHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Games->Get"));
+    console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
 
     let games = await getAllGames();
     games.forEach((game) => {
@@ -29,7 +29,7 @@ async function getAllHandler(req, res) {
     res.status(200).json(games);
 }
 async function getOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Games->Get"));
+    console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
 
     if(req.params.gameid == undefined) {
         res.status(400).json({name: "MISSING_DATA", text: "Required parameter: gameid"});
@@ -45,7 +45,7 @@ async function getOneHandler(req, res) {
     res.status(200).json(gameData);
 }
 async function postOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] Games->Post"));
+    console.log(chalk.grey("[mgg-server] (Games) Games->Post"));
 
     const data = {
         title: req.body.title,
