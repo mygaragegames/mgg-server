@@ -97,7 +97,7 @@ async function deleteOneHandler(req, res) {
     }
 
     deletePlaylist( playlist ).then((data) => {
-        res.status(201).json({name: "PLAYLIST_UPDATED", text: "Playlist was deleted."});
+        res.status(200).json({name: "PLAYLIST_DELETED", text: "Playlist was deleted."});
         return;
     }).catch((error) => {
         res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});

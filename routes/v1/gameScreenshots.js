@@ -70,7 +70,7 @@ async function deleteOneHandler(req, res) {
     }
 
     deleteGameScreenshot( gameScreenshot ).then(() => {
-        res.status(200).json({name: "GAMESCREENSHOTS_REMOVED", text: "Screenshot was removed"});
+        res.status(200).json({name: "GAMESCREENSHOTS_DELETED", text: "Screenshot was deleted"});
         return;
     }).catch((error) => {
         console.log(error);
@@ -79,7 +79,7 @@ async function deleteOneHandler(req, res) {
             res.status(404).json({name: "GAMESCREENSHOT_NOT_FOUND", text: "Screenshot could not be found."});
             return;
         } else {
-            res.status(500).json({name: "UNKNOWN_ERROR", text: "Screenshot could not be removed."});
+            res.status(500).json({name: "UNKNOWN_ERROR", text: "Screenshot could not be deleted."});
             return;
         }
     });

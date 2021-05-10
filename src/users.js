@@ -117,7 +117,7 @@ function setAvatar( user, avatarFile ) {
     });
 }
 
-function removeAvatar( user ) {
+function deleteAvatar( user ) {
     return new Promise((resolve, reject) => {
         if(user === null){
             reject(404);
@@ -146,5 +146,5 @@ module.exports = {
     updateUser,
     deleteUser,
     setAvatar,
-    removeAvatar,
+    deleteAvatar,
 }

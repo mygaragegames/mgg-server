@@ -153,8 +153,8 @@ async function deleteUpdateAvatarHandler(req, res) {
         return;
     }
 
-    removeAvatar( user ).then(() => {
-        res.status(200).json({name: "USER_AVATAR_UPDATED", text: "Avatar was removed."});
+    deleteAvatar( user ).then(() => {
+        res.status(200).json({name: "USER_AVATAR_DELETED", text: "Avatar was deleted."});
         return;
     }).catch((error) => {
         if(error === 404) {
