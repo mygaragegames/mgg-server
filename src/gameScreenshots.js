@@ -19,7 +19,6 @@ function getOneGameScreenshot( searchOptions ) {
         GameScreenshot.findOne({ where: searchOptions }).then((gameScreenshotData) => {
             resolve(gameScreenshotData);
         }).catch((error) => {
-            console.error(error);
             reject(error);
         });
     });

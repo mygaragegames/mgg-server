@@ -73,12 +73,11 @@ async function deleteOneHandler(req, res) {
         res.status(200).json({name: "GAMESCREENSHOTS_DELETED", text: "Screenshot was deleted"});
         return;
     }).catch((error) => {
-        console.log(error);
-
         if(error === 404) {
             res.status(404).json({name: "GAMESCREENSHOT_NOT_FOUND", text: "Screenshot could not be found."});
             return;
         } else {
+            console.log(error);
             res.status(500).json({name: "UNKNOWN_ERROR", text: "Screenshot could not be deleted."});
             return;
         }

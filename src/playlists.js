@@ -21,7 +21,6 @@ function getOnePlaylist( searchOptions ) {
 function createPlaylist( data ) {
     return new Promise((resolve, reject) => {
         Playlist.create(data).then((playlistData) => {
-            console.log(playlistData);
             resolve(playlistData);
         }).catch((error) => {
             reject(error);
