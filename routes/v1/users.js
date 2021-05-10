@@ -5,6 +5,7 @@ const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { User } = require('../../sequelize');
 const { getAllUsers, getOneUser, createUser, setAvatar, removeAvatar } = require('../../src/users');
+const { getOnePlaylist } = require('../../src/playlists');
 
 let upload = multer({ dest: '/tmp/'});
 
@@ -42,19 +43,17 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let userData = await getOneUser({ id: req.params.userid }).catch((error) => { return (error === 404) ? 404 : 500; });
-
-    if(userData === 500) {
-        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
-    } else if(userData === 404) {
+    let userData = await getOneUser({ id: req.params.userid }).catch((error) => { return null; });
+    if(userData === null) {
         res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
-    } else {
-        // remove security related fields for return
-        userData.password = undefined;
-        userData.email = undefined;
-
-        res.status(200).json(userData);
+        return;
     }
+
+    // remove security related fields for return
+    userData.password = undefined;
+    userData.email = undefined;
+
+    res.status(200).json(userData);
 }
 async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Users) Users->Post"));
