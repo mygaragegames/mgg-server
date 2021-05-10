@@ -9,20 +9,24 @@ const UserModel = require('./models/user');
 const UserRoleModel = require('./models/userRole');
 const GameModel = require('./models/game');
 const GameScreenshotModel = require('./models/gameScreenshot');
+const PlaylistModel = require('./models/playlist');
 
 const User = UserModel(sequelize, Sequelize);
 const UserRole = UserRoleModel(sequelize, Sequelize);
 const Game = GameModel(sequelize, Sequelize);
 const GameScreenshot = GameScreenshotModel(sequelize, Sequelize);
+const Playlist = PlaylistModel(sequelize, Sequelize);
 
 const ROLES = ["user", "supporter", "moderator", "admin"];
 
+// User -> Game Relation
 User.hasMany(Game, { as: "games" });
 Game.belongsTo(User, {
     foreignKey: "userId",
     as: "user"
 });
 
+// User -> UserRole Relation
 User.belongsToMany(UserRole, {
     through: "user_roles",
     as: "roles",
@@ -34,10 +38,30 @@ UserRole.belongsToMany(User, {
     foreignKey: "userRole_id",
 });
 
+// Game -> GameScreenshot Relation
 Game.hasMany(GameScreenshot, { as: "screenshots" });
 GameScreenshot.belongsTo(Game, {
     foreignKey: "gameId",
     as: "game"
+});
+
+// Playlist -> User Relation
+User.hasMany(Playlist, { as: "playlists" });
+Playlist.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user"
+});
+
+// Playlist -> Game Relation
+Playlist.belongsToMany(Game, {
+    through: "playlist_games",
+    as: "games",
+    foreignKey: "playlist_id",
+});
+Game.belongsToMany(Playlist, {
+    through: "playlist_games",
+    as: "playlists",
+    foreignKey: "game_id",
 });
 
 function createRoles() {
@@ -72,5 +96,6 @@ module.exports = {
     UserRole,
     Game,
     GameScreenshot,
+    Playlist,
     ROLES
 };
