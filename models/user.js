@@ -19,6 +19,7 @@ module.exports = (sequelize, type) => {
             allowNull: false,
             unique: true
         },
+        avatarFileName: type.STRING,
         pronouns: type.STRING,
         ingameID: type.STRING,
         socialDiscord: type.STRING,
