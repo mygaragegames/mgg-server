@@ -29,7 +29,7 @@ async function getOneHandler(req, res) {
 
     let gameChannelData = await getOneGameChannel({ id: parseInt(req.params.channelid) }).catch(() => { return null; });
     if(gameChannelData === null) {
-        res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: "There is no game channel with the id " + req.params.channelid});
+        res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: `There is no game channel with the id ${req.params.channelid}`});
         return;
     }
 
@@ -74,7 +74,7 @@ async function putOneHandler(req, res) {
     // Find attached game channel
     let gameChannel = await getOneGameChannel({ id: req.params.channelid }).catch(() => { return null; });
     if(gameChannel === null) {
-        res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: "There is no game channel with the id " + req.params.channelid});
+        res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: `There is no game channel with the id ${req.params.channelid}`});
         return;
     }
 
@@ -93,7 +93,7 @@ async function putOneHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: "There is no game channel with the id " + req.params.channelid});
+            res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: `There is no game channel with the id ${req.params.channelid}`});
             return;
         } else {
             console.log(error);    
@@ -113,7 +113,7 @@ async function deleteOneHandler(req, res) {
     // Find attached game channel
     let gameChannel = await getOneGameChannel({ id: req.params.channelid }).catch(() => { return null; });
     if(gameChannel === null) {
-        res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: "There is no game channel with the id " + req.params.channelid});
+        res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: `There is no game channel with the id ${req.params.channelid}`});
         return;
     }
 
@@ -127,7 +127,7 @@ async function deleteOneHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: "There is no game channel with the id " + req.params.channelid});
+            res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: `There is no game channel with the id ${req.params.channelid}`});
             return;
         } else {
             console.log(error);    

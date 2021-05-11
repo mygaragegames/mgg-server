@@ -83,7 +83,7 @@ function setAvatar( user, avatarFile ) {
 
         // Remove previous avatars if existing
         if(user.avatarFileName !== null) {
-            let imagePath = path.join("./public/avatars/" + user.avatarFileName);
+            let imagePath = path.join(`./public/avatars/${user.avatarFileName}`);
             fs.unlinkSync(imagePath);
             user.avatarFile = null;
         }
@@ -103,7 +103,7 @@ function setAvatar( user, avatarFile ) {
         }
 
         let newImageName = uniqid() + "." + avatarImageType.ext;
-        let newImagePath = path.join("./public/avatars/" + newImageName);
+        let newImagePath = path.join(`./public/avatars/${newImageName}`);
         fs.renameSync(avatarFile.path, newImagePath);
 
         user.update({
@@ -124,7 +124,7 @@ function deleteAvatar( user ) {
             return;
         }
 
-        let imagePath = path.join("./public/avatars/" + user.avatarFileName);
+        let imagePath = path.join(`./public/avatars/${user.avatarFileName}`);
         
         // remove physical file
         fs.unlinkSync(imagePath);

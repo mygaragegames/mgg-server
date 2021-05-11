@@ -45,7 +45,7 @@ async function getOneHandler(req, res) {
 
     let userData = await getOneUser({ id: req.params.userid }).catch((error) => { return null; });
     if(userData === null) {
-        res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
+        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         return;
     }
 
@@ -111,7 +111,7 @@ async function putUpdateAvatarHandler(req, res) {
     // Find attached user
     let user = await getOneUser({ id: req.params.userid }).catch(() => { return null; });
     if(user === null) {
-        res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
+        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         return;
     }
 
@@ -126,7 +126,7 @@ async function putUpdateAvatarHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
+            res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         } else {
             res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
         }
@@ -143,7 +143,7 @@ async function deleteUpdateAvatarHandler(req, res) {
     // Find attached user
     let user = await getOneUser({ id: req.params.userid }).catch(() => { return null; });
     if(user === null) {
-        res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
+        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         return;
     }
 
@@ -158,7 +158,7 @@ async function deleteUpdateAvatarHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the id " + req.params.userid});
+            res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         } else {
             res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
         }

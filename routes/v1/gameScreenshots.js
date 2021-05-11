@@ -25,7 +25,7 @@ async function postOneHandler(req, res) {
     // Find attached game
     let game = await getOneGame({ id: req.params.gameid }).catch(() => { return null; });
     if(game === null) {
-        res.status(404).json({name: "GAME_NOT_FOUND", text: "There is no game with the id " + req.params.gameid});
+        res.status(404).json({name: "GAME_NOT_FOUND", text: `There is no game with the id ${req.params.gameid}`});
         return;
     }
 
@@ -60,7 +60,7 @@ async function deleteOneHandler(req, res) {
     // Find attached game
     let game = await getOneGame({ id: gameScreenshot.gameId }).catch(() => { return null; });
     if(game === null) {
-        res.status(404).json({name: "GAME_NOT_FOUND", text: "There is no game with the id " + req.params.gameid});
+        res.status(404).json({name: "GAME_NOT_FOUND", text: `There is no game with the id ${req.params.gameid}`});
         return;
     }
 

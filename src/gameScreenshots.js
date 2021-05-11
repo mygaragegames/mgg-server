@@ -42,7 +42,7 @@ function saveGameScreenshot( game, files ) {
             }
     
             let newImageName = uniqid() + "." + screenshotImageType.ext;
-            let newImagePath = path.join("./public/gameScreenshots/" + newImageName);
+            let newImagePath = path.join(`./public/gameScreenshots/${newImageName}`);
             fs.renameSync(screenshotFile.path, newImagePath);
     
             let data = {
@@ -70,7 +70,7 @@ function deleteGameScreenshot( gameScreenshot ) {
             return;
         }
 
-        let imagePath = path.join("./public/gameScreenshots/" + gameScreenshot.fileName);
+        let imagePath = path.join(`./public/gameScreenshots/${gameScreenshot.fileName}`);
         
         // remove physical file
         fs.unlinkSync(imagePath);

@@ -66,7 +66,7 @@ async function putOneHandler(req, res) {
     // Find attached game comment
     let gameComment = await getOneGameComment({ id: req.params.gameid }).catch(() => { return null; });
     if(gameComment === null) {
-        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
+        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: `There is no game comment with the id ${req.params.gameid}`});
         return;
     }
 
@@ -80,7 +80,7 @@ async function putOneHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
+            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: `There is no game comment with the id ${req.params.gameid}`});
             return;
         } else {
             console.log(error);    
@@ -100,7 +100,7 @@ async function deleteOneHandler(req, res) {
     // Find attached game comment
     let gameComment = await getOneGameComment({ id: req.params.gameid }).catch(() => { return null; });
     if(gameComment === null) {
-        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
+        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: `There is no game comment with the id ${req.params.gameid}`});
         return;
     }
 
@@ -114,7 +114,7 @@ async function deleteOneHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
+            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: `There is no game comment with the id ${req.params.gameid}`});
             return;
         } else {
             console.log(error);    

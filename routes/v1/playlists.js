@@ -29,7 +29,7 @@ async function getOneHandler(req, res) {
 
     let playlistDetail = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlistDetail === null) {
-        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: "There is no playlist with the id " + req.params.playlistid});
+        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
     }
 
@@ -70,7 +70,7 @@ async function putOneHandler(req, res) {
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
-        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: "There is no playlist with the id " + req.params.playlistid});
+        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
     }
 
@@ -92,7 +92,7 @@ async function deleteOneHandler(req, res) {
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
-        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: "There is no playlist with the id " + req.params.playlistid});
+        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
     }
 
@@ -115,7 +115,7 @@ async function postAddHandler(req, res) {
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
-        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: "There is no playlist with the id " + req.params.playlistid});
+        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
     }
 
@@ -142,7 +142,7 @@ async function deleteRemoveHandler(req, res) {
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
-        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: "There is no playlist with the id " + req.params.playlistid});
+        res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
     }
 

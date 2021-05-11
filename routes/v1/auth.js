@@ -23,7 +23,7 @@ async function getLoginHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "USER_NOT_FOUND", text: "There is no user with the username " + req.body.username});
+            res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the username ${req.body.username}`});
             return;
         } if(error === 403) {
             res.status(403).json({name: "AUTHENTICATION_WRONG", text: "Password is not correct."});
