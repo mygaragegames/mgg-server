@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const chalk = require('chalk');
-const { Game, User, GameScreenshot, GameComment } = require('../sequelize');
+const { Game, User, GameScreenshot, GameComment, GameChannel } = require('../sequelize');
 const { deleteGameScreenshot } = require('./gameScreenshots');
 
 function getAllGames() {
@@ -16,6 +16,7 @@ function getOneGame( searchOptions ) {
         Game.findOne({ where: searchOptions, include: [
             { model: GameScreenshot, as: "screenshots" },
             { model: User, as: "user" },
+            { model: GameChannel, as: "channels" },
             { model: GameComment, as: "comments", include: { model: User, as: "user" } }]}).then((gameData) => {
             resolve(gameData);
         });
