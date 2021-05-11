@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { User, Game } = require('../../sequelize');
+const { User, Game, GameChannel } = require('../../sequelize');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame } = require('../../src/games');
 const { getGameScreenshots } = require('../../src/gameScreenshots');
 
@@ -68,6 +68,7 @@ async function postOneHandler(req, res) {
     }
 
     createGame( data ).then((game) => {
+        game.setChannels(req.body.channels);
         res.status(201).json( game );
     }).catch((error) => {
         console.error(error);
@@ -96,6 +97,7 @@ async function putOneHandler(req, res) {
         return;
     }
 
+    game.setChannels(req.body.channels);
     updateGame( game, data ).then((data) => {
         res.status(201).json({name: "GAME_UPDATED", text: "Game was updated."});
         return;
