@@ -4,12 +4,21 @@ const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { getGameChannels, getOneGameChannel, createGameChannel, updateGameChannel, deleteGameChannel } = require('../../src/gameChannel');
 
+router.route('/')
+    .get(getAllHandler)
+    .post(auth.verifyToken, postOneHandler);
+
 router.route('/:channelid')
     .get(getOneHandler)
-    .post(auth.verifyToken, postOneHandler)
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
+async function getAllHandler(req, res) {
+    console.log(chalk.grey("[mgg-server] (GameChannels) GameChannels->Get"));
+
+    let gameChannels = await getGameChannels({}).catch(() => { return []; });
+    res.status(200).json(gameChannels);
+}
 async function getOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (GameChannels) GameChannels->Get"));
 
@@ -24,18 +33,19 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    /*
-    // remove security related fields for return
-    gameCommentData.user.password = undefined;
-    gameCommentData.user.email = undefined; */
+    gameChannelData.games.forEach((game) => {
+        // remove security related fields for return
+        game.user.password = undefined;
+        game.user.email = undefined;
+    });
 
     res.status(200).json(gameChannelData);
 }
 async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (GameChannels) GameChannels->Post"));
 
-    if(req.params.channelid === '' || req.body.title === '' || req.body.description === '') {
-        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: channelId, title, description"});
+    if(req.body.title === '' || req.body.description === '') {
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: title, description"});
         return;
     }
 
