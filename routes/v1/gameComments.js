@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { Game, GameScreenshot } = require('../../sequelize');
 const { getOneGame } = require('../../src/games');
-const { getGameComments, getOneGameComment, createGameComment, updateGameComment, deleteGameComment } = require('../../src/gameComments');
+const { getOneGameComment, createGameComment, updateGameComment, deleteGameComment } = require('../../src/gameComments');
 
 router.route('/:gameid')
     .get(getOneHandler)
@@ -67,7 +66,7 @@ async function putOneHandler(req, res) {
     // Find attached game comment
     let gameComment = await getOneGameComment({ id: req.params.gameid }).catch(() => { return null; });
     if(gameComment === null) {
-        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "Comment could not be found."});
+        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
         return;
     }
 
@@ -81,7 +80,7 @@ async function putOneHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "Comment could not be found."});
+            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
             return;
         } else {
             console.log(error);    
@@ -101,7 +100,7 @@ async function deleteOneHandler(req, res) {
     // Find attached game comment
     let gameComment = await getOneGameComment({ id: req.params.gameid }).catch(() => { return null; });
     if(gameComment === null) {
-        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "Comment could not be found."});
+        res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
         return;
     }
 
@@ -115,7 +114,7 @@ async function deleteOneHandler(req, res) {
         return;
     }).catch((error) => {
         if(error === 404) {
-            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "Comment could not be found."});
+            res.status(404).json({name: "GAMECOMMENT_NOT_FOUND", text: "There is no game comment with the id " + req.params.gameid});
             return;
         } else {
             console.log(error);    
