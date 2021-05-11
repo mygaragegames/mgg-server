@@ -10,7 +10,7 @@ function getGameChannels( searchOptions ) {
 }
 function getOneGameChannel( searchOptions ) {
     return new Promise((resolve, reject) => {
-        GameChannel.findOne({ where: searchOptions, include: { model: Game, as: "game", include: { model: User, as: "user" } } }).then((gameChannelData) => {
+        GameChannel.findOne({ where: searchOptions, include: { model: Game, as: "games", include: { model: User, as: "user" } } }).then((gameChannelData) => {
             resolve(gameChannelData);
         }).catch((error) => {
             reject(error);
