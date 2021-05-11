@@ -4,27 +4,29 @@ Project Description
 
 ### Todo
 
-- [ ] [Model] Channel  
-- [ ] [Src] GetAllChannels()  
-- [ ] [Src] GetOneChannel( searchOptions )  
-- [ ] [Src] CreateChannel( channelData )  
-- [ ] [Src] UpdateChannel( channel, data )  
-- [ ] [Src] DeleteChannel( channel )  
-- [ ] [Route] GetAllChannels  
-- [ ] [Route] GetOneChannel  
-- [ ] [Route] CreateChannel  
-- [ ] [Route] DeleteChannel  
-- [ ] [Route] UpdateChannel  
 - [ ] [Src] PlaylistAddGame( playlist, game )  
 - [ ] [Src] PlaylistRemoveGame( playlist, game )  
 - [ ] [Route] PlaylistAddGame  
 - [ ] [Route] PlaylistRemoveGame  
+- [ ] [Src] CreateGame -> AddChannels  
+- [ ] [Src] GetOneGame -> GetChannels  
 
 ### In Progress
 
 
 ### Done ✓
 
+- [x] [Model] Channel  
+- [x] [Src] GetAllChannels()  
+- [x] [Src] GetOneChannel( searchOptions )  
+- [x] [Src] CreateChannel( channelData )  
+- [x] [Src] UpdateChannel( channel, data )  
+- [x] [Src] DeleteChannel( channel )  
+- [x] [Route] GetAllChannels  
+- [x] [Route] GetOneChannel  
+- [x] [Route] CreateChannel  
+- [x] [Route] DeleteChannel  
+- [x] [Route] UpdateChannel  
 - [x] [Model] GameComment  
 - [x] [Src] CreateComment( game, text )  
 - [x] [Src] GetComments( game )  
