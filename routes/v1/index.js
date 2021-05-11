@@ -5,6 +5,7 @@ router.use('/auth', require('./auth'));
 router.use('/games', require('./games'));
 router.use('/gameScreenshots', require('./gameScreenshots'));
 router.use('/gameComments', require('./gameComments'));
+router.use('/gameChannels', require('./gameChannels'));
 router.use('/users', require('./users'));
 router.use('/playlists', require('./playlists'));
 

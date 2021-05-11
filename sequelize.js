@@ -10,6 +10,7 @@ const UserRoleModel = require('./models/userRole');
 const GameModel = require('./models/game');
 const GameScreenshotModel = require('./models/gameScreenshot');
 const GameCommentModel = require('./models/gameComment');
+const GameChannelModel = require('./models/gameChannel');
 const PlaylistModel = require('./models/playlist');
 
 const User = UserModel(sequelize, Sequelize);
@@ -17,6 +18,7 @@ const UserRole = UserRoleModel(sequelize, Sequelize);
 const Game = GameModel(sequelize, Sequelize);
 const GameScreenshot = GameScreenshotModel(sequelize, Sequelize);
 const GameComment = GameCommentModel(sequelize, Sequelize);
+const GameChannel = GameChannelModel(sequelize, Sequelize);
 const Playlist = PlaylistModel(sequelize, Sequelize);
 
 const ROLES = ["user", "supporter", "moderator", "admin"];
@@ -68,6 +70,18 @@ Playlist.belongsTo(User, {
     as: "user"
 });
 
+// Game -> GameChannel Relation
+GameChannel.belongsToMany(Game, {
+    through: "channel_games",
+    as: "games",
+    foreignKey: "channel_id",
+});
+Game.belongsToMany(GameChannel, {
+    through: "channel_games",
+    as: "channels",
+    foreignKey: "game_id",
+});
+
 // Playlist -> Game Relation
 Playlist.belongsToMany(Game, {
     through: "playlist_games",
@@ -113,6 +127,7 @@ module.exports = {
     Game,
     GameScreenshot,
     GameComment,
+    GameChannel,
     Playlist,
     ROLES
 };
