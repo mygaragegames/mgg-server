@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const chalk = require('chalk');
 const { Game, User, GameScreenshot, GameComment, GameChannel } = require('../sequelize');
 const { deleteGameScreenshot } = require('./gameScreenshots');
+const { deleteGameComment } = require('./gameComments');
 
 function getAllGames() {
     return new Promise((resolve, reject) => {
@@ -51,9 +52,10 @@ function deleteGame( game ) {
             deleteGameScreenshot(gameScreenshot);
         });
 
-        // TODO: Remove Playlist Entries
-
-        // TODO: Remove Comments
+        // Remove Comments
+        game.comments.forEach((gameComment) => {
+            deleteGameComment(gameComment);
+        });
 
         game.destroy().then(() => {
             resolve();
