@@ -40,13 +40,7 @@ async function login( username, password ) {
         }).catch((error) => {
             reject(error);
             return;
-        })
-
-        // TODO: Check Password
-
-        // TODO: Set JWT
-
-        // TODO: Return UserData
+        });
     });
 }
 

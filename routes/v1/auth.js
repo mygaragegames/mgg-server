@@ -16,8 +16,6 @@ async function getLoginHandler(req, res) {
         return;
     }
 
-    // TODO: Check for Authentication and if user has access to game
-
     login(req.body.username, req.body.password).then((userData) => {
         res.status(200).json(userData);
         return;
