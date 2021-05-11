@@ -115,10 +115,46 @@ function createRoles() {
     console.log(chalk.cyan('[mgg-server] (Sequelize) Created roles.'));
 }
 
+function createChannels() {
+    GameChannel.create({
+        id: 1,
+        title: "2D",
+        description: "2D Games"
+    });
+    GameChannel.create({
+        id: 2,
+        title: "3D",
+        description: "3D Games"
+    });
+    GameChannel.create({
+        id: 3,
+        title: "Topdown",
+        description: "Topdown Games"
+    });
+    GameChannel.create({
+        id: 4,
+        title: "Sidescroller",
+        description: "Sidescroller Games"
+    });
+    GameChannel.create({
+        id: 5,
+        title: "Third-Person",
+        description: "Third-Person Games"
+    });
+    GameChannel.create({
+        id: 6,
+        title: "First-Person",
+        description: "First-Person Games"
+    });
+
+    console.log(chalk.cyan('[mgg-server] (Sequelize) Created channels.'));
+}
+
 let forceReset = false;
 sequelize.sync({ force: forceReset }).then(() => {
     console.log(chalk.grey('[mgg-server] (Sequelize) Updated database.'));
     if(forceReset) createRoles();
+    if(forceReset) createChannels();
 });
 
 module.exports = {
