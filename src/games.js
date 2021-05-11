@@ -17,7 +17,8 @@ function getOneGame( searchOptions ) {
             { model: GameScreenshot, as: "screenshots" },
             { model: User, as: "user" },
             { model: GameChannel, as: "channels" },
-            { model: GameComment, as: "comments", include: { model: User, as: "user" } }]}).then((gameData) => {
+            { model: GameComment, as: "comments", include: { model: User, as: "user" } }
+        ]}).then((gameData) => {
             resolve(gameData);
         });
     });
