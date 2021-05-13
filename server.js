@@ -7,6 +7,7 @@ const path = require('path');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
+const cors = require('cors');
 const express = require('express');
 const forceSecure = require('express-force-https');
 const chalk = require('chalk');
@@ -15,6 +16,7 @@ let isDev = process.env.NODE_ENV !== 'prod';
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 // Routes
