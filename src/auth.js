@@ -44,6 +44,23 @@ async function login( username, password ) {
     });
 }
 
+async function verify( token ) {   
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, process.env.JWT_SECRET_KEY, (error, decoded) => {
+            if(error) {
+                reject(403);
+            }
+
+            getOneUser( { id: decoded.id} ).then((userData) => {
+                resolve(userData);
+            }).catch(() => {
+                reject(403);
+            });
+        });
+    });
+}
+
 module.exports = {
     login,
+    verify,
 }
