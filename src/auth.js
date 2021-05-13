@@ -52,7 +52,21 @@ async function verify( token ) {
             }
 
             getOneUser( { id: decoded.id} ).then((userData) => {
-                resolve(userData);
+                let userRoles = []
+                userData.getRoles().then((roles) => {
+                    roles.forEach(role => {
+                        userRoles.push(role.name);
+                    });
+    
+                    // remove security related fields for return
+                    userData.password = undefined;
+        
+                    resolve({
+                        userData: userData,
+                        token: token,
+                        roles: userRoles
+                    });
+                });
             }).catch(() => {
                 reject(403);
             });

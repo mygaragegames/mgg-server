@@ -44,8 +44,8 @@ async function postVerifyHandler(req, res) {
         return;
     }
 
-    verify(req.body.token).then(() => {
-        res.status(200).json({name: "AUTHENTICATION_CORRECT", text: "Token is valid."});
+    verify(req.body.token).then((userData) => {
+        res.status(200).json(userData);
         return;
     }).catch((error) => {
         if(error === 403) {
