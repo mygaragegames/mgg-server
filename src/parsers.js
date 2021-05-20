@@ -16,7 +16,16 @@ function parseGameScreenshot(fileName) {
     }
 }
 
+function parseGameCover(fileName) {
+    if(fileName) {
+        return process.env.ASSET_BASE + "gameCovers/" + fileName;
+    } else {
+        return process.env.ASSET_BASE + "defaultGameCover.png";
+    }
+}
+
 module.exports = {
     parseAvatar,
-    parseGameScreenshot
+    parseGameScreenshot,
+    parseGameCover
 }

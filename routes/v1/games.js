@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameScreenshot } = require('../../src/parsers');
+const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame } = require('../../src/games');
 
 router.route('/')
@@ -19,9 +19,12 @@ async function getAllHandler(req, res) {
 
     let games = await getAllGames();
     games.forEach((game) => {
+        game.coverFileName = parseGameCover(game.coverFileName);
+
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
+
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
     
     });
@@ -41,6 +44,8 @@ async function getOneHandler(req, res) {
         res.status(404).json({name: "GAME_NOT_FOUND", text: `There is no game with the id ${req.params.gameid}`});
         return;
     }
+
+    gameData.coverFileName = parseGameCover(gameData.coverFileName);
 
     gameData.comments.forEach((comment) => {
         // remove security related fields for return
@@ -74,6 +79,9 @@ async function postOneHandler(req, res) {
 
     createGame( data ).then((game) => {
         game.setChannels(req.body.channels);
+
+        game.coverFileName = parseGameCover(game.coverFileName);
+
         res.status(201).json( game );
     }).catch((error) => {
         console.error(error);
