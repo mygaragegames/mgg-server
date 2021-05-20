@@ -27,9 +27,6 @@ async function login( username, password ) {
                 roles.forEach(role => {
                     userRoles.push(role.name);
                 });
-
-                // remove security related fields for return
-                userData.password = undefined;
     
                 resolve({
                     userData: userData,
@@ -57,9 +54,6 @@ async function verify( token ) {
                     roles.forEach(role => {
                         userRoles.push(role.name);
                     });
-    
-                    // remove security related fields for return
-                    userData.password = undefined;
         
                     resolve({
                         userData: userData,

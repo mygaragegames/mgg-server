@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
-
-const { User, UserRole, ROLES } = require('../../sequelize');
+const { parseAvatar } = require('../../src/parsers');
 const { login, verify } = require('../../src/auth');
 
 router.route('/login')
@@ -20,6 +19,10 @@ async function postLoginHandler(req, res) {
     }
 
     login(req.body.username, req.body.password).then((userData) => {
+        // remove security related fields for return
+        userData.password = undefined;
+        userData.avatarFileName = parseAvatar(userData.avatarFileName);
+
         res.status(200).json(userData);
         return;
     }).catch((error) => {
@@ -45,6 +48,10 @@ async function postVerifyHandler(req, res) {
     }
 
     verify(req.body.token).then((userData) => {
+        // remove security related fields for return
+        userData.password = undefined;
+        userData.avatarFileName = parseAvatar(userData.avatarFileName);
+        
         res.status(200).json(userData);
         return;
     }).catch((error) => {
