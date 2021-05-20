@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
+const { parseAvatar } = require('../../src/parsers');
 const { getOneGame } = require('../../src/games');
 const { getOneGameComment, createGameComment, updateGameComment, deleteGameComment } = require('../../src/gameComments');
 
@@ -28,6 +29,7 @@ async function getOneHandler(req, res) {
     // remove security related fields for return
     gameCommentData.user.password = undefined;
     gameCommentData.user.email = undefined;
+    gameCommentData.user.avatarFileName = parseAvatar(gameCommentData.user.avatarFileName);
 
     res.status(200).json(gameCommentData);
 }

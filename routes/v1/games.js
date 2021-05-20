@@ -2,9 +2,8 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { User, Game, GameChannel } = require('../../sequelize');
+const { parseAvatar } = require('../../src/parsers');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame } = require('../../src/games');
-const { getGameScreenshots } = require('../../src/gameScreenshots');
 
 router.route('/')
     .get(getAllHandler)
@@ -23,6 +22,7 @@ async function getAllHandler(req, res) {
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
+        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
     
     });
 
@@ -46,6 +46,7 @@ async function getOneHandler(req, res) {
         // remove security related fields for return
         comment.user.password = undefined;
         comment.user.email = undefined;
+        comment.user.avatarFileName = parseAvatar(comment.user.avatarFileName);
     });
 
     res.status(200).json(gameData);

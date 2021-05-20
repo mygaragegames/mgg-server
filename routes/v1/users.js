@@ -2,7 +2,9 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
+const path = require('path');
 const auth = require('../../middlewares/auth');
+const { parseAvatar } = require('../../src/parsers');
 const { User } = require('../../sequelize');
 const { getAllUsers, getOneUser, createUser, setAvatar, removeAvatar } = require('../../src/users');
 const { getOnePlaylist } = require('../../src/playlists');
@@ -31,6 +33,7 @@ async function getAllHandler(req, res) {
         // remove security related fields for return
         user.password = undefined;
         user.email = undefined;
+        user.avatarFileName = parseAvatar(user.avatarFileName);
     });
     
     res.status(200).json(users);
@@ -52,6 +55,7 @@ async function getOneHandler(req, res) {
     // remove security related fields for return
     userData.password = undefined;
     userData.email = undefined;
+    userData.avatarFileName = parseAvatar(userData.avatarFileName);
 
     res.status(200).json(userData);
 }
@@ -78,6 +82,7 @@ async function postOneHandler(req, res) {
         // remove security related fields for return
         userData.password = undefined;
         userData.email = undefined;
+        userData.avatarFileName = parseAvatar(userData.avatarFileName);
 
         res.status(201).json(userData);
     }).catch((error) => {
