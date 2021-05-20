@@ -18,12 +18,12 @@ async function postLoginHandler(req, res) {
         return;
     }
 
-    login(req.body.username, req.body.password).then((userData) => {
+    login(req.body.username, req.body.password).then((loginData) => {
         // remove security related fields for return
-        userData.password = undefined;
-        userData.avatarFileName = parseAvatar(userData.avatarFileName);
+        loginData.userData.password = undefined;
+        loginData.userData.avatarFileName = parseAvatar(loginData.userData.avatarFileName);
 
-        res.status(200).json(userData);
+        res.status(200).json(loginData);
         return;
     }).catch((error) => {
         if(error === 404) {
@@ -47,12 +47,12 @@ async function postVerifyHandler(req, res) {
         return;
     }
 
-    verify(req.body.token).then((userData) => {
+    verify(req.body.token).then((verifyData) => {
         // remove security related fields for return
-        userData.password = undefined;
-        userData.avatarFileName = parseAvatar(userData.avatarFileName);
+        verifyData.userData.password = undefined;
+        verifyData.userData.avatarFileName = parseAvatar(verifyData.userData.avatarFileName);
         
-        res.status(200).json(userData);
+        res.status(200).json(verifyData);
         return;
     }).catch((error) => {
         if(error === 403) {
