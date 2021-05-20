@@ -19,6 +19,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Public assets
+app.use(express.static('public'));
+
 // Routes
 app.use('/api/v1', require('./routes/v1/index'));
 
