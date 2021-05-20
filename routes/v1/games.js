@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar } = require('../../src/parsers');
+const { parseAvatar, parseGameScreenshot } = require('../../src/parsers');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame } = require('../../src/games');
 
 router.route('/')
@@ -47,6 +47,10 @@ async function getOneHandler(req, res) {
         comment.user.password = undefined;
         comment.user.email = undefined;
         comment.user.avatarFileName = parseAvatar(comment.user.avatarFileName);
+    });
+
+    gameData.screenshots.forEach((gameScreenshot) => {
+        gameScreenshot.fileName = parseGameScreenshot(gameScreenshot.fileName);
     });
 
     res.status(200).json(gameData);

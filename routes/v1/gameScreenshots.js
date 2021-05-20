@@ -3,9 +3,8 @@ const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { Game, GameScreenshot } = require('../../sequelize');
 const { getOneGame } = require('../../src/games');
-const { getGameScreenshots, getOneGameScreenshot, saveGameScreenshot, deleteGameScreenshot } = require('../../src/gameScreenshots');
+const { getOneGameScreenshot, saveGameScreenshot, deleteGameScreenshot } = require('../../src/gameScreenshots');
 const game = require('../../models/game');
 
 let upload = multer({ dest: '/tmp/'});

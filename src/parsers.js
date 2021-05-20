@@ -8,6 +8,15 @@ function parseAvatar(avatarFileName) {
     }
 }
 
+function parseGameScreenshot(fileName) {
+    if(fileName) {
+        return path.join(process.env.ASSET_BASE, "gameScreenshots", fileName);
+    } else {
+        return path.join(process.env.ASSET_BASE, "defaultGameScreenshot.png");
+    }
+}
+
 module.exports = {
-    parseAvatar
+    parseAvatar,
+    parseGameScreenshot
 }
