@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar } = require('../../src/parsers');
+const { parseGameCover, parseAvatar } = require('../../src/parsers');
 const { getGameChannels, getOneGameChannel, createGameChannel, updateGameChannel, deleteGameChannel } = require('../../src/gameChannel');
 
 router.route('/')
@@ -35,6 +35,8 @@ async function getOneHandler(req, res) {
     }
 
     gameChannelData.games.forEach((game) => {
+        game.coverFileName = parseGameCover(game.coverFileName);
+
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
