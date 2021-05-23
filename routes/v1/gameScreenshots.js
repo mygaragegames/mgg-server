@@ -5,7 +5,6 @@ const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { getOneGame } = require('../../src/games');
 const { getOneGameScreenshot, saveGameScreenshot, deleteGameScreenshot } = require('../../src/gameScreenshots');
-const game = require('../../models/game');
 
 let upload = multer({ dest: '/tmp/'});
 
