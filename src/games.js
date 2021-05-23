@@ -1,5 +1,10 @@
 const bcrypt = require('bcrypt');
 const chalk = require('chalk');
+const fs = require("fs");
+const readChunk = require('read-chunk');
+const imageType = require('image-type');
+const uniqid = require('uniqid');
+const path = require("path");
 const { Game, User, GameScreenshot, GameComment, GameChannel } = require('../sequelize');
 const { deleteGameScreenshot } = require('./gameScreenshots');
 const { deleteGameComment } = require('./gameComments');
@@ -65,10 +70,77 @@ function deleteGame( game ) {
     });
 }
 
+function saveGameCover( game, coverFile ) {
+    return new Promise((resolve, reject) => {
+        if(game === null){
+            reject(404);
+            return;
+        }
+
+        // Remove previous covers if existing
+        if(game.coverFileName !== null) {
+            let imagePath = path.join(`./public/gameCovers/${game.coverFileName}`);
+            try {
+                fs.unlinkSync(imagePath);
+            } catch(error) {}
+            game.coverFileName = null;
+        }
+
+        // Filetype Check
+        let coverImageBuffer = readChunk.sync(coverFile.path, 0, 12);
+        let coverImageType = imageType(coverImageBuffer);
+
+        // Ignore non-images
+        if(coverImageType === null) {
+            return;
+        }
+
+        // Only allow PNG & JPG images
+        if(coverImageType.mime !== "image/jpeg" && coverImageType.mime !== "image/png") {
+            return;
+        }
+
+        let newImageName = uniqid() + "." + coverImageType.ext;
+        let newImagePath = path.join(`./public/gameCovers/${newImageName}`);
+        fs.renameSync(coverFile.path, newImagePath);
+
+        game.update({
+            coverFileName: newImageName
+        }).then(() => {
+            resolve();
+        }).catch((error) => {
+            fs.unlinkSync(newImagePath);
+            reject(error);
+        });
+    });
+}
+
+function deleteGameCover( game ) {
+    return new Promise((resolve, reject) => {
+        if(game === null) {
+            reject(404);
+            return;
+        }
+
+        let imagePath = path.join(`./public/gameCovers/${game.coverFileName}`);
+        
+        // remove physical file
+        fs.unlinkSync(imagePath);
+
+        game.update({ coverFileName: null }).then(() => {
+            resolve();
+        }).catch((error) => {
+            reject(error);
+        });
+    });
+}
+
 module.exports = {
     createGame,
     getAllGames,
     getOneGame,
     updateGame,
-    deleteGame
+    deleteGame,
+    saveGameCover,
+    deleteGameCover
 }
