@@ -63,12 +63,26 @@ async function getOneHandler(req, res) {
 async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Post"));
 
+    let filteredDisplayStatus = 0;
+    switch(req.body.displayStatus) {
+        default:
+        case 0:
+            filteredDisplayStatus = 0;
+            break;
+        case 1:
+            filteredDisplayStatus = 1;
+            break;
+        case 2:
+            filteredDisplayStatus = 2;
+            break;
+    }
+
     const data = {
         title: req.body.title,
         ingameID: req.body.ingameID,
         description: req.body.description,
         youtubeID: req.body.youtubeID,
-        displayStatus: req.body.displayStatus,
+        displayStatus: filteredDisplayStatus,
         userId: req.user.id
     };
 
