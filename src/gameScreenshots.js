@@ -73,7 +73,9 @@ function deleteGameScreenshot( gameScreenshot ) {
         let imagePath = path.join(`./public/gameScreenshots/${gameScreenshot.fileName}`);
         
         // remove physical file
-        fs.unlinkSync(imagePath);
+        try {
+            fs.unlinkSync(imagePath);
+        } catch(error) {}
 
         gameScreenshot.destroy().then(() => {
             resolve();
