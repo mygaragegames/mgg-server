@@ -33,11 +33,13 @@ function saveGameScreenshot( game, files ) {
     
             // Ignore non-images
             if(screenshotImageType === null) {
+                reject(400);
                 return;
             }
     
             // Only allow PNG & JPG images
             if(screenshotImageType.mime !== "image/jpeg" && screenshotImageType.mime !== "image/png") {
+                reject(400);
                 return;
             }
     

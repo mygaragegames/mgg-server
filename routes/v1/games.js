@@ -186,9 +186,15 @@ async function putOneCoverHandler(req, res) {
     saveGameCover(game, req.file).then(() => {
         res.status(201).json({name: "GAME_COVER_UPDATED", text: "Cover of game was updated."});
         return;
-    }).catch(() => {
-        res.status(500).json({name: "UNKNOWN_ERROR", text: "Cover could not be updated."});
-        return;
+    }).catch((error) => {
+        switch(error) {
+            default:
+                res.status(500).json({name: "UNKNOWN_ERROR", text: "Cover could not be updated."});
+                return;
+            case 400:
+                res.status(400).json({name: "GAME_COVER_WRONGFORMAT", text: "Your cover is not a png or jpg file."});
+                return;
+        }
     });
 }
 async function deleteOneCoverHandler(req, res) {

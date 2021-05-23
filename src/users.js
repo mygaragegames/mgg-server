@@ -96,11 +96,13 @@ function setAvatar( user, avatarFile ) {
 
         // Ignore non-images
         if(avatarImageType === null) {
+            reject(400);
             return;
         }
 
         // Only allow PNG & JPG images
         if(avatarImageType.mime !== "image/jpeg" && avatarImageType.mime !== "image/png") {
+            reject(400);
             return;
         }
 

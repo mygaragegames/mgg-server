@@ -92,11 +92,13 @@ function saveGameCover( game, coverFile ) {
 
         // Ignore non-images
         if(coverImageType === null) {
+            reject(400);
             return;
         }
 
         // Only allow PNG & JPG images
         if(coverImageType.mime !== "image/jpeg" && coverImageType.mime !== "image/png") {
+            reject(400);
             return;
         }
 

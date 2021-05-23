@@ -133,7 +133,14 @@ async function putUpdateAvatarHandler(req, res) {
         if(error === 404) {
             res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         } else {
-            res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+            switch(error) {
+                default:
+                    res.status(500).json({name: "UNKNOWN_ERROR", text: "Avatar could not be updated."});
+                    return;
+                case 400:
+                    res.status(400).json({name: "USER_AVATAR_WRONGFORMAT", text: "Your avatar is not a png or jpg file."});
+                    return;
+            }
         }
     });
 }

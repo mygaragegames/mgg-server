@@ -36,8 +36,14 @@ async function postOneHandler(req, res) {
         res.status(201).json({name: "GAMESCREENSHOTS_UPLOADED", text: "Screenshots were uploaded"});
         return;
     }).catch(() => {
-        res.status(500).json({name: "UNKNOWN_ERROR", text: "Screenshots could not be uploaded."});
-        return;
+        switch(error) {
+            default:
+                res.status(500).json({name: "UNKNOWN_ERROR", text: "Screenshots could not be updated."});
+                return;
+            case 400:
+                res.status(400).json({name: "GAMESCREENSHOT_COVER_WRONGFORMAT", text: "One or more screenshots are not a png or jpg file."});
+                return;
+        }
     });
 }
 async function deleteOneHandler(req, res) {
