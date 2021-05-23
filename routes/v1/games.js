@@ -1,9 +1,12 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
-const { getAllGames, getOneGame, createGame, deleteGame, updateGame } = require('../../src/games');
+const { getAllGames, getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
+
+let upload = multer({ dest: '/tmp/'});
 
 router.route('/')
     .get(getAllHandler)
@@ -13,6 +16,10 @@ router.route('/:gameid')
     .get(getOneHandler)
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
+
+router.route('/:gameid/cover')
+    .put(auth.verifyToken, upload.single('cover'), putOneCoverHandler)
+    .delete(auth.verifyToken, deleteOneCoverHandler);
 
 async function getAllHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
@@ -152,6 +159,64 @@ async function deleteOneHandler(req, res) {
         return;
     }).catch((error) => {
         res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+    });
+}
+
+async function putOneCoverHandler(req, res) {
+    console.log(chalk.grey("[mgg-server] (Games) Game->PutCover"));
+
+    if(req.params.gameid === '' || req.file === undefined) {
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId, cover"});
+        return;
+    }
+
+    // Find attached game
+    let game = await getOneGame({ id: req.params.gameid }).catch(() => { return null; });
+    if(game === null) {
+        res.status(404).json({name: "GAME_NOT_FOUND", text: `There is no game with the id ${req.params.gameid}`});
+        return;
+    }
+
+    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    saveGameCover(game, req.file).then(() => {
+        res.status(201).json({name: "GAME_COVER_UPDATED", text: "Cover of game was updated."});
+        return;
+    }).catch(() => {
+        res.status(500).json({name: "UNKNOWN_ERROR", text: "Cover could not be updated."});
+        return;
+    });
+}
+async function deleteOneCoverHandler(req, res) {
+    console.log(chalk.grey("[mgg-server] (Games) Games->DeleteCover"));
+
+    if(req.params.gameid === '') {
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId"});
+        return;
+    }
+
+    // Find attached game
+    let game = await getOneGame({ id: gameScreenshot.gameId }).catch(() => { return null; });
+    if(game === null) {
+        res.status(404).json({name: "GAME_NOT_FOUND", text: `There is no game with the id ${req.params.gameid}`});
+        return;
+    }
+
+    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    deleteGameCover( game ).then(() => {
+        res.status(200).json({name: "GAME_COVER_UPDATED", text: "Cover of game was deleted."});
+        return;
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({name: "UNKNOWN_ERROR", text: "Cover could not be deleted."});
+        return;
     });
 }
 
