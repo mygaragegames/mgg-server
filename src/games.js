@@ -127,7 +127,9 @@ function deleteGameCover( game ) {
         let imagePath = path.join(`./public/gameCovers/${game.coverFileName}`);
         
         // remove physical file
-        fs.unlinkSync(imagePath);
+        try {
+            fs.unlinkSync(imagePath);
+        } catch(error) {}
 
         game.update({ coverFileName: null }).then(() => {
             resolve();
