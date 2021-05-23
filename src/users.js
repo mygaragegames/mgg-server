@@ -84,7 +84,9 @@ function setAvatar( user, avatarFile ) {
         // Remove previous avatars if existing
         if(user.avatarFileName !== null) {
             let imagePath = path.join(`./public/avatars/${user.avatarFileName}`);
-            fs.unlinkSync(imagePath);
+            try {
+                fs.unlinkSync(imagePath);
+            } catch(error) {}
             user.avatarFile = null;
         }
 
@@ -127,7 +129,9 @@ function deleteAvatar( user ) {
         let imagePath = path.join(`./public/avatars/${user.avatarFileName}`);
         
         // remove physical file
-        fs.unlinkSync(imagePath);
+        try {
+            fs.unlinkSync(imagePath);
+        } catch(error) {}
 
         user.update({
             avatarFile: null
