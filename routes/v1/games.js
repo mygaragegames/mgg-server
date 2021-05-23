@@ -88,8 +88,8 @@ async function postOneHandler(req, res) {
         title: req.body.title,
         ingameID: req.body.ingameID,
         description: req.body.description,
-        youtubeID: req.body.youtubeID,
         displayStatus: filteredDisplayStatus,
+        youtubeID: req.body.youtubeID,
         userId: req.user.id
     };
 
@@ -117,6 +117,7 @@ async function putOneHandler(req, res) {
         ingameID: req.body.ingameID,
         description: req.body.description,
         displayStatus: req.body.displayStatus,
+        youtubeID: req.body.youtubeID,
     };
 
     let game = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
