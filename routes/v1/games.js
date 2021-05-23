@@ -54,6 +54,12 @@ async function getOneHandler(req, res) {
 
     gameData.coverFileName = parseGameCover(gameData.coverFileName);
 
+    // remove security related fields for return
+    gameData.user.password = undefined;
+    gameData.user.email = undefined;
+
+    gameData.user.avatarFileName = parseAvatar(gameData.user.avatarFileName);
+
     gameData.comments.forEach((comment) => {
         // remove security related fields for return
         comment.user.password = undefined;
