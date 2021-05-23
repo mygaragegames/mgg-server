@@ -20,7 +20,7 @@ router.route('/:userid')
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
-router.route('/:userid/updateAvatar')
+router.route('/:userid/avatar')
     .put(auth.verifyToken, upload.single('avatar'), putUpdateAvatarHandler)
     .delete(auth.verifyToken, deleteUpdateAvatarHandler)
 
