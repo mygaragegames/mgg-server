@@ -57,6 +57,9 @@ function deleteGame( game ) {
             deleteGameScreenshot(gameScreenshot);
         });
 
+        // Remove Cover
+        deleteGameCover(game);
+
         // Remove Comments
         game.comments.forEach((gameComment) => {
             deleteGameComment(gameComment);
