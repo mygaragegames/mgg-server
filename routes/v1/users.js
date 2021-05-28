@@ -4,7 +4,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const path = require('path');
 const auth = require('../../middlewares/auth');
-const { parseAvatar } = require('../../src/parsers');
+const { parseAvatar, parseGameCover } = require('../../src/parsers');
 const { User } = require('../../sequelize');
 const { getAllUsers, getOneUser, createUser, setAvatar, removeAvatar } = require('../../src/users');
 const { getOnePlaylist } = require('../../src/playlists');
@@ -57,6 +57,13 @@ async function getOneHandler(req, res) {
     userData.email = undefined;
     userData.avatarFileName = parseAvatar(userData.avatarFileName);
 
+    userData.games.forEach((game) => {
+        game.coverFileName = parseGameCover(game.coverFileName);
+        game.user.password = undefined;
+        game.user.email = undefined;
+        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+    });
+
     res.status(200).json(userData);
 }
 async function postOneHandler(req, res) {
@@ -93,6 +100,9 @@ async function postOneHandler(req, res) {
                 return;
             case 409:
                 res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
+                return;
+            case 418:
+                res.status(418).json({name: "USERNAME_INVALID", text: "Username is not valid!"});
                 return;
             case 400:
                 res.status(400).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
