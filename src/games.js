@@ -6,7 +6,7 @@ const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
 const { Game, User, GameScreenshot, GameComment, GameChannel } = require('../sequelize');
-const { checkGameID } = require('./parsers');
+const { isGameIDValid } = require('./parsers');
 const { deleteGameScreenshot } = require('./gameScreenshots');
 const { deleteGameComment } = require('./gameComments');
 
@@ -33,7 +33,7 @@ function getOneGame( searchOptions ) {
 
 function createGame( data ) {
     return new Promise((resolve, reject) => {
-        if(!checkGameID(data.ingameID)) {
+        if(!isGameIDValid(data.ingameID)) {
             reject(400);
             return;
         }
@@ -48,7 +48,7 @@ function createGame( data ) {
 
 function updateGame( game, newData ) {
     return new Promise((resolve, reject) => {
-        if(newData.ingameID != undefined && !checkGameID(newData.ingameID)) {
+        if(newData.ingameID != undefined && !isGameIDValid(newData.ingameID)) {
             reject(400);
             return;
         }
