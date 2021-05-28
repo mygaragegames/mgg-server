@@ -35,7 +35,7 @@ async function postOneHandler(req, res) {
     saveGameScreenshot(game, req.files).then(() => {
         res.status(201).json({name: "GAMESCREENSHOTS_UPLOADED", text: "Screenshots were uploaded"});
         return;
-    }).catch(() => {
+    }).catch((error) => {
         switch(error) {
             default:
                 res.status(500).json({name: "UNKNOWN_ERROR", text: "Screenshots could not be updated."});
