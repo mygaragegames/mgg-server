@@ -24,8 +24,22 @@ function parseGameCover(fileName) {
     }
 }
 
+function checkCreatorID(unfilteredCreatorID) {
+    let creatorIDRegex = /^G-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
+
+    return creatorIDRegex.test(unfilteredCreatorID);
+}
+
+function checkGameID(unfilteredGameID) {
+    let gameIDRegex = /^G-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
+
+    return gameIDRegex.test(unfilteredGameID);
+}
+
 module.exports = {
     parseAvatar,
     parseGameScreenshot,
-    parseGameCover
+    parseGameCover,
+    checkCreatorID,
+    checkGameID
 }
