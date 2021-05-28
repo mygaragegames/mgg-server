@@ -3,7 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameScreenshot, parseGameCover, checkGameID } = require('../../src/parsers');
+const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
 
 let upload = multer({ dest: '/tmp/'});
