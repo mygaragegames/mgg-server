@@ -86,12 +86,17 @@ async function postOneHandler(req, res) {
 
         res.status(201).json(userData);
     }).catch((error) => {
-        console.error(error);
-
-        if(error == 409) {
-            res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
-        } else {
-            res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+        switch(error) {
+            case 500:
+            default:
+                res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+                return;
+            case 409:
+                res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
+                return;
+            case 400:
+                res.status(400).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
+                return;
         }
     });
 }

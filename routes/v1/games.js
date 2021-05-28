@@ -3,7 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
+const { parseAvatar, parseGameScreenshot, parseGameCover, checkGameID } = require('../../src/parsers');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
 
 let upload = multer({ dest: '/tmp/'});
@@ -111,8 +111,14 @@ async function postOneHandler(req, res) {
 
         res.status(201).json( game );
     }).catch((error) => {
-        console.error(error);
-        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+        switch(error) {
+            default:
+                res.status(500).json({name: "UNKNOWN_ERROR", text: "Game could not be updated."});
+                return;
+            case 400:
+                res.status(400).json({name: "GAME_GAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (G-000-000-000)."});
+                return;
+        }
     });
 }
 async function putOneHandler(req, res) {
@@ -138,12 +144,22 @@ async function putOneHandler(req, res) {
         return;
     }
 
-    game.setChannels(req.body.channels);
+    if(req.body.channels != undefined) {
+        game.setChannels(req.body.channels);
+    }
+
     updateGame( game, data ).then((data) => {
         res.status(201).json({name: "GAME_UPDATED", text: "Game was updated."});
         return;
     }).catch((error) => {
-        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+        switch(error) {
+            default:
+                res.status(500).json({name: "UNKNOWN_ERROR", text: "Game could not be updated."});
+                return;
+            case 400:
+                res.status(400).json({name: "GAME_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (G-000-000-000)."});
+                return;
+        }
     });
 }
 async function deleteOneHandler(req, res) {

@@ -6,6 +6,7 @@ const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
 const { User, Playlist } = require('../sequelize');
+const { checkCreatorID } = require('./parsers');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -40,6 +41,11 @@ function createUser( data ) {
     return new Promise((resolve, reject) => {
         data.password = bcrypt.hashSync(data.password, 12);
 
+        if(data.ingameID != undefined && !checkCreatorID(data.ingameID)) {
+            reject(400);
+            return;
+        }
+
         User.create(data).then((userData) => {
             // Give user role
             userData.setRoles([1]);
@@ -64,6 +70,12 @@ function createUser( data ) {
 
 function updateUser( userID, data ) {
     return new Promise((resolve, reject) => {
+        
+        if(data.ingameID != undefined && !checkCreatorID(data.ingameID)) {
+            reject(400);
+            return;
+        }
+
         resolve();
     });
 }
