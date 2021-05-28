@@ -4,7 +4,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const path = require('path');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameCover } = require('../../src/parsers');
+const { parseAvatar, parseGameCover, isGameIDValid, isUsernameValid, isCreatorIDValid } = require('../../src/parsers');
 const { User } = require('../../sequelize');
 const { getAllUsers, getOneUser, createUser, setAvatar, removeAvatar } = require('../../src/users');
 const { getOnePlaylist } = require('../../src/playlists');
@@ -46,7 +46,16 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let userData = await getOneUser({ id: req.params.userid }).catch((error) => { return null; });
+    let searchOptions = undefined;
+    if(parseInt(req.params.userid)) {
+        searchOptions = { id: req.params.userid };
+    } else if(isCreatorIDValid(req.params.userid)) {
+        searchOptions = { ingameID: req.params.userid };
+    } else if(isUsernameValid(req.params.userid)) {
+        searchOptions = { username: req.params.userid };
+    }
+
+    let userData = await getOneUser(searchOptions).catch((error) => { return null; });
     if(userData === null) {
         res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
         return;
