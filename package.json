@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon server.js",
-    "test:setup": "node tests/setup.js"
+    "test:setup": "node tests/setup.js",
+    "test:idparser": "node tests/idparser.js"
   },
   "repository": {
     "type": "git",

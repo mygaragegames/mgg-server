@@ -25,7 +25,7 @@ function parseGameCover(fileName) {
 }
 
 function checkCreatorID(unfilteredCreatorID) {
-    let creatorIDRegex = /^G-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
+    let creatorIDRegex = /^P-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
 
     return creatorIDRegex.test(unfilteredCreatorID);
 }
