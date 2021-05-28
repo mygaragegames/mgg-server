@@ -5,8 +5,8 @@ const readChunk = require('read-chunk');
 const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
-const { User, Playlist } = require('../sequelize');
-const { checkCreatorID } = require('./parsers');
+const { User, Playlist, Game } = require('../sequelize');
+const { isUsernameValid, isCreatorIDValid } = require('./parsers');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -26,7 +26,10 @@ function getAllUsers() {
 
 function getOneUser( searchOptions ) {
     return new Promise((resolve, reject) => {
-        User.findOne({ where: searchOptions, include: { model: Playlist, as: "playlists" }}).then((userData) => {
+        User.findOne({ where: searchOptions, include: [
+            { model: Playlist, as: "playlists" },
+            { model: Game, as: "games", include: { model: User, as: "user" } }]})
+        .then((userData) => {
             if(userData === null){
                 reject(404);
                 return;
@@ -41,7 +44,12 @@ function createUser( data ) {
     return new Promise((resolve, reject) => {
         data.password = bcrypt.hashSync(data.password, 12);
 
-        if(data.ingameID != undefined && !checkCreatorID(data.ingameID)) {
+        if(!isUsernameValid(data.username)) {
+            reject(418);
+            return;
+        }
+
+        if(data.ingameID != undefined && !isCreatorIDValid(data.ingameID)) {
             reject(400);
             return;
         }
@@ -71,7 +79,7 @@ function createUser( data ) {
 function updateUser( userID, data ) {
     return new Promise((resolve, reject) => {
         
-        if(data.ingameID != undefined && !checkCreatorID(data.ingameID)) {
+        if(data.ingameID != undefined && !isCreatorIDValid(data.ingameID)) {
             reject(400);
             return;
         }
