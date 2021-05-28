@@ -12,7 +12,12 @@ const { deleteGameComment } = require('./gameComments');
 
 function getAllGames() {
     return new Promise((resolve, reject) => {
-        Game.findAll({ include: { model: User, as: "user" } }).then((games) => {
+        Game.findAll({
+            include: { model: User, as: "user" },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        }).then((games) => {
             resolve(games);
         });
     });

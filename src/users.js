@@ -10,7 +10,11 @@ const { isUsernameValid, isCreatorIDValid } = require('./parsers');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
-        User.findAll().then((users) => {
+        User.findAll({
+            order: [
+                [ 'createdAt', 'ASC']
+            ]
+        }).then((users) => {
             let output = [];
 
             users.forEach((user) => {
@@ -26,10 +30,16 @@ function getAllUsers() {
 
 function getOneUser( searchOptions ) {
     return new Promise((resolve, reject) => {
-        User.findOne({ where: searchOptions, include: [
-            { model: Playlist, as: "playlists" },
-            { model: Game, as: "games", include: { model: User, as: "user" } }]})
-        .then((userData) => {
+        User.findOne({
+            where: searchOptions,
+            include: [
+                { model: Playlist, as: "playlists" },
+                { model: Game, as: "games", include: { model: User, as: "user" } }
+            ],
+            order: [
+                [{ model: Game, as: "games" }, 'createdAt', 'DESC']
+            ]
+        }).then((userData) => {
             if(userData === null){
                 reject(404);
                 return;
