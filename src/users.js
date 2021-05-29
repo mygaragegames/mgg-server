@@ -5,8 +5,10 @@ const readChunk = require('read-chunk');
 const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
-const { User, Playlist, Game } = require('../sequelize');
+const { User, Playlist, Game, GameComment } = require('../sequelize');
 const { isUsernameValid, isCreatorIDValid } = require('./parsers');
+const { deleteGame } = require('./games');
+const { deleteGameComment } = require('./gameComments');
 const { deletePlaylist } = require('./playlists');
 
 function getAllUsers() {
@@ -35,6 +37,7 @@ function getOneUser( searchOptions ) {
             where: searchOptions,
             include: [
                 { model: Playlist, as: "playlists" },
+                { model: GameComment, as: "comments", include: { model: User, as: "user" } },
                 { model: Game, as: "games", include: { model: User, as: "user" } }
             ],
             order: [
@@ -103,34 +106,6 @@ function updateUser( user, newData ) {
 
         user.update( newData ).then((newUser) => {
             resolve(newUser);
-        }).catch((error) => {
-            reject(error);
-        });
-    });
-}
-
-function deleteUser( user ) {
-    return new Promise((resolve, reject) => {
-        // Remove User
-        user.games.forEach((game) => {
-            deleteGame(game);
-        });
-
-        // Remove Avatar
-        deleteAvatar(user);
-
-        // Remove Comments
-        user.comments.forEach((gameComment) => {
-            deleteGameComment(gameComment);
-        });
-
-        // Remove Playlists
-        user.playlists.forEach((playlist) => {
-            deletePlaylist(playlist);
-        });
-
-        user.destroy().then(() => {
-            resolve();
         }).catch((error) => {
             reject(error);
         });
@@ -213,7 +188,6 @@ module.exports = {
     getAllUsers,
     getOneUser,
     updateUser,
-    deleteUser,
     setAvatar,
     deleteAvatar,
 }

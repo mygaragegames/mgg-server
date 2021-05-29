@@ -16,8 +16,7 @@ router.route('/')
 
 router.route('/:userid')
     .get(getOneHandler)
-    .put(auth.verifyToken, putOneHandler)
-    .delete(auth.verifyToken, deleteOneHandler);
+    .put(auth.verifyToken, putOneHandler);
 
 router.route('/:userid/avatar')
     .put(auth.verifyToken, upload.single('avatar'), putUpdateAvatarHandler)
@@ -153,28 +152,6 @@ async function putOneHandler(req, res) {
                 res.status(400).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
                 return;
         }
-    });
-}
-async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Users) Users->Delete"));
-
-    let user = await getOneUser({ id: parseInt(req.params.userid) }).catch(() => { return null; });
-    if(user === null) {
-        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
-        return;
-    }
-
-    // Check if user is owner or moderator/admin
-    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
-        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
-        return;
-    }
-
-    deleteUser( user ).then((data) => {
-        res.status(200).json({name: "USER_DELETED", text: "User was deleted."});
-        return;
-    }).catch((error) => {
-        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
     });
 }
 async function putUpdateAvatarHandler(req, res) {
