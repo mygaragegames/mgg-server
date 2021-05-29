@@ -4,10 +4,9 @@ const router = express.Router();
 const chalk = require('chalk');
 const path = require('path');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameCover, isGameIDValid, isUsernameValid, isCreatorIDValid } = require('../../src/parsers');
+const { parseAvatar, parseGameCover, isUsernameValid, isCreatorIDValid } = require('../../src/parsers');
 const { User } = require('../../sequelize');
-const { getAllUsers, getOneUser, createUser, setAvatar, removeAvatar } = require('../../src/users');
-const { getOnePlaylist } = require('../../src/playlists');
+const { getAllUsers, getOneUser, createUser, updateUser, deleteUser, setAvatar, deleteAvatar } = require('../../src/users');
 
 let upload = multer({ dest: '/tmp/'});
 
@@ -122,12 +121,61 @@ async function postOneHandler(req, res) {
 async function putOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Users) Users->Put"));
 
-    // TODO: Update User
+    const data = {
+        pronouns: req.body.pronouns,
+        ingameID: req.body.ingameID,
+        socialDiscord: req.body.socialDiscord,
+        socialTwitter: req.body.socialTwitter,
+        socialYouTube: req.body.socialYouTube,
+    };
+
+    let user = await getOneUser({ id: parseInt(req.params.userid) }).catch(() => { return null; });
+    if(user === null) {
+        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
+        return;
+    }
+
+    // Check if user is owner or moderator/admin
+    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    updateUser( user, data ).then((data) => {
+        res.status(201).json({name: "USER_UPDATED", text: "User was updated."});
+        return;
+    }).catch((error) => {
+        switch(error) {
+            default:
+                res.status(500).json({name: "UNKNOWN_ERROR", text: "User could not be updated."});
+                return;
+            case 400:
+                res.status(400).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
+                return;
+        }
+    });
 }
 async function deleteOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Users) Users->Delete"));
 
-    // TODO: Remove User
+    let user = await getOneUser({ id: parseInt(req.params.userid) }).catch(() => { return null; });
+    if(user === null) {
+        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
+        return;
+    }
+
+    // Check if user is owner or moderator/admin
+    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    deleteUser( user ).then((data) => {
+        res.status(200).json({name: "USER_DELETED", text: "User was deleted."});
+        return;
+    }).catch((error) => {
+        res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
+    });
 }
 async function putUpdateAvatarHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Users) Users->PutUpdateAvatar"));
