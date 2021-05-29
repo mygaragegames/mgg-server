@@ -7,6 +7,7 @@ const uniqid = require('uniqid');
 const path = require("path");
 const { User, Playlist, Game } = require('../sequelize');
 const { isUsernameValid, isCreatorIDValid } = require('./parsers');
+const { deletePlaylist } = require('./playlists');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -86,21 +87,53 @@ function createUser( data ) {
     });
 }
 
-function updateUser( userID, data ) {
+function updateUser( user, newData ) {
     return new Promise((resolve, reject) => {
-        
-        if(data.ingameID != undefined && !isCreatorIDValid(data.ingameID)) {
+        newData.avatarFileName = undefined;
+        newData.email = undefined;
+
+        if(newData.password != undefined) {
+            newData.password = bcrypt.hashSync(newData.password, 12);
+        }
+
+        if(newData.ingameID != undefined && !isCreatorIDValid(newData.ingameID)) {
             reject(400);
             return;
         }
 
-        resolve();
+        user.update( newData ).then((newUser) => {
+            resolve(newUser);
+        }).catch((error) => {
+            reject(error);
+        });
     });
 }
 
-function deleteUser( userID ) {
+function deleteUser( user ) {
     return new Promise((resolve, reject) => {
-        resolve();
+        // Remove User
+        user.games.forEach((game) => {
+            deleteGame(game);
+        });
+
+        // Remove Avatar
+        deleteAvatar(user);
+
+        // Remove Comments
+        user.comments.forEach((gameComment) => {
+            deleteGameComment(gameComment);
+        });
+
+        // Remove Playlists
+        user.playlists.forEach((playlist) => {
+            deletePlaylist(playlist);
+        });
+
+        user.destroy().then(() => {
+            resolve();
+        }).catch((error) => {
+            reject(error);
+        });
     });
 }
 
