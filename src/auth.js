@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const chalk = require('chalk');
 const path = require("path");
 const { User, UserRole, ROLES } = require('../sequelize');
+const { isEmailValid } = require('./parsers');
 const { getOneUser } = require('./users');
 
 async function login( username, password ) {
@@ -49,7 +50,8 @@ async function verify( token ) {
             }
 
             getOneUser( { id: decoded.id} ).then((userData) => {
-                let userRoles = []
+                let userRoles = [];
+
                 userData.getRoles().then((roles) => {
                     roles.forEach(role => {
                         userRoles.push(role.name);
@@ -68,7 +70,38 @@ async function verify( token ) {
     });
 }
 
+function update( user, newData ) {
+    return new Promise((resolve, reject) => {
+        if(newData.email != undefined && newData.email != "") {
+            if(!isEmailValid(newData.email)) {
+                reject(406);
+                return;
+            }
+        } else {
+            newData.email = undefined;
+        }
+
+        if(newData.password != undefined && newData.password != "") {
+            newData.password = bcrypt.hashSync(newData.password, 12);
+        } else {
+            newData.password = undefined;
+        }
+
+        user.update( newData ).then((newUser) => {
+            resolve(newUser);
+        }).catch((error) => {
+            if(error.name === 'SequelizeUniqueConstraintError') {
+                reject(409);
+            } else {
+                console.error(error);
+                reject(error);
+            }
+        });
+    });
+}
+
 module.exports = {
     login,
     verify,
+    update,
 }
