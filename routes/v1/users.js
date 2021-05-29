@@ -6,7 +6,7 @@ const path = require('path');
 const auth = require('../../middlewares/auth');
 const { parseAvatar, parseGameCover, isUsernameValid, isCreatorIDValid } = require('../../src/parsers');
 const { User } = require('../../sequelize');
-const { getAllUsers, getOneUser, createUser, updateUser, deleteUser, setAvatar, deleteAvatar } = require('../../src/users');
+const { getAllUsers, getOneUser, createUser, updateUser, setAvatar, deleteAvatar } = require('../../src/users');
 
 let upload = multer({ dest: '/tmp/'});
 
@@ -110,6 +110,9 @@ async function postOneHandler(req, res) {
                 return;
             case 418:
                 res.status(418).json({name: "USERNAME_INVALID", text: "Username is not valid!"});
+                return;
+            case 406:
+                res.status(406).json({name: "EMAIL_INVALID", text: "Email is not valid!"});
                 return;
             case 400:
                 res.status(400).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
