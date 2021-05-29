@@ -30,14 +30,24 @@ function isUsernameValid(unfilteredUsername) {
     return usernameRegex.test(unfilteredUsername);
 }
 
+function isEmailValid(unfilteredEmail) {
+    let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g;
+
+    return emailRegex.test(unfilteredEmail);
+}
+
 function isCreatorIDValid(unfilteredCreatorID) {
     let creatorIDRegex = /^P-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
+
+    if(unfilteredCreatorID === "") { return true; }
 
     return creatorIDRegex.test(unfilteredCreatorID);
 }
 
 function isGameIDValid(unfilteredGameID) {
     let gameIDRegex = /^G-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
+
+    if(unfilteredGameID === "") { return true; }
 
     return gameIDRegex.test(unfilteredGameID);
 }
@@ -47,6 +57,7 @@ module.exports = {
     parseGameScreenshot,
     parseGameCover,
     isUsernameValid,
+    isEmailValid,
     isCreatorIDValid,
     isGameIDValid
 }
