@@ -20,6 +20,12 @@ let verifyToken = (req, res, next) => {
         }
 
         getOneUser( { id: decoded.id} ).then((userData) => {
+            // Check if user is banned
+            if(userData.banActive) {
+                res.status(401).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: userData.banReason});
+                return;
+            }
+
             req.user = userData;
             req.userId = userData.id;
             
