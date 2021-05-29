@@ -53,6 +53,8 @@ function createGame( data ) {
 
 function updateGame( game, newData ) {
     return new Promise((resolve, reject) => {
+        newData.coverFileName = undefined;
+
         if(newData.ingameID != undefined && !isGameIDValid(newData.ingameID)) {
             reject(400);
             return;
