@@ -6,7 +6,7 @@ const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
 const { User, Playlist, Game, GameComment } = require('../sequelize');
-const { isUsernameValid, isCreatorIDValid } = require('./parsers');
+const { isUsernameValid, isCreatorIDValid, isEmailValid } = require('./parsers');
 const { deleteGame } = require('./games');
 const { deleteGameComment } = require('./gameComments');
 const { deletePlaylist } = require('./playlists');
@@ -63,6 +63,11 @@ function createUser( data ) {
             return;
         }
 
+        if(!isEmailValid(data.email)) {
+            reject(406);
+            return;
+        }
+
         if(data.ingameID != undefined && !isCreatorIDValid(data.ingameID)) {
             reject(400);
             return;
@@ -94,10 +99,7 @@ function updateUser( user, newData ) {
     return new Promise((resolve, reject) => {
         newData.avatarFileName = undefined;
         newData.email = undefined;
-
-        if(newData.password != undefined) {
-            newData.password = bcrypt.hashSync(newData.password, 12);
-        }
+        newData.password = undefined;
 
         if(newData.ingameID != undefined && !isCreatorIDValid(newData.ingameID)) {
             reject(400);
@@ -174,7 +176,7 @@ function deleteAvatar( user ) {
         } catch(error) {}
 
         user.update({
-            avatarFile: null
+            avatarFileName: null
         }).then(() => {
             resolve();
         }).catch((error) => {
