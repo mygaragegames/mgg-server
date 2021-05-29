@@ -1,14 +1,19 @@
 const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
-const { parseAvatar } = require('../../src/parsers');
-const { login, verify } = require('../../src/auth');
+const auth = require('../../middlewares/auth');
+const { parseAvatar, isEmailValid } = require('../../src/parsers');
+const { login, verify, update } = require('../../src/auth');
+const { getOneUser } = require('../../src/users');
 
 router.route('/login')
     .post(postLoginHandler);
 
 router.route('/verify')
     .post(postVerifyHandler);
+
+router.route('/update/:userid')
+    .put(auth.verifyToken, putUpdateHandler);
 
 async function postLoginHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Auth) Auth->Login"));
@@ -22,6 +27,11 @@ async function postLoginHandler(req, res) {
         // remove security related fields for return
         loginData.userData.password = undefined;
         loginData.userData.avatarFileName = parseAvatar(loginData.userData.avatarFileName);
+
+        if(loginData.userData.banActive) {
+            res.status(401).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: loginData.userData.banReason});
+            return;
+        }
 
         res.status(200).json(loginData);
         return;
@@ -51,6 +61,11 @@ async function postVerifyHandler(req, res) {
         // remove security related fields for return
         verifyData.userData.password = undefined;
         verifyData.userData.avatarFileName = parseAvatar(verifyData.userData.avatarFileName);
+
+        if(verifyData.userData.banActive) {
+            res.status(401).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: verifyData.userData.banReason});
+            return;
+        }
         
         res.status(200).json(verifyData);
         return;
@@ -61,6 +76,60 @@ async function postVerifyHandler(req, res) {
         } else {
             res.status(500).json({name: "UNKNOWN_ERROR", text: "Could not login."});
             return;
+        }
+    });
+}
+
+async function putUpdateHandler(req, res) {
+    console.log(chalk.grey("[mgg-server] (Auth) Auth->Update"));
+
+    if(req.params.userid === '') {
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: userId"});
+        return;
+    }
+
+    let user = await getOneUser({ id: parseInt(req.params.userid) }).catch(() => { return null; });
+    if(user === null) {
+        res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
+        return;
+    }
+
+    // Check if user is owner or moderator/admin
+    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
+        return;
+    }
+
+    let updatePayload = {};
+    if(req.body.email != undefined) {
+        updatePayload.email = req.body.email;
+    }
+    if(req.body.password != undefined) {
+        updatePayload.password = req.body.password;
+    }
+
+    update(user, updatePayload).then(() => {
+        res.status(201).json({name: "USER_UPDATED", text: "User was updated."});
+        return;
+    }).catch((error) => {
+        switch(error) {
+            case 500:
+            default:
+                console.error(error);
+                res.status(500).json({name: "UNKNOWN_ERROR", text: "User could not be updated."});
+                return;
+            case 404:
+                res.status(404).json({name: "USER_NOT_FOUND", text: `There is no user with the id ${req.params.userid}`});
+                return;
+            case 406:
+                res.status(406).json({name: "EMAIL_INVALID", text: "Email is not valid!"});
+                return;
+            case 409:
+                res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
+                return;
+            case 403:
+                res.status(403).json({name: "AUTHENTICATION_WRONG", text: "Password is not correct."});
+                return;
         }
     });
 }
