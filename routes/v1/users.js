@@ -15,7 +15,7 @@ router.route('/')
     .post(postOneHandler);
 
 router.route('/:userid')
-    .get(getOneHandler)
+    .get(auth.optionalToken, getOneHandler)
     .put(auth.verifyToken, putOneHandler);
 
 router.route('/:userid/avatar')
@@ -59,17 +59,32 @@ async function getOneHandler(req, res) {
         return;
     }
 
+    // Dirty hack to make the data editable
+    userData = JSON.parse(JSON.stringify(userData));
+
     // remove security related fields for return
     userData.password = undefined;
     userData.email = undefined;
     userData.avatarFileName = parseAvatar(userData.avatarFileName);
 
+    let filteredGames = [];
     userData.games.forEach((game) => {
+        // Only add display status 1 & 2 games when owner or admin/moderator
+        if(game.displayStatus == 1 || game.displayStatus == 2) {
+            if(req.userId == null) return;
+            if(req.userRoles == null) return;
+            if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) return;
+        }
+
         game.coverFileName = parseGameCover(game.coverFileName);
         game.user.password = undefined;
         game.user.email = undefined;
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+
+        filteredGames.push(game);
     });
+
+    userData.games = filteredGames;
 
     res.status(200).json(userData);
 }
