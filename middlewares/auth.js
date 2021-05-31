@@ -1,10 +1,5 @@
-const bcrypt = require('bcrypt');
 const chalk = require('chalk');
-const fs = require("fs");
-const path = require("path");
 const jwt = require("jsonwebtoken");
-
-const { User, ROLES } = require('../sequelize');
 const { getOneUser } = require('../src/users');
 
 let verifyToken = (req, res, next) => {
@@ -22,7 +17,7 @@ let verifyToken = (req, res, next) => {
         getOneUser( { id: decoded.id} ).then((userData) => {
             // Check if user is banned
             if(userData.banActive) {
-                res.status(401).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: userData.banReason});
+                res.status(423).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: userData.banReason});
                 return;
             }
 
@@ -48,6 +43,67 @@ let verifyToken = (req, res, next) => {
     });
 }
 
+let optionalToken = (req, res, next) => {
+    let token = req.headers["x-access-token"];
+
+    if(token === undefined) {
+        req.user = null;
+        req.userId = null;
+        req.userRoles = [];
+
+        next();
+        return;
+    }
+
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (error, decoded) => {
+        if(error) {
+            req.user = null;
+            req.userId = null;
+            req.userRoles = [];
+    
+            next();
+            return;
+        }
+
+        getOneUser( { id: decoded.id} ).then((userData) => {
+            // Check if user is banned
+            if(userData.banActive) {
+                req.user = null;
+                req.userId = null;
+                req.userRoles = [];
+        
+                next();
+                return;
+            }
+
+            req.user = userData;
+            req.userId = userData.id;
+            
+            userData.getRoles().then((roles) => {
+                req.userRoles = [];
+
+                roles.forEach(role => {
+                    req.userRoles.push(role.name);
+                });
+
+                next();
+            }).catch(() => {
+                req.userRoles = [];
+
+                next();
+            });
+        }).catch((error) => {
+            req.user = null;
+            req.userId = null;
+            req.userRoles = [];
+    
+            next();
+            return;
+        });
+    });
+}
+
 module.exports = {
-    verifyToken
+    verifyToken,
+    optionalToken
 }
