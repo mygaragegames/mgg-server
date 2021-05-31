@@ -3,15 +3,17 @@ const { User, Game, Playlist } = require('../sequelize');
 
 function getOnePlaylist( searchOptions ) {
     return new Promise((resolve, reject) => {
-        Playlist.findOne({ where: searchOptions, include: { model: User, as: 'user' }}).then((playlistData) => {
+        Playlist.findOne({
+                where: searchOptions,
+                include: [
+                    { model: User, as: 'user' },
+                    { model: Game, as: 'games', include: { model: User, as: 'user' } }
+                ]
+        }).then((playlistData) => {
             if(playlistData === null){
                 reject(404);
                 return;
             }
-
-            // remove security related fields for return
-            playlistData.user.password = undefined;
-            playlistData.user.email = undefined;
 
             resolve(playlistData);
         });
