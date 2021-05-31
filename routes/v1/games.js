@@ -5,15 +5,16 @@ const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
 const { getAllGames, getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
+const { getOnePlaylist } = require('../../src/playlists');
 
 let upload = multer({ dest: '/tmp/'});
 
 router.route('/')
-    .get(getAllHandler)
+    .get(auth.optionalToken, getAllHandler)
     .post(auth.verifyToken, postOneHandler);
 
 router.route('/:gameid')
-    .get(getOneHandler)
+    .get(auth.optionalToken, getOneHandler)
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
@@ -24,8 +25,20 @@ router.route('/:gameid/cover')
 async function getAllHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
 
-    let games = await getAllGames();
-    games.forEach((game) => {
+    let gamesData = await getAllGames();
+
+    // Dirty hack to make the data editable
+    gamesData = JSON.parse(JSON.stringify(gamesData));
+
+    let filteredGames = [];
+    gamesData.forEach((game) => {
+        // Only add display status 1 & 2 games when owner or admin/moderator
+        if(game.displayStatus == 1 || game.displayStatus == 2) {
+            if(req.userId == null) return;
+            if(req.userRoles == null) return;
+            if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) return;
+        }
+
         game.coverFileName = parseGameCover(game.coverFileName);
 
         // remove security related fields for return
@@ -33,10 +46,13 @@ async function getAllHandler(req, res) {
         game.user.email = undefined;
 
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
-    
-    });
 
-    res.status(200).json(games);
+        filteredGames.push(game);
+    });
+    
+    gamesData = filteredGames;
+
+    res.status(200).json(gamesData);
 }
 async function getOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
@@ -46,10 +62,31 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let gameData = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
+    gameData = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
     if(gameData === null) {
         res.status(404).json({name: "GAME_NOT_FOUND", text: `There is no game with the id ${req.params.gameid}`});
         return;
+    }
+
+    // Only allow moderators/admins and owners to get display status 2 games
+    if(gameData.displayStatus == 2) {
+        if(gameData.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+            res.status(403).json({name: "GAME_PRIVATE", text: "You are not allowed to see this game."});
+            return;
+        }
+    }
+
+    // Check if game is in playlist
+    let isInPlaylist = false;
+    if(req.user != null) {
+        let playlistData = await getOnePlaylist({ id: req.user.playlists[0].id }).catch(() => { return null; });
+        if(playlistData != null) {
+            playlistData.games.forEach(game => {
+                if(game.id === gameData.id) {
+                    isInPlaylist = true;
+                }
+            })
+        }
     }
 
     gameData.coverFileName = parseGameCover(gameData.coverFileName);
@@ -71,13 +108,13 @@ async function getOneHandler(req, res) {
         gameScreenshot.fileName = parseGameScreenshot(gameScreenshot.fileName);
     });
 
-    res.status(200).json(gameData);
+    res.status(200).json({ game: gameData, isInPlaylist: isInPlaylist});
 }
 async function postOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Post"));
 
     let filteredDisplayStatus = 0;
-    switch(req.body.displayStatus) {
+    switch(parseInt(req.body.displayStatus)) {
         default:
         case 0:
             filteredDisplayStatus = 0;
@@ -124,11 +161,25 @@ async function postOneHandler(req, res) {
 async function putOneHandler(req, res) {
     console.log(chalk.grey("[mgg-server] (Games) Games->Put"));
 
+    let filteredDisplayStatus = 0;
+    switch(parseInt(req.body.displayStatus)) {
+        default:
+        case 0:
+            filteredDisplayStatus = 0;
+            break;
+        case 1:
+            filteredDisplayStatus = 1;
+            break;
+        case 2:
+            filteredDisplayStatus = 2;
+            break;
+    }
+
     const data = {
         title: req.body.title,
         ingameID: req.body.ingameID,
         description: req.body.description,
-        displayStatus: req.body.displayStatus,
+        displayStatus: filteredDisplayStatus,
         youtubeID: req.body.youtubeID,
     };
 
