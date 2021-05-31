@@ -3,6 +3,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { User, Game } = require('../../sequelize');
+const { parseAvatar, parseGameCover } = require('../../src/parsers');
 const { getOnePlaylist, createPlaylist, updatePlaylist, deletePlaylist } = require('../../src/playlists');
 
 router.route('/')
@@ -32,6 +33,18 @@ async function getOneHandler(req, res) {
         res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
     }
+    
+    playlistDetail.user.password = undefined;
+    playlistDetail.user.email = undefined;
+    playlistDetail.user.avatarFileName = parseAvatar(playlistDetail.user.avatarFileName);
+
+    playlistDetail.games.forEach(game => {
+        game.coverFileName = parseGameCover(game.coverFileName);
+        
+        game.user.password = undefined;
+        game.user.email = undefined;
+        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+    });
 
     res.status(200).json(playlistDetail);
 }
