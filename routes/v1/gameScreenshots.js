@@ -6,14 +6,32 @@ const auth = require('../../middlewares/auth');
 const { getOneGame } = require('../../src/games');
 const { getOneGameScreenshot, saveGameScreenshot, deleteGameScreenshot } = require('../../src/gameScreenshots');
 
+let isDev = process.env.NODE_ENV !== 'prod';
+
 let upload = multer({ dest: '/tmp/'});
 
 router.route('/:gameid')
     .post(auth.verifyToken, upload.array('screenshots'), postOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
+/**
+ * @api {post} /gameScreenshots/:gameId Uploads a screenshot
+ * @apiName UploadGameScreenshot
+ * @apiGroup GameScreenshots
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} gameId The ID of the Game
+ * @apiParam {Array} screenshots multipart/form-data array of png or jpg files
+ * 
+ * @apiSuccess (201) GAMESCREENSHOTS_UPLOADED Comment were uploaded
+ * @apiError (404) GAME_NOT_FOUND There is no game with the id <code>gameId</code>
+ * @apiError (400) GAMESCREENSHOT_COVER_WRONGFORMAT One or more screenshots are not a png or jpg file
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function postOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (GameScreenshots) GameScreenshots->Post"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (GameScreenshots) GameScreenshots->Post"));
 
     if(req.params.gameid === '' || req.files.length < 1) {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId, screenshots"});
@@ -46,8 +64,23 @@ async function postOneHandler(req, res) {
         }
     });
 }
+
+/**
+ * @api {delete} /gameScreenshots/:screenshotId Deletes a GameScreenshot
+ * @apiName DeleteGameScreenshot
+ * @apiGroup GameScreenshots
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} screenshotId The ID of the GameScreenshot
+ * 
+ * @apiSuccess (200) GAMESCREENSHOT_DELETED Screenshot was deleted
+ * @apiError (404) GAMESCREENSHOT_NOT_FOUND There is no game screenshot with the id <code>screenshotId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (GameScreenshots) GameScreenshots->Delete"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (GameScreenshots) GameScreenshots->Delete"));
 
     if(req.params.gameid === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId"});
