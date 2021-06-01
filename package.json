@@ -7,6 +7,7 @@
     "start": "nodemon server.js",
     "test:setup": "node tests/setup.js",
     "test:idparser": "node tests/idparser.js",
+    "test:usernameparser": "node tests/usernameparser.js",
     "docs:generate": "apidoc -i routes/ -o docs/generated/ -t docs/template"
   },
   "repository": {
@@ -20,8 +21,10 @@
   },
   "homepage": "https://github.com/LauraWebdev/mgg-comingsoon#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "chalk": "^3.0.0",
+    "client-oauth2": "^4.3.3",
     "cors": "^2.8.5",
     "dotenv": "^9.0.0",
     "express": "^4.17.1",
