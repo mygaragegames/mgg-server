@@ -27,5 +27,8 @@ module.exports = (sequelize, type) => {
         socialYouTube: type.STRING,
         banActive: type.BOOLEAN,
         banReason: type.STRING,
+        loginDiscord: type.STRING,
+        loginTwitter: type.STRING,
+        loginGoogle: type.STRING,
     });
 }
