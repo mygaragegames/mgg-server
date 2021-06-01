@@ -16,6 +16,19 @@ let isDev = process.env.NODE_ENV !== 'prod';
 
 const app = express();
 
+// HTTP to HTTPS redirect
+if(!isDev) {
+    console.log(`[mgg-comingsoon] Using HTTPS redirect.`);
+
+    app.use(function(req, res, next) {
+        if (req.secure) {
+            next();
+        } else {
+            res.redirect('https://' + req.headers.host + req.url);
+        }
+    });
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -23,12 +36,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Routes
-app.use('/api/v1', require('./routes/v1/index'));
-
-// HTTP to HTTPS redirect
-if(!isDev) {
-    app.use(forceSecure);
-}
+app.use('/v1', require('./routes/v1/index'));
 
 // Servers
 const httpServer = http.createServer(app);
