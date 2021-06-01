@@ -6,7 +6,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "test:setup": "node tests/setup.js",
-    "test:idparser": "node tests/idparser.js"
+    "test:idparser": "node tests/idparser.js",
+    "docs:generate": "apidoc -i routes/ -o docs/generated/ -t docs/template"
   },
   "repository": {
     "type": "git",

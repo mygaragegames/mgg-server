@@ -33,10 +33,16 @@ app.use(cors());
 app.use(express.json());
 
 // Public assets
-app.use(express.static('public'));
+app.use(express.static('./public'));
 
 // Routes
 app.use('/v1', require('./routes/v1/index'));
+
+// Documentation
+app.use('/docs', express.static('./docs/generated'));
+app.get('/docs', (req, res) => {
+    res.sendFile(__dirname + '/docs/generated/index.html');
+});
 
 // Servers
 const httpServer = http.createServer(app);
