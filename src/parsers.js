@@ -30,6 +30,12 @@ function isUsernameValid(unfilteredUsername) {
     return usernameRegex.test(unfilteredUsername);
 }
 
+function makeUsernameValid(unfilteredUsername) {
+    let usernameRegex = /[^a-zA-Z0-9-_]*/g;
+
+    return unfilteredUsername.replace(usernameRegex, '');
+}
+
 function isEmailValid(unfilteredEmail) {
     let emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/g;
 
@@ -57,6 +63,7 @@ module.exports = {
     parseGameScreenshot,
     parseGameCover,
     isUsernameValid,
+    makeUsernameValid,
     isEmailValid,
     isCreatorIDValid,
     isGameIDValid
