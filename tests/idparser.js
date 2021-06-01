@@ -1,6 +1,6 @@
 require('dotenv').config();
 const chalk = require('chalk');
-const { checkGameID, checkCreatorID } = require('../src/parsers');
+const { isGameIDValid, isCreatorIDValid } = require('../src/parsers');
 
 console.clear();
 
@@ -18,7 +18,7 @@ let gameTests = [
 ];
 
 gameTests.forEach(test => {
-    let testResult = checkGameID(test.input);
+    let testResult = isGameIDValid(test.input);
 
     if(testResult == test.result) {
         console.log(chalk.green(`[mgg-server] (IDParserTest) --> ${test.input} = ${testResult} (Expecting: ${test.result})`));
@@ -43,7 +43,7 @@ let creatorTests = [
 ];
 
 creatorTests.forEach(test => {
-    let testResult = checkCreatorID(test.input);
+    let testResult = isCreatorIDValid(test.input);
 
     if(testResult == test.result) {
         console.log(chalk.green(`[mgg-server] (IDParserTest) --> ${test.input} = ${testResult} (Expecting: ${test.result})`));
