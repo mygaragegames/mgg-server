@@ -39,6 +39,9 @@ app.use(express.static('./public'));
 app.use('/v1', require('./routes/v1/index'));
 
 // Documentation
+app.get('/', (req, res) => {
+    res.redirect(301, '/docs');
+});
 app.use('/docs', express.static('./docs/generated'));
 app.get('/docs', (req, res) => {
     res.sendFile(__dirname + '/docs/generated/index.html');
