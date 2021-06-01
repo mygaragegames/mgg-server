@@ -6,17 +6,36 @@ const { parseAvatar } = require('../../src/parsers');
 const { getOneGame } = require('../../src/games');
 const { getOneGameComment, createGameComment, updateGameComment, deleteGameComment } = require('../../src/gameComments');
 
+let isDev = process.env.NODE_ENV !== 'prod';
+
 router.route('/:gameid')
     .get(getOneHandler)
     .post(auth.verifyToken, postOneHandler)
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
+/**
+ * @api {get} /gameComments/:commentId Get detailled information data from a GameComment
+ * @apiName GetOneGameComment
+ * @apiGroup GameComments
+ * 
+ * @apiParam {Integer} gameId The ID of the GameComment
+ * 
+ * @apiSuccess (200) {Integer} id ID
+ * @apiSuccess (200) {String} text Comment Body
+ * @apiSuccess (200) {DateTime} createAt DateTime of creation
+ * @apiSuccess (200) {DateTime} updatedAt DateTime of last change
+ * @apiSuccess (200) {Integer} gameId ID of the Game from the Comment
+ * @apiSuccess (200) {Integer} userId ID of the User who created the Comment
+ * @apiSuccess (200) {Integer} id ID
+ * @apiSuccess (200) {Object} user Object of the User who created the Comment
+ * @apiError (404) GAMECOMMENT_NOT_FOUND There is no game comment with the id <code>commentId</code>
+ */
 async function getOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Get"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Get"));
 
     if(req.params.gameid == undefined) {
-        res.status(400).json({name: "MISSING_FIELDS", text: "Required parameter: gameid"});
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required parameter: commentId"});
         return;
     }
 
@@ -33,8 +52,23 @@ async function getOneHandler(req, res) {
 
     res.status(200).json(gameCommentData);
 }
+
+/**
+ * @api {post} /gameComments/:gameId Creates a GameComment
+ * @apiName CreateGameComment
+ * @apiGroup GameComments
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {String} text Text of the GameComment
+ * 
+ * @apiSuccess (201) GAMECOMMENT_CREATED Comment was created
+ * @apiError (404) GAME_NOT_FOUND There is no game with the id <code>gameId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function postOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Post"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Post"));
 
     if(req.params.gameid === '' || req.body.text === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId, text"});
@@ -57,8 +91,24 @@ async function postOneHandler(req, res) {
         return;
     });
 }
+
+/**
+ * @api {put} /gameComments/:commentId Updates a GameComment
+ * @apiName UpdateGameComment
+ * @apiGroup GameComments
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} commentId The ID of the GameComment
+ * @apiParam {String} text New text of the GameComment
+ * 
+ * @apiSuccess (200) GAMECOMMENT_UPDATED Comment was updated
+ * @apiError (404) GAMECOMMENT_NOT_FOUND There is no game comment with the id <code>commentId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function putOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Put"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Put"));
 
     if(req.params.gameid === '' || req.body.text === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameCommentId, text"});
@@ -91,8 +141,23 @@ async function putOneHandler(req, res) {
         }
     });
 }
+
+/**
+ * @api {delete} /gameComments/:commentId Deletes a GameComment
+ * @apiName DeleteGameComment
+ * @apiGroup GameComments
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} commentId The ID of the GameComment
+ * 
+ * @apiSuccess (200) GAMECOMMENT_DELETED Comment was deleted
+ * @apiError (404) GAMECOMMENT_NOT_FOUND There is no game comment with the id <code>commentId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Delete"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (GameComments) GameComments->Delete"));
 
     if(req.params.gameid === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: gameId"});
