@@ -6,6 +6,8 @@ const { User, Game } = require('../../sequelize');
 const { parseAvatar, parseGameCover } = require('../../src/parsers');
 const { getOnePlaylist, createPlaylist, updatePlaylist, deletePlaylist } = require('../../src/playlists');
 
+let isDev = process.env.NODE_ENV !== 'prod';
+
 router.route('/')
     .post(auth.verifyToken, postOneHandler);
 
@@ -20,8 +22,25 @@ router.route('/:playlistid/add/:gameid')
 router.route('/:playlistid/delete/:gameid')
     .delete(auth.verifyToken, deleteRemoveHandler);
 
+/**
+ * @api {get} /playlists/:playlistId Get detailled information data from a Playlist
+ * @apiName GetOnePlaylist
+ * @apiGroup Playlists
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} playlistId The ID of the Playlist
+ * 
+ * @apiSuccess (200) {Integer} id ID
+ * @apiSuccess (200) {String} title Title
+ * @apiSuccess (200) {DateTime} createAt DateTime of creation
+ * @apiSuccess (200) {DateTime} updatedAt DateTime of last change
+ * @apiSuccess (200) {Integer} userId ID of the User who created the playlist
+ * @apiSuccess (200) {Object} user Object of the User who created the playlist
+ * @apiSuccess (200) {Array} games Array of Games in the Playlist
+ * @apiError (404) PLAYLIST_NOT_FOUND There is no playlist with the id <code>playlistId</code>
+ */
 async function getOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Get"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Get"));
 
     if(req.params.playlistid == undefined) {
         res.status(400).json({name: "MISSING_DATA", text: "Required parameter: playlistid"});
@@ -48,8 +67,26 @@ async function getOneHandler(req, res) {
 
     res.status(200).json(playlistDetail);
 }
+
+/**
+ * @api {post} /playlists Creates a Playlist
+ * @apiName CreatePlaylist
+ * @apiGroup Playlists
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {String} title Title of the Playlist
+ * 
+ * @apiSuccess (201) {Integer} id ID
+ * @apiSuccess (201) {String} title Title
+ * @apiSuccess (201) {DateTime} createAt DateTime of creation
+ * @apiSuccess (201) {DateTime} updatedAt DateTime of last change
+ * @apiSuccess (201) {Integer} userId ID of the User who created the playlist
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function postOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Post"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Post"));
 
     const data = {
         title: req.body.title,
@@ -67,8 +104,24 @@ async function postOneHandler(req, res) {
         res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
     });
 }
+
+/**
+ * @api {put} /playlists/:playlistId Updates a Playlist
+ * @apiName UpdatePlaylist
+ * @apiGroup Playlists
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} playlistId The ID of the Playlist
+ * @apiParam {String} title New title of the Playlist
+ * 
+ * @apiSuccess (201) PLAYLIST_UPDATED Playlist was updated.
+ * @apiError (404) PLAYLIST_NOT_FOUND There is no playlist with the id <code>playlistId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function putOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Put"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Put"));
 
     const data = {
         id: req.params.playlistid,
@@ -100,8 +153,23 @@ async function putOneHandler(req, res) {
         res.status(500).json({name: "UNKNOWN_SERVER_ERROR", text: "Unknown Server Error! Please try again later!"});
     });
 }
+
+/**
+ * @api {delete} /playlists/:playlistId/ Deletes a Playlist
+ * @apiName DeletePlaylist
+ * @apiGroup Playlists
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} playlistId The ID of the Playlist
+ * 
+ * @apiSuccess (200) PLAYLIST_REMOVED Playlist was deleted.
+ * @apiError (404) PLAYLIST_NOT_FOUND There is no playlist with the id <code>playlistId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function deleteOneHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Delete"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Playlists) Playlists->Delete"));
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
@@ -123,8 +191,25 @@ async function deleteOneHandler(req, res) {
     });
 }
 
+/**
+ * @api {post} /playlists/:playlistId/add/:gameId Adds a Game to a Playlist
+ * @apiName AddToPlaylist
+ * @apiGroup Playlists
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} playlistId The ID of the Playlist
+ * @apiParam {Integer} gameId The ID of the Game
+ * 
+ * @apiSuccess (201) PLAYLIST_GAME_ADDED Game was added to playlist.
+ * @apiError (404) PLAYLIST_NOT_FOUND There is no playlist with the id <code>playlistId</code>
+ * @apiError (404) GAME_NOT_FOUND There is no game with the id <code>gameId</code>
+ * @apiError (409) PLAYLIST_GAME_CONFLICT Game is already in playlist.
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function postAddHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Playlists) Playlists->AddGame"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Playlists) Playlists->AddGame"));
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
@@ -150,8 +235,23 @@ async function postAddHandler(req, res) {
     });
 }
 
+/**
+ * @api {delete} /playlists/:playlistId/delete/:gameId Deletes a Game from a Playlist
+ * @apiName DeleteFromPlaylist
+ * @apiGroup Playlists
+ * 
+ * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiParam {Integer} playlistId The ID of the Playlist
+ * @apiParam {Integer} gameId The ID of the Game
+ * 
+ * @apiSuccess (200) PLAYLIST_GAME_REMOVED Game was deleted from playlist.
+ * @apiError (404) PLAYLIST_NOT_FOUND There is no playlist with the id <code>playlistId</code>
+ * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
+ * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
+ * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
+ */
 async function deleteRemoveHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Playlists) Playlists->RemoveGame"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Playlists) Playlists->RemoveGame"));
 
     let playlist = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlist === null) {
