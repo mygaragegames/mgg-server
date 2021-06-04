@@ -42,6 +42,43 @@ async function login( username, password ) {
     });
 }
 
+async function loginViaMethod( method, id ) {
+    return new Promise((resolve, reject) => {
+        let userQuery = {};
+        switch(method) {
+            case "discord":
+                userQuery = { loginDiscord: id};
+        }
+
+        getOneUser(userQuery).then((userData) => {
+            if(userData === null) {
+                reject(404);
+                return;
+            }
+
+            let newToken = jwt.sign({ id: userData.id }, process.env.JWT_SECRET_KEY, {
+                expiresIn: 86400
+            });
+
+            let userRoles = []
+            userData.getRoles().then((roles) => {
+                roles.forEach(role => {
+                    userRoles.push(role.name);
+                });
+    
+                resolve({
+                    userData: userData,
+                    token: newToken,
+                    roles: userRoles
+                });
+            });
+        }).catch((error) => {
+            reject(error);
+            return;
+        });
+    });
+}
+
 async function verify( token ) {   
     return new Promise((resolve, reject) => {
         jwt.verify(token, process.env.JWT_SECRET_KEY, (error, decoded) => {
@@ -102,6 +139,7 @@ function update( user, newData ) {
 
 module.exports = {
     login,
+    loginViaMethod,
     verify,
     update,
 }
