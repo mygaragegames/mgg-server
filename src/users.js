@@ -56,7 +56,11 @@ function getOneUser( searchOptions ) {
 
 function createUser( data ) {
     return new Promise((resolve, reject) => {
-        data.password = bcrypt.hashSync(data.password, 12);
+        if(data.password != undefined) {
+            data.password = bcrypt.hashSync(data.password, 12);
+        } else {
+            data.password = "$SOCIALLOGIN$";
+        }
 
         if(!isUsernameValid(data.username)) {
             reject(418);
@@ -153,7 +157,7 @@ function setAvatar( user, avatarFile ) {
         user.update({
             avatarFileName: newImageName
         }).then(() => {
-            resolve();
+            resolve(newImagePath);
         }).catch((error) => {
             fs.unlinkSync(newImagePath);
             reject(error);
