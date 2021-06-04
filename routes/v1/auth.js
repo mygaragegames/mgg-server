@@ -123,7 +123,7 @@ async function postVerifyHandler(req, res) {
  * @apiSuccess (201) USER_UPDATED User was updated.
  * @apiError (404) USER_NOT_FOUND There is no user with the id <code>id</code>
  * @apiError (406) EMAIL_INVALID Email is not valid!
- * @apiError (309) USERNAME_EMAIL_CONFLICT Username or email is already in use!
+ * @apiError (409) USERNAME_EMAIL_CONFLICT Username or email is already in use!
  * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
  * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
  * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
