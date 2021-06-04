@@ -70,8 +70,6 @@ async function processDiscordCallback( callbackCode ) {
 
                             // Set Avatar
                             setAvatar(userData, { path: avatarTempPath }).then((avatarUrl) => {
-                                console.log(avatarUrl);
-
                                 loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
                                     resolve(userData);
                                     return;
