@@ -9,7 +9,6 @@ const http = require('http');
 const https = require('https');
 const cors = require('cors');
 const express = require('express');
-const forceSecure = require('express-force-https');
 const chalk = require('chalk');
 
 let isDev = process.env.NODE_ENV !== 'prod';
