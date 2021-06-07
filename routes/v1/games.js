@@ -4,7 +4,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
-const { getAllGames, getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
+const { getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
 const { getOnePlaylist } = require('../../src/playlists');
 
 let isDev = process.env.NODE_ENV !== 'prod';
@@ -12,7 +12,6 @@ let isDev = process.env.NODE_ENV !== 'prod';
 let upload = multer({ dest: '/tmp/'});
 
 router.route('/')
-    .get(auth.optionalToken, getAllHandler)
     .post(auth.verifyToken, postOneHandler);
 
 router.route('/:gameid')
@@ -23,48 +22,6 @@ router.route('/:gameid')
 router.route('/:gameid/cover')
     .put(auth.verifyToken, upload.single('cover'), putOneCoverHandler)
     .delete(auth.verifyToken, deleteOneCoverHandler);
-
-/**
- * @api {get} /games Get all Games
- * @apiName GetAllGames
- * @apiGroup Games
- * 
- * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
- * 
- * @apiSuccess (200) {Array} games Array of Games
- */
-async function getAllHandler(req, res) {
-    if(isDev) console.log(chalk.grey("[mgg-server] (Games) Games->Get"));
-
-    let gamesData = await getAllGames();
-
-    // Dirty hack to make the data editable
-    gamesData = JSON.parse(JSON.stringify(gamesData));
-
-    let filteredGames = [];
-    gamesData.forEach((game) => {
-        // Only add display status 1 & 2 games when owner or admin/moderator
-        if(game.displayStatus == 1 || game.displayStatus == 2) {
-            if(req.userId == null) return;
-            if(req.userRoles == null) return;
-            if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) return;
-        }
-
-        game.coverFileName = parseGameCover(game.coverFileName);
-
-        // remove security related fields for return
-        game.user.password = undefined;
-        game.user.email = undefined;
-
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
-
-        filteredGames.push(game);
-    });
-    
-    gamesData = filteredGames;
-
-    res.status(200).json(gamesData);
-}
 
 /**
  * @api {get} /games/:gameId Get detailled information from a Game
