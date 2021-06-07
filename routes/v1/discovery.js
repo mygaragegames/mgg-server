@@ -40,6 +40,9 @@ async function getPopularHandler(req, res) {
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
+        game.user.loginDiscord = undefined;
+        game.user.loginTwitter = undefined;
+        game.user.loginYouTube = undefined;
 
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
 
@@ -75,6 +78,9 @@ async function getPopularHandler(req, res) {
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
+        game.user.loginDiscord = undefined;
+        game.user.loginTwitter = undefined;
+        game.user.loginYouTube = undefined;
 
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
 
@@ -116,6 +122,9 @@ async function getPopularHandler(req, res) {
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
+        game.user.loginDiscord = undefined;
+        game.user.loginTwitter = undefined;
+        game.user.loginYouTube = undefined;
 
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
 

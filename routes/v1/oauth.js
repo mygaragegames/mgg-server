@@ -50,6 +50,9 @@ async function postDiscordCallbackHandler(req, res) {
         let discordResponse = await processDiscordCallback(req.body.callbackCode);
 
         discordResponse.userData.password = undefined;
+        discordResponse.userData.loginDiscord = undefined;
+        discordResponse.userData.loginTwitter = undefined;
+        discordResponse.userData.loginYouTube = undefined;
         discordResponse.userData.avatarFileName = parseAvatar(discordResponse.userData.avatarFileName);
 
         if(discordResponse.userData.banActive) {

@@ -66,6 +66,9 @@ async function getOneHandler(req, res) {
         // remove security related fields for return
         game.user.password = undefined;
         game.user.email = undefined;
+        game.user.loginDiscord = undefined;
+        game.user.loginTwitter = undefined;
+        game.user.loginYouTube = undefined;
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
     });
 

@@ -55,6 +55,9 @@ async function getOneHandler(req, res) {
     
     playlistDetail.user.password = undefined;
     playlistDetail.user.email = undefined;
+    playlistDetail.user.loginDiscord = undefined;
+    playlistDetail.user.loginTwitter = undefined;
+    playlistDetail.user.loginYouTube = undefined;
     playlistDetail.user.avatarFileName = parseAvatar(playlistDetail.user.avatarFileName);
 
     playlistDetail.games.forEach(game => {
