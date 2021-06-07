@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const { Sequelize } = require('sequelize');
 const { Game, GameChannel, User } = require('../sequelize');
 
 function getGameChannels( searchOptions ) {
@@ -8,9 +9,32 @@ function getGameChannels( searchOptions ) {
         });
     });
 }
-function getOneGameChannel( searchOptions ) {
+
+function getOneGameChannel( searchOptions, userId, userRoles ) {
+    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+
     return new Promise((resolve, reject) => {
-        GameChannel.findOne({ where: searchOptions, include: { model: Game, as: "games", include: { model: User, as: "user" } } }).then((gameChannelData) => {
+        GameChannel.findOne({
+            where: searchOptions,
+            include: {
+                model: Game,
+                as: "games",
+                include: { model: User, as: "user" },
+                where: {
+                    [Sequelize.Op.and]: [
+                        Sequelize.literal(`1 = CASE
+                                                    WHEN ${overrideDisplayStatus} = true THEN 1
+                                                    WHEN games.displayStatus = 2 AND games.userId = ${userId} THEN 1
+                                                    WHEN games.displayStatus = 0 THEN 1
+                                                    ELSE 2
+                                               END`)
+                    ]
+                },
+                order: [
+                    ['games.views', 'DESC']
+                ],
+            }
+        }).then((gameChannelData) => {
             resolve(gameChannelData);
         }).catch((error) => {
             reject(error);
