@@ -10,7 +10,7 @@ function getGameChannels( searchOptions ) {
     });
 }
 
-function getOneGameChannel( searchOptions, userId, userRoles ) {
+function getOneGameChannel( searchOptions, userId = 0, userRoles = []) {
     let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
 
     return new Promise((resolve, reject) => {
