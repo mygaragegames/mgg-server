@@ -12,7 +12,7 @@ router.route('/')
     .post(auth.verifyToken, postOneHandler);
 
 router.route('/:channelid')
-    .get(getOneHandler)
+    .get(auth.optionalToken, getOneHandler)
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
@@ -35,6 +35,7 @@ async function getAllHandler(req, res) {
  * @apiName GetOneGameChannel
  * @apiGroup GameChannels
  * 
+ * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * @apiParam {Integer} channelId The ID of the GameChannel
  * 
  * @apiSuccess (200) {Integer} id ID
@@ -53,7 +54,7 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let gameChannelData = await getOneGameChannel({ id: parseInt(req.params.channelid) }).catch(() => { return null; });
+    let gameChannelData = await getOneGameChannel({ id: parseInt(req.params.channelid) }, req.userId, req.userRoles).catch(() => { return null; });
     if(gameChannelData === null) {
         res.status(404).json({name: "GAMECHANNEL_NOT_FOUND", text: `There is no game channel with the id ${req.params.channelid}`});
         return;
