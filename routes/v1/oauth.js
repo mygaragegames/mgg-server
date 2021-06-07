@@ -3,6 +3,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { getDiscordUri, processDiscordCallback } = require('../../src/oauth');
+const { parseAvatar } = require('../../src/parsers');
 
 let isDev = process.env.NODE_ENV !== 'prod';
 
@@ -51,8 +52,8 @@ async function postDiscordCallbackHandler(req, res) {
         discordResponse.userData.password = undefined;
         discordResponse.userData.avatarFileName = parseAvatar(discordResponse.userData.avatarFileName);
 
-        if(loginData.userData.banActive) {
-            res.status(401).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: loginData.userData.banReason});
+        if(discordResponse.userData.banActive) {
+            res.status(401).json({name: "AUTHENTICATION_BANNED", text: "Your account was banned.", reason: discordResponse.userData.banReason});
             return;
         }
 
