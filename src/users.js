@@ -5,11 +5,9 @@ const readChunk = require('read-chunk');
 const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
+const { Sequelize } = require('sequelize');
 const { User, Playlist, Game, GameComment } = require('../sequelize');
 const { isUsernameValid, isCreatorIDValid, isEmailValid } = require('./parsers');
-const { deleteGame } = require('./games');
-const { deleteGameComment } = require('./gameComments');
-const { deletePlaylist } = require('./playlists');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -31,17 +29,32 @@ function getAllUsers() {
     });
 }
 
-function getOneUser( searchOptions ) {
+function getOneUser( searchOptions, userId, userRoles ) {
+    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+
     return new Promise((resolve, reject) => {
         User.findOne({
             where: searchOptions,
             include: [
                 { model: Playlist, as: "playlists" },
                 { model: GameComment, as: "comments", include: { model: User, as: "user" } },
-                { model: Game, as: "games", include: { model: User, as: "user" } }
-            ],
-            order: [
-                [{ model: Game, as: "games" }, 'createdAt', 'DESC']
+                {
+                    model: Game, as: "games",
+                    include: { model: User, as: "user" },
+                    where: {
+                        [Sequelize.Op.and]: [
+                            Sequelize.literal(`1 = CASE
+                                WHEN ${overrideDisplayStatus} = true THEN 1
+                                WHEN games.displayStatus = 2 AND games.userId = ${userId} THEN 1
+                                WHEN games.displayStatus = 0 THEN 1
+                                ELSE 2
+                            END`)
+                        ]
+                    },
+                    order: [
+                        ['games.createdAt', 'DESC']
+                    ],
+                }
             ]
         }).then((userData) => {
             if(userData === null){
