@@ -17,5 +17,6 @@ module.exports = (sequelize, type) => {
         coverFileName: type.STRING,
         youtubeID: type.STRING,
         displayStatus: type.INTEGER,
+        views: type.INTEGER,
     });
 }
