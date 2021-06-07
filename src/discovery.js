@@ -63,7 +63,10 @@ function getQueryGames(searchQuery, userId, userRoles) {
             include: { model: User, as: "user" },
             where: {
                 [Sequelize.Op.or]: {
-                    title: searchQuery
+                    title: { [Sequelize.Op.substring]: searchQuery },
+                    ingameID: { [Sequelize.Op.substring]: searchQuery },
+                    description: { [Sequelize.Op.substring]: searchQuery },
+                    '$user.username$': { [Sequelize.Op.substring]: searchQuery }
                 },
                 [Sequelize.Op.and]: [
                     Sequelize.literal(`1 = CASE
