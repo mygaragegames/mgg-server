@@ -18,6 +18,7 @@ router.route('/:gameid')
  * @api {post} /gameScreenshots/:gameId Uploads a screenshot
  * @apiName UploadGameScreenshot
  * @apiGroup GameScreenshots
+ * @apiPermission User
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} gameId The ID of the Game
@@ -69,6 +70,9 @@ async function postOneHandler(req, res) {
  * @api {delete} /gameScreenshots/:screenshotId Deletes a GameScreenshot
  * @apiName DeleteGameScreenshot
  * @apiGroup GameScreenshots
+ * @apiPermission Public
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} screenshotId The ID of the GameScreenshot

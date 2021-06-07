@@ -16,6 +16,7 @@ router.route('/discord/callback')
  * @api {get} /oauth/discord Receive the correct OAuth login URL
  * @apiName OauthDiscordGetUrl
  * @apiGroup Auth
+ * @apiPermission Public
  * 
  * @apiSuccess (200) {string} url The URL for the OAuth login flow
  */
@@ -29,6 +30,7 @@ async function getDiscordHandler(req, res) {
  * @api {post} /oauth/discord/callback Login a user with the received OAuth Code
  * @apiName OauthDiscordCallback
  * @apiGroup Auth
+ * @apiPermission Public
  * 
  * @apiParam {String} callbackCode The received OAuth code
  * 

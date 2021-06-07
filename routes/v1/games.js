@@ -27,10 +27,12 @@ router.route('/:gameid/cover')
  * @api {get} /games/:gameId Get detailled information from a Game
  * @apiName GetOneGame
  * @apiGroup Games
+ * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * @apiParam {Integer} gameId The ID of the Game
  * 
+ * @apiSuccess (200) {Object} game Object of the Game
  * @apiSuccess (200) {Integer} game.id ID
  * @apiSuccess (200) {String} game.title Title
  * @apiSuccess (200) {String} game.ingameID Ingame-ID
@@ -38,8 +40,8 @@ router.route('/:gameid/cover')
  * @apiSuccess (200) {String} game.coverFileName URL of the cover
  * @apiSuccess (200) {String} game.youtubeID Trailer YouTube-ID of the Game
  * @apiSuccess (200) {Integer} game.displayStatus Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
- * @apiSuccess (200) {DateTime} createAt DateTime of creation
- * @apiSuccess (200) {DateTime} updatedAt DateTime of last change
+ * @apiSuccess (200) {DateTime} game.createAt DateTime of creation
+ * @apiSuccess (200) {DateTime} game.updatedAt DateTime of last change
  * @apiSuccess (200) {Integer} game.userId ID of the User who created the Game
  * @apiSuccess (200) {Integer} game.user Object of the User who created the Game
  * @apiSuccess (200) {Array} game.screenshots Array of GameScreenshots
@@ -116,6 +118,7 @@ async function getOneHandler(req, res) {
  * @api {post} /games Create a Game
  * @apiName CreateGame
  * @apiGroup Games
+ * @apiPermission User
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {String} title Title
@@ -194,6 +197,9 @@ async function postOneHandler(req, res) {
  * @api {put} /games/:gameId Update a Game
  * @apiName UpdateGame
  * @apiGroup Games
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} gameId ID of the Game
@@ -270,6 +276,9 @@ async function putOneHandler(req, res) {
  * @api {delete} /games/:gameId Deletes a Game
  * @apiName DeleteGame
  * @apiGroup Games
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} gameId ID of the Game
@@ -307,6 +316,9 @@ async function deleteOneHandler(req, res) {
  * @api {put} /game/:gameId/cover Uploads a cover to a Game
  * @apiName UploadGameCover
  * @apiGroup Games
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} gameId The ID of the Game
@@ -358,6 +370,9 @@ async function putOneCoverHandler(req, res) {
  * @api {delete} /game/:gameId/cover Deletes the cover of a Game
  * @apiName DeleteGameCover
  * @apiGroup Games
+ * @apiPermission Public
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} gameId The ID of the Game

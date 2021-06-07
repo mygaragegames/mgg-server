@@ -20,6 +20,7 @@ router.route('/:channelid')
  * @api {get} /gameChannels Get all available GameChannels
  * @apiName GetAllGameChannels
  * @apiGroup GameChannels
+ * @apiPermission Public
  * 
  * @apiSuccess (200) {Array} gameChannels Array of GameChannels
  */
@@ -34,6 +35,7 @@ async function getAllHandler(req, res) {
  * @api {get} /gameChannels/:channelId Get detailled information and list of games from a GameChannel
  * @apiName GetOneGameChannel
  * @apiGroup GameChannels
+ * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * @apiParam {Integer} channelId The ID of the GameChannel
@@ -79,6 +81,8 @@ async function getOneHandler(req, res) {
  * @api {post} /gameChannels Creates a GameChannel
  * @apiName CreateGameChannel
  * @apiGroup GameChannels
+ * @apiPermission Moderator
+ * @ApiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {String} title Title of the GameChannel
@@ -116,6 +120,8 @@ async function postOneHandler(req, res) {
  * @api {put} /gameChannels/:channelId Updates a GameChannel
  * @apiName UpdateGameChannel
  * @apiGroup GameChannels
+ * @apiPermission Moderator
+ * @ApiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} channelId The ID of the GameChannel
@@ -172,6 +178,8 @@ async function putOneHandler(req, res) {
  * @api {delete} /gameChannels/:channelId Deletes a GameChannel
  * @apiName DeleteGameChannel
  * @apiGroup GameChannels
+ * @apiPermission Moderator
+ * @ApiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} channelId The ID of the GameChannel

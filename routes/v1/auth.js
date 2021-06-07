@@ -21,6 +21,7 @@ router.route('/update/:userid')
  * @api {post} /auth/login Login a User
  * @apiName AuthLogin
  * @apiGroup Auth
+ * @apiPermission Public
  * 
  * @apiParam {String} username Username
  * @apiParam {String} password Password
@@ -70,6 +71,7 @@ async function postLoginHandler(req, res) {
  * @api {post} /auth/verify Verifies a JWT token
  * @apiName AuthVerify
  * @apiGroup Auth
+ * @apiPermission Public
  * 
  * @apiParam {String} token JWT Token
  * 
@@ -114,6 +116,9 @@ async function postVerifyHandler(req, res) {
  * @api {put} /auth/update/:userid Updates a Users email/password
  * @apiName AuthUpdate
  * @apiGroup Auth
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {String} userid The ID of the User

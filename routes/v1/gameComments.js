@@ -18,6 +18,7 @@ router.route('/:gameid')
  * @api {get} /gameComments/:commentId Get detailled information data from a GameComment
  * @apiName GetOneGameComment
  * @apiGroup GameComments
+ * @apiPermission Public
  * 
  * @apiParam {Integer} gameId The ID of the GameComment
  * 
@@ -57,6 +58,7 @@ async function getOneHandler(req, res) {
  * @api {post} /gameComments/:gameId Creates a GameComment
  * @apiName CreateGameComment
  * @apiGroup GameComments
+ * @apiPermission User
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {String} text Text of the GameComment
@@ -96,6 +98,9 @@ async function postOneHandler(req, res) {
  * @api {put} /gameComments/:commentId Updates a GameComment
  * @apiName UpdateGameComment
  * @apiGroup GameComments
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} commentId The ID of the GameComment
@@ -146,6 +151,9 @@ async function putOneHandler(req, res) {
  * @api {delete} /gameComments/:commentId Deletes a GameComment
  * @apiName DeleteGameComment
  * @apiGroup GameComments
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} commentId The ID of the GameComment

@@ -26,6 +26,9 @@ router.route('/:playlistid/delete/:gameid')
  * @api {get} /playlists/:playlistId Get detailled information data from a Playlist
  * @apiName GetOnePlaylist
  * @apiGroup Playlists
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} playlistId The ID of the Playlist
@@ -65,6 +68,9 @@ async function getOneHandler(req, res) {
         
         game.user.password = undefined;
         game.user.email = undefined;
+        game.user.loginDiscord = undefined;
+        game.user.loginTwitter = undefined;
+        game.user.loginYouTube = undefined;
         game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
     });
 
@@ -75,6 +81,7 @@ async function getOneHandler(req, res) {
  * @api {post} /playlists Creates a Playlist
  * @apiName CreatePlaylist
  * @apiGroup Playlists
+ * @apiPermission User
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {String} title Title of the Playlist
@@ -112,6 +119,9 @@ async function postOneHandler(req, res) {
  * @api {put} /playlists/:playlistId Updates a Playlist
  * @apiName UpdatePlaylist
  * @apiGroup Playlists
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} playlistId The ID of the Playlist
@@ -161,6 +171,9 @@ async function putOneHandler(req, res) {
  * @api {delete} /playlists/:playlistId/ Deletes a Playlist
  * @apiName DeletePlaylist
  * @apiGroup Playlists
+ * @apiPermission User
+ * @apiPermission Moderator
+ * @apiPermission Admin
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} playlistId The ID of the Playlist
@@ -198,6 +211,7 @@ async function deleteOneHandler(req, res) {
  * @api {post} /playlists/:playlistId/add/:gameId Adds a Game to a Playlist
  * @apiName AddToPlaylist
  * @apiGroup Playlists
+ * @apiPermission User
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} playlistId The ID of the Playlist
@@ -242,6 +256,7 @@ async function postAddHandler(req, res) {
  * @api {delete} /playlists/:playlistId/delete/:gameId Deletes a Game from a Playlist
  * @apiName DeleteFromPlaylist
  * @apiGroup Playlists
+ * @apiPermission User
  * 
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} playlistId The ID of the Playlist

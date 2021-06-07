@@ -20,6 +20,7 @@ router.route('/find')
  * @api {get} /discovery/popular Get the 15 most popular games
  * @apiName GetPopularGames
  * @apiGroup Discovery
+ * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * 
@@ -58,6 +59,7 @@ async function getPopularHandler(req, res) {
  * @api {get} /discovery/newest Get the 15 newest games
  * @apiName GetNewestGames
  * @apiGroup Discovery
+ * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * 
@@ -96,6 +98,7 @@ async function getPopularHandler(req, res) {
  * @api {post} /discovery/find Find games based on a condition
  * @apiName FindGames
  * @apiGroup Discovery
+ * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * @apiParam {String} query Search Query
