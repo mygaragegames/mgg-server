@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const { Sequelize } = require('sequelize');
 const { Game, User } = require('../sequelize');
 
-function getNewestGames(userId, userRoles) {
+function getNewestGames(userId = 0, userRoles = []) {
     let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
 
     return new Promise((resolve, reject) => {
@@ -29,7 +29,7 @@ function getNewestGames(userId, userRoles) {
     });
 }
 
-function getPopularGames(userId, userRoles) {
+function getPopularGames(userId = 0, userRoles = []) {
     let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
 
     return new Promise((resolve, reject) => {
