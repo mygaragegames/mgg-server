@@ -12,11 +12,11 @@ function getNewestGames(userId, userRoles) {
             where: {
                 [Sequelize.Op.and]: [
                     Sequelize.literal(`1 = CASE
-                                                WHEN ${overrideDisplayStatus} = true THEN 1
-                                                WHEN displayStatus = 2 AND userId = ${userId} THEN 1
-                                                WHEN displayStatus = 0 THEN 1
-                                                ELSE 2
-                                           END`)
+                        WHEN ${overrideDisplayStatus} = true THEN 1
+                        WHEN displayStatus = 2 AND userId = ${userId} THEN 1
+                        WHEN displayStatus = 0 THEN 1
+                        ELSE 2
+                    END`)
                 ]
             },
             order: [
@@ -38,11 +38,11 @@ function getPopularGames(userId, userRoles) {
             where: {
                 [Sequelize.Op.and]: [
                     Sequelize.literal(`1 = CASE
-                                                WHEN ${overrideDisplayStatus} = true THEN 1
-                                                WHEN displayStatus = 2 AND userId = ${userId} THEN 1
-                                                WHEN displayStatus = 0 THEN 1
-                                                ELSE 2
-                                           END`)
+                        WHEN ${overrideDisplayStatus} = true THEN 1
+                        WHEN displayStatus = 2 AND userId = ${userId} THEN 1
+                        WHEN displayStatus = 0 THEN 1
+                        ELSE 2
+                    END`)
                 ]
             },
             order: [

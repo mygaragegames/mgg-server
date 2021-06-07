@@ -23,11 +23,11 @@ function getOneGameChannel( searchOptions, userId, userRoles ) {
                 where: {
                     [Sequelize.Op.and]: [
                         Sequelize.literal(`1 = CASE
-                                                    WHEN ${overrideDisplayStatus} = true THEN 1
-                                                    WHEN games.displayStatus = 2 AND games.userId = ${userId} THEN 1
-                                                    WHEN games.displayStatus = 0 THEN 1
-                                                    ELSE 2
-                                               END`)
+                            WHEN ${overrideDisplayStatus} = true THEN 1
+                            WHEN games.displayStatus = 2 AND games.userId = ${userId} THEN 1
+                            WHEN games.displayStatus = 0 THEN 1
+                            ELSE 2
+                        END`)
                     ]
                 },
                 order: [
