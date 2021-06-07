@@ -3,7 +3,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { parseAvatar, parseGameCover } = require('../../src/parsers');
-const { getNewestGames } = require('../../src/discovery');
+const { getPopularGames, getNewestGames, getQueryGames } = require('../../src/discovery');
 
 let isDev = process.env.NODE_ENV !== 'prod';
 
@@ -99,20 +99,18 @@ async function getPopularHandler(req, res) {
  async function postFindHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Discovery) Find->Post"));
 
-    let gamesData = await getAllGames();
+    if(req.body.query === '') {
+        res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: query"});
+        return;
+    }
+
+    let gamesData = await getQueryGames(req.body.query, req.userId, req.userRoles);
 
     // Dirty hack to make the data editable
     gamesData = JSON.parse(JSON.stringify(gamesData));
 
     let filteredGames = [];
     gamesData.forEach((game) => {
-        // Only add display status 1 & 2 games when owner or admin/moderator
-        if(game.displayStatus == 1 || game.displayStatus == 2) {
-            if(req.userId == null) return;
-            if(req.userRoles == null) return;
-            if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) return;
-        }
-
         game.coverFileName = parseGameCover(game.coverFileName);
 
         // remove security related fields for return
