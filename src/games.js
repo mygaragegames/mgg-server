@@ -31,7 +31,13 @@ function getOneGame( searchOptions ) {
             { model: GameChannel, as: "channels" },
             { model: GameComment, as: "comments", include: { model: User, as: "user" } }
         ]}).then((gameData) => {
-            resolve(gameData);
+            gameData.update({
+                views: gameData.views + 1
+            }).then(() => {
+                resolve(gameData);
+            }).catch((error) => {
+                resolve(gameData);
+            });
         });
     });
 }
