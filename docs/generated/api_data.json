@@ -5,6 +5,11 @@
     "title": "Login a User",
     "name": "AuthLogin",
     "group": "Auth",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -88,6 +93,17 @@
     "title": "Updates a Users email/password",
     "name": "AuthUpdate",
     "group": "Auth",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -198,6 +214,11 @@
     "title": "Verifies a JWT token",
     "name": "AuthVerify",
     "group": "Auth",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -266,6 +287,11 @@
     "title": "Login a user with the received OAuth Code",
     "name": "OauthDiscordCallback",
     "group": "Auth",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -336,6 +362,11 @@
     "title": "Receive the correct OAuth login URL",
     "name": "OauthDiscordGetUrl",
     "group": "Auth",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "success": {
       "fields": {
         "200": [
@@ -359,6 +390,11 @@
     "title": "Find games based on a condition",
     "name": "FindGames",
     "group": "Discovery",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -408,6 +444,11 @@
     "title": "Get the 15 newest games",
     "name": "GetNewestGames",
     "group": "Discovery",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -444,6 +485,11 @@
     "title": "Get the 15 most popular games",
     "name": "GetPopularGames",
     "group": "Discovery",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -480,6 +526,14 @@
     "title": "Creates a GameChannel",
     "name": "CreateGameChannel",
     "group": "GameChannels",
+    "permission": [
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -559,6 +613,14 @@
     "title": "Deletes a GameChannel",
     "name": "DeleteGameChannel",
     "group": "GameChannels",
+    "permission": [
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -639,6 +701,11 @@
     "title": "Get all available GameChannels",
     "name": "GetAllGameChannels",
     "group": "GameChannels",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "success": {
       "fields": {
         "200": [
@@ -662,6 +729,24 @@
     "title": "Get detailled information and list of games from a GameChannel",
     "name": "GetOneGameChannel",
     "group": "GameChannels",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>(Optional) JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
     "parameter": {
       "fields": {
         "Parameter": [
@@ -745,6 +830,14 @@
     "title": "Updates a GameChannel",
     "name": "UpdateGameChannel",
     "group": "GameChannels",
+    "permission": [
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -839,6 +932,11 @@
     "title": "Creates a GameComment",
     "name": "CreateGameComment",
     "group": "GameComments",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -919,6 +1017,17 @@
     "title": "Deletes a GameComment",
     "name": "DeleteGameComment",
     "group": "GameComments",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -999,6 +1108,11 @@
     "title": "Get detailled information data from a GameComment",
     "name": "GetOneGameComment",
     "group": "GameComments",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "parameter": {
       "fields": {
         "Parameter": [
@@ -1089,6 +1203,17 @@
     "title": "Updates a GameComment",
     "name": "UpdateGameComment",
     "group": "GameComments",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1176,6 +1301,17 @@
     "title": "Deletes a GameScreenshot",
     "name": "DeleteGameScreenshot",
     "group": "GameScreenshots",
+    "permission": [
+      {
+        "name": "Public"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1256,6 +1392,11 @@
     "title": "Uploads a screenshot",
     "name": "UploadGameScreenshot",
     "group": "GameScreenshots",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1351,6 +1492,11 @@
     "title": "Create a Game",
     "name": "CreateGame",
     "group": "Games",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1523,6 +1669,17 @@
     "title": "Deletes a Game",
     "name": "DeleteGame",
     "group": "Games",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1603,6 +1760,17 @@
     "title": "Deletes the cover of a Game",
     "name": "DeleteGameCover",
     "group": "Games",
+    "permission": [
+      {
+        "name": "Public"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1679,46 +1847,15 @@
   },
   {
     "type": "get",
-    "url": "/games",
-    "title": "Get all Games",
-    "name": "GetAllGames",
-    "group": "Games",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "x-access-token",
-            "description": "<p>(Optional) JWT Token for authentication</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "200": [
-          {
-            "group": "200",
-            "type": "Array",
-            "optional": false,
-            "field": "games",
-            "description": "<p>Array of Games</p>"
-          }
-        ]
-      }
-    },
-    "version": "0.0.0",
-    "filename": "routes/v1/games.js",
-    "groupTitle": "Games"
-  },
-  {
-    "type": "get",
     "url": "/games/:gameId",
     "title": "Get detailled information from a Game",
     "name": "GetOneGame",
     "group": "Games",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -1748,6 +1885,13 @@
     "success": {
       "fields": {
         "200": [
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "game",
+            "description": "<p>Object of the Game</p>"
+          },
           {
             "group": "200",
             "type": "Integer",
@@ -1801,14 +1945,14 @@
             "group": "200",
             "type": "DateTime",
             "optional": false,
-            "field": "createAt",
+            "field": "game.createAt",
             "description": "<p>DateTime of creation</p>"
           },
           {
             "group": "200",
             "type": "DateTime",
             "optional": false,
-            "field": "updatedAt",
+            "field": "game.updatedAt",
             "description": "<p>DateTime of last change</p>"
           },
           {
@@ -1886,6 +2030,17 @@
     "title": "Update a Game",
     "name": "UpdateGame",
     "group": "Games",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2009,6 +2164,17 @@
     "title": "Uploads a cover to a Game",
     "name": "UploadGameCover",
     "group": "Games",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2104,6 +2270,11 @@
     "title": "Adds a Game to a Playlist",
     "name": "AddToPlaylist",
     "group": "Playlists",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2205,6 +2376,11 @@
     "title": "Creates a Playlist",
     "name": "CreatePlaylist",
     "group": "Playlists",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2306,6 +2482,11 @@
     "title": "Deletes a Game from a Playlist",
     "name": "DeleteFromPlaylist",
     "group": "Playlists",
+    "permission": [
+      {
+        "name": "User"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2393,6 +2574,17 @@
     "title": "Deletes a Playlist",
     "name": "DeletePlaylist",
     "group": "Playlists",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2473,6 +2665,17 @@
     "title": "Get detailled information data from a Playlist",
     "name": "GetOnePlaylist",
     "group": "Playlists",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2576,6 +2779,17 @@
     "title": "Updates a Playlist",
     "name": "UpdatePlaylist",
     "group": "Playlists",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
     "header": {
       "fields": {
         "Header": [
@@ -2656,5 +2870,588 @@
     "version": "0.0.0",
     "filename": "routes/v1/playlists.js",
     "groupTitle": "Playlists"
+  },
+  {
+    "type": "post",
+    "url": "/users",
+    "title": "Creates a User",
+    "name": "CreateUser",
+    "group": "Users",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "password",
+            "description": "<p>Password for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "email",
+            "description": "<p>Email for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pronouns",
+            "description": "<p>(Optional) Pronouns for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "gameID",
+            "description": "<p>(Optional) Ingame-ID for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "socialDiscord",
+            "description": "<p>(Optional) Discord username for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "socialTwitter",
+            "description": "<p>(Optional) Twitter username for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "socialYouTube",
+            "description": "<p>(Optional) YouTube username for the User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "type": "Object",
+            "optional": false,
+            "field": "User",
+            "description": "<p>object of created user</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "406": [
+          {
+            "group": "406",
+            "optional": false,
+            "field": "USERNAME_INVALID",
+            "description": "<p>Username is not valid!</p>"
+          },
+          {
+            "group": "406",
+            "optional": false,
+            "field": "EMAIL_INVALID",
+            "description": "<p>Email is not valid!</p>"
+          },
+          {
+            "group": "406",
+            "optional": false,
+            "field": "USER_INGAMEID_WRONGFORMAT",
+            "description": "<p>The ingame ID has the wrong format (P-000-000-000).</p>"
+          }
+        ],
+        "409": [
+          {
+            "group": "409",
+            "optional": false,
+            "field": "USERNAME_EMAIL_CONFLICT",
+            "description": "<p>Username or email is already in use.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/users.js",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "delete",
+    "url": "/user/:userId/avatar",
+    "title": "Deletes the avatar of a User",
+    "name": "DeleteUserAvatar",
+    "group": "Users",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The ID of the User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "optional": false,
+            "field": "USER_AVATAR_UPDATED",
+            "description": "<p>Avatar was deleted.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "USER_NOT_FOUND",
+            "description": "<p>There is no user with the id <code>userId</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/users.js",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "get",
+    "url": "/users",
+    "title": "Get all users",
+    "name": "GetAllUsers",
+    "group": "Users",
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "users",
+            "description": "<p>Array of users</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/users.js",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "get",
+    "url": "/users/:userId",
+    "title": "Get detailled information from a user",
+    "name": "GetOneUsers",
+    "group": "Users",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>(Optional) JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The ID of the User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "id",
+            "description": "<p>ID of the User</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "username",
+            "description": "<p>Username</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "avatarFileName",
+            "description": "<p>URL to the Users avatar</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "pronouns",
+            "description": "<p>Chosen pronouns</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "ingameID",
+            "description": "<p>Ingame-ID</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "socialDiscord",
+            "description": "<p>Discord username of the User</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "socialTwitter",
+            "description": "<p>Twitter username of the User</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "socialYouTube",
+            "description": "<p>YouTube username of the User</p>"
+          },
+          {
+            "group": "200",
+            "type": "DateTime",
+            "optional": false,
+            "field": "createdAt",
+            "description": "<p>Join date of the User</p>"
+          },
+          {
+            "group": "200",
+            "type": "DateTime",
+            "optional": false,
+            "field": "updatedDate",
+            "description": "<p>Last time the User updated their profile</p>"
+          },
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "playlists",
+            "description": "<p>Playlists created by the User (currently called &quot;Play Later&quot;)</p>"
+          },
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "comments",
+            "description": "<p>Comments posted by the User</p>"
+          },
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "games",
+            "description": "<p>Games published by the User</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "USER_NOT_FOUND",
+            "description": "<p>There is no user with the id <code>:userId</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/users.js",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "put",
+    "url": "/users/:userId",
+    "title": "Updates a User",
+    "name": "UpdateUser",
+    "group": "Users",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The ID of the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pronouns",
+            "description": "<p>(Optional) Pronouns for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "gameID",
+            "description": "<p>(Optional) Ingame-ID for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "socialDiscord",
+            "description": "<p>(Optional) Discord username for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "socialTwitter",
+            "description": "<p>(Optional) Twitter username for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "socialYouTube",
+            "description": "<p>(Optional) YouTube username for the User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "optional": false,
+            "field": "USER_UPDATED",
+            "description": "<p>User was updated.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "USER_NOT_FOUND",
+            "description": "<p>There is no user with the id <code>userId</code></p>"
+          }
+        ],
+        "406": [
+          {
+            "group": "406",
+            "optional": false,
+            "field": "USER_INGAMEID_WRONGFORMAT",
+            "description": "<p>The ingame ID has the wrong format (P-000-000-000).</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/users.js",
+    "groupTitle": "Users"
+  },
+  {
+    "type": "put",
+    "url": "/users/:userId/avatar",
+    "title": "Updates a Users avatar",
+    "name": "UpdateUserAvatar",
+    "group": "Users",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The ID of the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "File",
+            "optional": false,
+            "field": "avatar",
+            "description": "<p>multipart/form-data of a png or jpg file</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "optional": false,
+            "field": "USER_AVATAR_UPDATED",
+            "description": "<p>Avatar was updated.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "400": [
+          {
+            "group": "400",
+            "optional": false,
+            "field": "USER_AVATAR_WRONGFORMAT",
+            "description": "<p>Your avatar is not a png or jpg file.</p>"
+          }
+        ],
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "USER_NOT_FOUND",
+            "description": "<p>There is no user with the id <code>userId</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/users.js",
+    "groupTitle": "Users"
   }
 ]

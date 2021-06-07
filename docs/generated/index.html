@@ -135,7 +135,14 @@
     {{/if}}
     <div class="clearfix"></div>
 
-    {{#if article.author}}<h4 class="muted">Authored by: {{article.author}}</h4>{{/if}}
+    {{#if article.permission}}
+      <div class="permissions">
+        <span>{{__ "Permission:"}}</span>
+        {{#each article.permission}}
+          <div class="permission-tag">{{name}}</div>
+        {{/each}}
+      </div>
+    {{/if}}
 
     {{#if article.deprecated}}
       <p class="deprecated"><span>{{__ "DEPRECATED"}}</span>
@@ -152,20 +159,6 @@
       <p>{{{nl2br article.description}}}</p>
     {{/if}}
     <pre data-type="{{toLowerCase article.type}}"><code class="language-http">{{article.url}}</code></pre>
-
-    {{#if article.permission}}
-      <p>
-        {{__ "Permission:"}}
-        {{#each article.permission}}
-          {{name}}
-          {{#if title}}
-          <button type="button" class="btn btn-info btn-xs" data-title="{{title}}" data-content="{{nl2br description}}" data-html="true" data-toggle="popover" data-placement="right" data-trigger="hover">
-              <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-          </button>
-          {{/if}}
-        {{/each}}
-      </p>
-    {{/if}}
 
     {{!-- CODE EXAMPLES IN TABS --}}
     {{#if_gt article.examples.length compare=0}}

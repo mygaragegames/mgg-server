@@ -206,8 +206,30 @@ td {
   justify-content: center;
   align-items: center;
 }
+
 .article-title .type {
   align-self: center;
+}
+
+.permissions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  transform: translateY(-10px);
+  padding-bottom: 15px;
+}
+.permissions span {
+  margin-right: 15px;
+}
+.permissions .permission-tag {
+  background: rgba(0,0,0,0.07);
+  color: #000;
+  font-size: 12px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-right: 10px;
 }
 
 /* ------------------------------------------------------------------------------------------
