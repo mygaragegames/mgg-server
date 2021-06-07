@@ -28,20 +28,13 @@ router.route('/find')
 async function getPopularHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Discovery) Popular->Get"));
 
-    let gamesData = await getAllGames();
+    let gamesData = await getPopularGames(req.userId, req.userRoles);
 
     // Dirty hack to make the data editable
     gamesData = JSON.parse(JSON.stringify(gamesData));
 
     let filteredGames = [];
     gamesData.forEach((game) => {
-        // Only add display status 1 & 2 games when owner or admin/moderator
-        if(game.displayStatus == 1 || game.displayStatus == 2) {
-            if(req.userId == null) return;
-            if(req.userRoles == null) return;
-            if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) return;
-        }
-
         game.coverFileName = parseGameCover(game.coverFileName);
 
         // remove security related fields for return
@@ -70,20 +63,13 @@ async function getPopularHandler(req, res) {
  async function getNewestHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Discovery) Newest->Get"));
 
-    let gamesData = await getNewestGames();
+    let gamesData = await getNewestGames(req.userId, req.userRoles);
 
     // Dirty hack to make the data editable
     gamesData = JSON.parse(JSON.stringify(gamesData));
 
     let filteredGames = [];
     gamesData.forEach((game) => {
-        // Only add display status 1 & 2 games when owner or admin/moderator
-        if(game.displayStatus == 1 || game.displayStatus == 2) {
-            if(req.userId == null) return;
-            if(req.userRoles == null) return;
-            if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) return;
-        }
-
         game.coverFileName = parseGameCover(game.coverFileName);
 
         // remove security related fields for return
