@@ -29,7 +29,7 @@ function getAllUsers() {
     });
 }
 
-function getOneUser( searchOptions, userId, userRoles ) {
+function getOneUser( searchOptions, userId = 0, userRoles = []) {
     let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
 
     return new Promise((resolve, reject) => {
@@ -117,6 +117,9 @@ function updateUser( user, newData ) {
         newData.avatarFileName = undefined;
         newData.email = undefined;
         newData.password = undefined;
+        newData.loginDiscord = undefined;
+        newData.loginTwitter = undefined;
+        newData.loginYouTube = undefined;
 
         if(newData.ingameID != undefined && !isCreatorIDValid(newData.ingameID)) {
             reject(400);
