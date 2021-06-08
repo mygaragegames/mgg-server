@@ -170,13 +170,13 @@ async function postOneHandler(req, res) {
             case 409:
                 res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username or email is already in use!"});
                 return;
-            case 406:
+            case 418:
                 res.status(406).json({name: "USERNAME_INVALID", text: "Username is not valid!"});
                 return;
             case 406:
                 res.status(406).json({name: "EMAIL_INVALID", text: "Email is not valid!"});
                 return;
-            case 406:
+            case 400:
                 res.status(406).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
                 return;
         }
@@ -191,6 +191,7 @@ async function postOneHandler(req, res) {
  * @apiHeader {String} x-access-token JWT Token for authentication
  * @apiParam {Integer} userId The ID of the User
  * 
+ * @apiParam {String} username (Optional) Username for the User
  * @apiParam {String} pronouns (Optional) Pronouns for the User
  * @apiParam {String} gameID (Optional) Ingame-ID for the User
  * @apiParam {String} socialDiscord (Optional) Discord username for the User
@@ -200,6 +201,7 @@ async function postOneHandler(req, res) {
  * @apiSuccess (201) USER_UPDATED User was updated.
  * @apiError (404) USER_NOT_FOUND There is no user with the id <code>userId</code>
  * @apiError (406) USER_INGAMEID_WRONGFORMAT The ingame ID has the wrong format (P-000-000-000).
+ * @apiError (406) USERNAME_INVALID Username is not valid!
  * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
  * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
  * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
@@ -208,6 +210,7 @@ async function putOneHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Users) Users->Put"));
 
     const data = {
+        username: req.body.username,
         pronouns: req.body.pronouns,
         ingameID: req.body.ingameID,
         socialDiscord: req.body.socialDiscord,
@@ -237,6 +240,9 @@ async function putOneHandler(req, res) {
                 return;
             case 406:
                 res.status(406).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
+                return;
+            case 418:
+                res.status(406).json({name: "USERNAME_INVALID", text: "Username is not valid!"});
                 return;
         }
     });
