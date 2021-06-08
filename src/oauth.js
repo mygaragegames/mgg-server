@@ -45,6 +45,9 @@ async function processDiscordCallback( callbackCode ) {
                     }
 
                     createUser(newUser).then(async (userData) => {
+                        console.log("Created User");
+                        console.log(userData);
+
                         let avatarTempPath = path.resolve(__dirname, '../tmp', uniqid() + ".png");
                         let userAvatarUrl = `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}.png?size=256`;
                         let avatarDownload = await axios({
