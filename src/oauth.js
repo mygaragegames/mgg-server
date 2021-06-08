@@ -66,6 +66,10 @@ async function processDiscordCallback( callbackCode ) {
                                 loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
                                     resolve(userData);
                                     return;
+                                }).catch((error) => {
+                                    console.error(error);
+                                    reject(error);
+                                    return;
                                 });
                             }).catch((error) => {
                                 try {
@@ -74,6 +78,10 @@ async function processDiscordCallback( callbackCode ) {
 
                                 loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
                                     resolve(userData);
+                                    return;
+                                }).catch((error) => {
+                                    console.error(error);
+                                    reject(error);
                                     return;
                                 });
                             });
@@ -85,6 +93,10 @@ async function processDiscordCallback( callbackCode ) {
                             
                             loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
                                 resolve(userData);
+                                return;
+                            }).catch((error) => {
+                                console.error(error);
+                                reject(error);
                                 return;
                             });
                         })
