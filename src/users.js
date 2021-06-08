@@ -133,8 +133,13 @@ function updateUser( user, newData ) {
         newData.loginTwitter = undefined;
         newData.loginYouTube = undefined;
 
+        if(!isUsernameValid(newData.username)) {
+            reject(418);
+            return;
+        }
+
         if(newData.ingameID != undefined && !isCreatorIDValid(newData.ingameID)) {
-            reject(400);
+            reject(406);
             return;
         }
 
