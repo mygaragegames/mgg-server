@@ -37,6 +37,8 @@ async function processDiscordCallback( callbackCode ) {
             loginViaMethod({ method: "discord", id: userResponse.data.id }).then((userData) => {
                 resolve(userData);
             }).catch((error) => {
+                console.log(error);
+
                 if(error == 404) {
                     let newUser = {
                         username: makeUsernameValid(userResponse.data.username),
@@ -67,22 +69,24 @@ async function processDiscordCallback( callbackCode ) {
                                 });
                             }).catch((error) => {
                                 try {
-                                //fs.unlinkSync(avatarTempPath);
-                                } catch(error) {
+                                    fs.unlinkSync(avatarTempPath);
+                                } catch(error) {}
 
-                                }
-                                reject(error);
-                                return;
+                                loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
+                                    resolve(userData);
+                                    return;
+                                });
                             });
                         });
                         avatarWriter.on('error', (error) => {
                             try {
                                 fs.unlinkSync(avatarTempPath);
-                            } catch(error) {
-
-                            }
-                            reject(error);
-                            return;
+                            } catch(error) {}
+                            
+                            loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
+                                resolve(userData);
+                                return;
+                            });
                         })
                     }).catch((error) => {
                         reject(error);
