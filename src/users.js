@@ -106,8 +106,9 @@ function createUser( data ) {
             userData.setRoles([1]);
 
             Playlist.create({
-                title: "Play later",
-                userId: userData.id
+                title: "Bookmarks",
+                userId: userData.id,
+                isBookmark: true,
             }).then(() => {
                 resolve(userData);
             }).catch((error) => {
