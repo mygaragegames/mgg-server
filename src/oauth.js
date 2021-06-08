@@ -39,7 +39,7 @@ async function processDiscordCallback( callbackCode ) {
             }).catch((error) => {
                 if(error == 404) {
                     let newUser = {
-                        username: makeUsernameValid(userResponse.data.username),
+                        username: makeUsernameValid(userResponse.data.username + "-" + userResponse.data.discriminator),
                         email: userResponse.data.email,
                         loginDiscord: userResponse.data.id
                     }
