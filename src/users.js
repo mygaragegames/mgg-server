@@ -32,23 +32,39 @@ function getAllUsers() {
 function getOneUser( searchOptions, userId = 0, userRoles = []) {
     let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
 
+    console.log("getOneUser");
+    console.log(searchOptions);
+
     return new Promise((resolve, reject) => {
         User.findOne({
             where: searchOptions,
             include: [
-                { model: Playlist, as: "playlists" },
-                { model: GameComment, as: "comments", include: { model: User, as: "user" } },
                 {
-                    model: Game, as: "games",
+                    model: Playlist,
+                    as: "playlists",
+                    required: false,
+                },
+                {
+                    model: GameComment,
+                    as: "comments",
                     include: { model: User, as: "user" },
-                    where: Sequelize.where(
-                        Sequelize.literal(`1 = CASE
-                            WHEN ${overrideDisplayStatus} = true THEN 1
-                            WHEN games.displayStatus = 2 AND games.userId = ${userId} THEN 1
-                            WHEN games.displayStatus = 0 THEN 1
-                            ELSE 2
-                        END`)
-                    ),
+                    required: false,
+                },
+                {
+                    model: Game,
+                    as: "games",
+                    include: { model: User, as: "user" },
+                    required: false,
+                    where: {
+                        [Sequelize.Op.and]: [
+                            Sequelize.literal(`1 = CASE
+                                WHEN ${overrideDisplayStatus} = true THEN 1
+                                WHEN games.displayStatus = 2 AND games.userId = ${userId} THEN 1
+                                WHEN games.displayStatus = 0 THEN 1
+                                ELSE 2
+                            END`)
+                        ]
+                    },
                     order: [
                         ['games.createdAt', 'DESC']
                     ],
