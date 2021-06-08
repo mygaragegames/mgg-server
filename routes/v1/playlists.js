@@ -51,7 +51,7 @@ async function getOneHandler(req, res) {
         return;
     }
 
-    let playlistDetail = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
+    let playlistDetail = await getOnePlaylist({ id: parseInt(req.params.playlistid) }, req.userId, req.userRoles).catch(() => { return null; });
     if(playlistDetail === null) {
         res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
         return;
