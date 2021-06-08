@@ -68,6 +68,7 @@ async function loginViaMethod( method, id ) {
                 });
             });
         }).catch((error) => {
+            console.log("Get user for loginViaMethod Error");
             console.log(error);
 
             reject(error);

@@ -57,6 +57,7 @@ async function processDiscordCallback( callbackCode ) {
                         avatarWriter.on('finish', () => {
                             // Set Avatar
                             setAvatar(userData, { path: avatarTempPath }).then((avatarUrl) => {
+                                console.log("SetAvatar LoginViaMethod");
                                 loginViaMethod("discord", userResponse.data.id).then((userData) => {
                                     resolve(userData);
                                     return;
