@@ -3,7 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameScreenshot, parseGameCover } = require('../../src/parsers');
+const { parseAvatar, parseGameScreenshot, parseGameCover, getYoutubeID } = require('../../src/parsers');
 const { getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
 const { getOnePlaylist } = require('../../src/playlists');
 
@@ -125,7 +125,7 @@ async function getOneHandler(req, res) {
  * @apiParam {String} description (Optional) Description
  * @apiParam {String} ingameID Ingame-ID (Syntax: G-000-000-000)
  * @apiParam {Integer} displayStatus (Optional) Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
- * @apiParam {String} youtubeID (Optional) Trailer YouTube-ID of the Game
+ * @apiParam {String} youtubeID (Optional) Trailer YouTube-URL of the Game
  * 
  * @apiSuccess (200) {Integer} id ID
  * @apiSuccess (200) {String} title Title
@@ -164,7 +164,7 @@ async function postOneHandler(req, res) {
         ingameID: req.body.ingameID,
         description: req.body.description,
         displayStatus: filteredDisplayStatus,
-        youtubeID: req.body.youtubeID,
+        youtubeID: getYoutubeID(req.body.youtubeID),
         userId: req.user.id
     };
 
@@ -207,7 +207,7 @@ async function postOneHandler(req, res) {
  * @apiParam {String} description (Optional) Description
  * @apiParam {String} ingameID (Optional) Ingame-ID (Syntax: G-000-000-000)
  * @apiParam {Integer} displayStatus (Optional) Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
- * @apiParam {String} youtubeID (Optional) Trailer YouTube-ID of the Game
+ * @apiParam {String} youtubeID (Optional) Trailer YouTube-URL of the Game
  * 
  * @apiSuccess (201) GAME_UPDATED Game was updated.
  * @apiError (400) GAME_GAMEID_WRONGFORMAT The ingame ID has the wrong format (G-000-000-000).
@@ -238,7 +238,7 @@ async function putOneHandler(req, res) {
         ingameID: req.body.ingameID,
         description: req.body.description,
         displayStatus: filteredDisplayStatus,
-        youtubeID: req.body.youtubeID,
+        youtubeID: getYoutubeID(req.body.youtubeID),
     };
 
     let game = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });

@@ -25,13 +25,15 @@ function parseGameCover(fileName) {
 }
 
 function isUsernameValid(unfilteredUsername) {
-    let usernameRegex = /^[a-zA-Z0-9-_]*$/g;
+    // Allowed: az AZ 09 - _
+    let usernameRegex = /^[\w-]{3,}$/g;
 
     return usernameRegex.test(unfilteredUsername);
 }
 
 function makeUsernameValid(unfilteredUsername) {
-    let usernameRegex = /[^a-zA-Z0-9-_]*/g;
+    // Allowed: az AZ 09 - _
+    let usernameRegex = /[^\w-]*/g;
 
     return unfilteredUsername.replace(usernameRegex, '');
 }
@@ -58,6 +60,13 @@ function isGameIDValid(unfilteredGameID) {
     return gameIDRegex.test(unfilteredGameID);
 }
 
+// Source: https://stackoverflow.com/posts/9102270/revisions
+function getYoutubeID(url) {
+    var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    var match = url.match(regExp);
+    return (match && match[2].length == 11)? match[2] : undefined;
+}
+
 module.exports = {
     parseAvatar,
     parseGameScreenshot,
@@ -66,5 +75,6 @@ module.exports = {
     makeUsernameValid,
     isEmailValid,
     isCreatorIDValid,
-    isGameIDValid
+    isGameIDValid,
+    getYoutubeID
 }
