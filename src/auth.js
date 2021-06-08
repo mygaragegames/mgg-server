@@ -8,7 +8,7 @@ const { getOneUser } = require('./users');
 
 async function login( username, password ) {
     return new Promise((resolve, reject) => {
-        getOneUser({ username: username }).then((userData) => {
+        getOneUser({ username: username }, 0, []).then((userData) => {
             if(userData === null) {
                 reject(404);
                 return;
@@ -50,7 +50,7 @@ async function loginViaMethod( method, id ) {
                 userQuery = { loginDiscord: id};
         }
 
-        getOneUser(userQuery).then((userData) => {
+        getOneUser(userQuery, 0, []).then((userData) => {
             if(userData === null) {
                 reject(404);
                 return;
@@ -86,7 +86,7 @@ async function verify( token ) {
                 reject(403);
             }
 
-            getOneUser( { id: decoded.id} ).then((userData) => {
+            getOneUser( { id: decoded.id}, 0, []).then((userData) => {
                 let userRoles = [];
 
                 userData.getRoles().then((roles) => {

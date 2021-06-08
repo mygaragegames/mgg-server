@@ -37,8 +37,6 @@ async function processDiscordCallback( callbackCode ) {
             loginViaMethod({ method: "discord", id: userResponse.data.id }).then((userData) => {
                 resolve(userData);
             }).catch((error) => {
-                console.log(error);
-
                 if(error == 404) {
                     let newUser = {
                         username: makeUsernameValid(userResponse.data.username),
@@ -47,8 +45,6 @@ async function processDiscordCallback( callbackCode ) {
                     }
 
                     createUser(newUser).then(async (userData) => {
-                        console.log(userData);
-
                         let avatarTempPath = path.resolve(__dirname, '../tmp', uniqid() + ".png");
                         let userAvatarUrl = `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}.png?size=256`;
                         let avatarDownload = await axios({
