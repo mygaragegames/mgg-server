@@ -12,7 +12,7 @@ router.route('/')
     .post(auth.verifyToken, postOneHandler);
 
 router.route('/:playlistid')
-    .get(getOneHandler)
+    .get(auth.optionalToken, getOneHandler)
     .put(auth.verifyToken, putOneHandler)
     .delete(auth.verifyToken, deleteOneHandler);
 
@@ -30,7 +30,7 @@ router.route('/:playlistid/delete/:gameid')
  * @apiPermission Moderator
  * @apiPermission Admin
  * 
- * @apiHeader {String} x-access-token JWT Token for authentication
+ * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
  * @apiParam {Integer} playlistId The ID of the Playlist
  * 
  * @apiSuccess (200) {Integer} id ID
@@ -40,6 +40,7 @@ router.route('/:playlistid/delete/:gameid')
  * @apiSuccess (200) {Integer} userId ID of the User who created the playlist
  * @apiSuccess (200) {Object} user Object of the User who created the playlist
  * @apiSuccess (200) {Array} games Array of Games in the Playlist
+ * @apiError (403) PLAYLIST_PRIVATE You are not allowed to see this playlist.
  * @apiError (404) PLAYLIST_NOT_FOUND There is no playlist with the id <code>playlistId</code>
  */
 async function getOneHandler(req, res) {
@@ -53,6 +54,12 @@ async function getOneHandler(req, res) {
     let playlistDetail = await getOnePlaylist({ id: parseInt(req.params.playlistid) }).catch(() => { return null; });
     if(playlistDetail === null) {
         res.status(404).json({name: "PLAYLIST_NOT_FOUND", text: `There is no playlist with the id ${req.params.playlistid}`});
+        return;
+    }
+
+    // Only allow moderators/admins and owners to get playlists
+    if(playlistDetail.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        res.status(403).json({name: "PLAYLIST_PRIVATE", text: "You are not allowed to see this playlist."});
         return;
     }
     
