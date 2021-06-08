@@ -9,11 +9,6 @@ const { getOneUser } = require('./users');
 async function login( username, password ) {
     return new Promise((resolve, reject) => {
         getOneUser({ username: username }).then((userData) => {
-            if(userData === null) {
-                reject(404);
-                return;
-            }
-
             if(!bcrypt.compareSync(password, userData.password)) {
                 reject(403);
                 return;
@@ -56,11 +51,6 @@ async function loginViaMethod( method, id ) {
             console.log("Get User for loginViaMethod");
             console.log(userData);
 
-            if(userData === null) {
-                reject(404);
-                return;
-            }
-
             let newToken = jwt.sign({ id: userData.id }, process.env.JWT_SECRET_KEY, {
                 expiresIn: 86400
             });
@@ -79,7 +69,7 @@ async function loginViaMethod( method, id ) {
             });
         }).catch((error) => {
             console.log(error);
-            
+
             reject(error);
             return;
         });
