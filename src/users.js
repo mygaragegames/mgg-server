@@ -146,7 +146,11 @@ function updateUser( user, newData ) {
         user.update( newData ).then((newUser) => {
             resolve(newUser);
         }).catch((error) => {
-            reject(error);
+            if(error.name === 'SequelizeUniqueConstraintError') {
+                reject(409);
+            } else {
+                reject(error);
+            }
         });
     });
 }

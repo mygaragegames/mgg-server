@@ -201,6 +201,7 @@ async function postOneHandler(req, res) {
  * @apiSuccess (201) USER_UPDATED User was updated.
  * @apiError (404) USER_NOT_FOUND There is no user with the id <code>userId</code>
  * @apiError (406) USER_INGAMEID_WRONGFORMAT The ingame ID has the wrong format (P-000-000-000).
+ * @apiError (409) USERNAME_EMAIL_CONFLICT Username is already in use.
  * @apiError (406) USERNAME_INVALID Username is not valid!
  * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
  * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
@@ -236,7 +237,11 @@ async function putOneHandler(req, res) {
     }).catch((error) => {
         switch(error) {
             default:
+                console.log(error);
                 res.status(500).json({name: "UNKNOWN_ERROR", text: "User could not be updated."});
+                return;
+            case 409:
+                res.status(409).json({name: "USERNAME_EMAIL_CONFLICT", text: "Username is already in use!"});
                 return;
             case 406:
                 res.status(406).json({name: "USER_INGAMEID_WRONGFORMAT", text: "The ingame ID has the wrong format (P-000-000-000)."});
