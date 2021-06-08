@@ -35,12 +35,8 @@ async function processDiscordCallback( callbackCode ) {
             
             // Find user connected to ID
             loginViaMethod("discord", userResponse.data.id).then((userData) => {
-                console.log("First LoginViaMethod Done");
                 resolve(userData);
             }).catch((error) => {
-                console.log("First LoginViaMethod Error");
-                console.error(error);
-
                 if(error == 404) {
                     let newUser = {
                         username: makeUsernameValid(userResponse.data.username),
@@ -49,9 +45,6 @@ async function processDiscordCallback( callbackCode ) {
                     }
 
                     createUser(newUser).then(async (userData) => {
-                        console.log("Create User Done");
-                        console.log(userData);
-
                         let avatarTempPath = path.resolve(__dirname, '../tmp', uniqid() + ".png");
                         let userAvatarUrl = `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}.png?size=256`;
                         let avatarDownload = await axios({
@@ -60,12 +53,8 @@ async function processDiscordCallback( callbackCode ) {
                             responseType: 'stream'
                         });
 
-                        console.log(`Downloading in: ${avatarTempPath}`);
-
                         let avatarWriter = avatarDownload.data.pipe(fs.createWriteStream(avatarTempPath));
                         avatarWriter.on('finish', () => {
-                            console.log("Writing avatar done");
-
                             // Set Avatar
                             setAvatar(userData, { path: avatarTempPath }).then((avatarUrl) => {
                                 console.log("Setting Avatar Done");
@@ -87,11 +76,9 @@ async function processDiscordCallback( callbackCode ) {
                                 console.error(error);
 
                                 loginViaMethod("discord", userResponse.data.id).then((userData) => {
-                                    console.log("SetAvatarError LoginViaMethod Done");
                                     resolve(userData);
                                     return;
                                 }).catch((error) => {
-                                    console.log("SetAvatarError LoginViaMethod Error");
                                     reject(error);
                                     return;
                                 });
@@ -111,8 +98,6 @@ async function processDiscordCallback( callbackCode ) {
                             });
                         })
                     }).catch((error) => {
-                        console.log("Create User Error");
-
                         reject(error);
                         return;
                     });

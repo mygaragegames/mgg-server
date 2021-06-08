@@ -78,6 +78,8 @@ async function loginViaMethod( method, id ) {
                 });
             });
         }).catch((error) => {
+            console.log(error);
+            
             reject(error);
             return;
         });
