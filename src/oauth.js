@@ -9,21 +9,12 @@ const { loginViaMethod } = require('./auth');
 const { createUser, setAvatar } = require('./users');
 const { response } = require('express');
 
-let isDev = process.env.NODE_ENV !== 'prod';
-
-let redirectUri = "";
-if(isDev) {
-    redirectUri = `http://localhost:8080/auth/callback/discord`;
-} else {
-    redirectUri = `https://mygarage.games/auth/callback/discord`;
-}
-
 let discordAuthClient = new OAuthClient({
     clientId: process.env.OAUTH_DISCORD_CLIENTID,
     clientSecret: process.env.OAUTH_DISCORD_CLIENTSECRET,
     accessTokenUri: 'https://discord.com/api/oauth2/token',
     authorizationUri: 'https://discord.com/api/oauth2/authorize',
-    redirectUri: redirectUri,
+    redirectUri: process.env.OAUTH_DISCORD_REDIRECTURI,
     scopes: ['identify', 'email']
 });
 

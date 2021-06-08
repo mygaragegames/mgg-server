@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 console.clear();
-console.log("---> mygarage.games <---");
+console.log("---> mygarage.games [mgg-server] <---");
 
 const path = require('path');
 const fs = require('fs');
@@ -16,8 +16,8 @@ let isDev = process.env.NODE_ENV !== 'prod';
 const app = express();
 
 // HTTP to HTTPS redirect
-if(!isDev) {
-    console.log(`[mgg-comingsoon] Using HTTPS redirect.`);
+if(process.env.SSL_ACTIVE) {
+    console.log(`[mgg-server] Using HTTPS redirect.`);
 
     app.use(function(req, res, next) {
         if (req.secure) {
@@ -52,7 +52,7 @@ httpServer.listen(process.env.PORT_HTTP, () => {
     console.log(chalk.green(`[mgg-server] (Server) HTTP server running on port ${process.env.PORT_HTTP}.`));
 });
 
-if(!isDev) {
+if(process.env.SSL_ACTIVE) {
     const sslPK = fs.readFileSync(`${process.env.SSL_DIR}/privkey.pem`, 'utf8');
     const sslCert = fs.readFileSync(`${process.env.SSL_DIR}/cert.pem`, 'utf8');
     const sslCA = fs.readFileSync(`${process.env.SSL_DIR}/chain.pem`, 'utf8');
@@ -67,5 +67,5 @@ if(!isDev) {
         console.log(chalk.green(`[mgg-server] (Server) HTTPS server running on port ${process.env.PORT_HTTPS}.`));
     });
 } else {
-    console.log(chalk.grey(`[mgg-server] (Server) HTTPS server disabled on development instances.`));
+    console.log(chalk.grey(`[mgg-server] (Server) HTTPS server disabled.`));
 }
