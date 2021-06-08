@@ -20,6 +20,7 @@ function getOneGameChannel( searchOptions, userId = 0, userRoles = []) {
                 model: Game,
                 as: "games",
                 include: { model: User, as: "user" },
+                required: false,
                 where: {
                     [Sequelize.Op.and]: [
                         Sequelize.literal(`1 = CASE
