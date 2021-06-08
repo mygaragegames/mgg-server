@@ -9,5 +9,6 @@ module.exports = (sequelize, type) => {
             type: type.STRING,
             allowNull: false
         },
+        isBookmark: type.BOOLEAN,
     });
 }
