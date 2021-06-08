@@ -6,7 +6,7 @@ const uniqid = require('uniqid');
 const OAuthClient = require('client-oauth2');
 const { makeUsernameValid } = require('./parsers');
 const { loginViaMethod } = require('./auth');
-const { createUser, setAvatar } = require('./users');
+const { getOneUser, createUser, setAvatar } = require('./users');
 const { response } = require('express');
 
 let discordAuthClient = new OAuthClient({
