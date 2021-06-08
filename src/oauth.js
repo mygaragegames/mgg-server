@@ -44,9 +44,9 @@ async function processDiscordCallback( callbackCode ) {
                         loginDiscord: userResponse.data.id
                     }
 
-                    createUser(newUser).then(async (userData) => {
+                    createUser(newUser).then(async (createdUserData) => {
                         console.log("Created User");
-                        console.log(userData);
+                        console.log(createdUserData.id);
 
                         let avatarTempPath = path.resolve(__dirname, '../tmp', uniqid() + ".png");
                         let userAvatarUrl = `https://cdn.discordapp.com/avatars/${userResponse.data.id}/${userResponse.data.avatar}.png?size=256`;
@@ -63,26 +63,31 @@ async function processDiscordCallback( callbackCode ) {
                             console.log("Writing avatar done");
 
                             // Set Avatar
-                            setAvatar(userData, { path: avatarTempPath }).then((avatarUrl) => {
-                                loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
-                                    resolve(userData);
-                                    return;
+                            getOneUser({ id: createdUserData.id }).then((userData) => {
+                                setAvatar(userData, { path: avatarTempPath }).then((avatarUrl) => {
+                                    loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
+                                        resolve(userData);
+                                        return;
+                                    }).catch((error) => {
+                                        reject(error);
+                                        return;
+                                    });
                                 }).catch((error) => {
-                                    reject(error);
-                                    return;
+                                    try {
+                                        fs.unlinkSync(avatarTempPath);
+                                    } catch(error) {}
+
+                                    loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
+                                        resolve(userData);
+                                        return;
+                                    }).catch((error) => {
+                                        reject(error);
+                                        return;
+                                    });
                                 });
                             }).catch((error) => {
-                                try {
-                                    fs.unlinkSync(avatarTempPath);
-                                } catch(error) {}
-
-                                loginViaMethod({ method: "discord", id: userResponse.data.id}).then((userData) => {
-                                    resolve(userData);
-                                    return;
-                                }).catch((error) => {
-                                    reject(error);
-                                    return;
-                                });
+                                reject(error);
+                                return;
                             });
                         });
                         avatarWriter.on('error', (error) => {
