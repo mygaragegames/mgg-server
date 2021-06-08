@@ -44,7 +44,7 @@ function getOneUser( searchOptions, userId = 0, userRoles = []) {
                 {
                     model: Game, as: "games",
                     include: { model: User, as: "user" },
-                    where: {
+                    /*where: {
                         [Sequelize.Op.and]: [
                             Sequelize.literal(`1 = CASE
                                 WHEN ${overrideDisplayStatus} = true THEN 1
@@ -56,7 +56,7 @@ function getOneUser( searchOptions, userId = 0, userRoles = []) {
                     },
                     order: [
                         ['games.createdAt', 'DESC']
-                    ],
+                    ], */
                 }
             ]
         }).then((userData) => {
