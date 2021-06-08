@@ -57,23 +57,18 @@ async function processDiscordCallback( callbackCode ) {
                         avatarWriter.on('finish', () => {
                             // Set Avatar
                             setAvatar(userData, { path: avatarTempPath }).then((avatarUrl) => {
-                                console.log("Setting Avatar Done");
                                 loginViaMethod("discord", userResponse.data.id).then((userData) => {
-                                    console.log("SetAvatar LoginViaMethod Done");
                                     resolve(userData);
                                     return;
                                 }).catch((error) => {
-                                    console.log("SetAvatar LoginViaMethod Error");
                                     reject(error);
                                     return;
                                 });
                             }).catch((error) => {
+                                // Remove avatar if not downloaded & set successfully
                                 try {
                                     fs.unlinkSync(avatarTempPath);
                                 } catch(error) {}
-
-                                console.log("Setting Avatar Error");
-                                console.error(error);
 
                                 loginViaMethod("discord", userResponse.data.id).then((userData) => {
                                     resolve(userData);
