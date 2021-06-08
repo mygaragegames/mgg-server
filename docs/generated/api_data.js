@@ -1546,7 +1546,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "youtubeID",
-            "description": "<p>(Optional) Trailer YouTube-ID of the Game</p>"
+            "description": "<p>(Optional) Trailer YouTube-URL of the Game</p>"
           }
         ]
       }
@@ -2097,7 +2097,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "youtubeID",
-            "description": "<p>(Optional) Trailer YouTube-ID of the Game</p>"
+            "description": "<p>(Optional) Trailer YouTube-URL of the Game</p>"
           }
         ]
       }
@@ -2684,7 +2684,7 @@ define({ "api": [
             "type": "String",
             "optional": false,
             "field": "x-access-token",
-            "description": "<p>JWT Token for authentication</p>"
+            "description": "<p>(Optional) JWT Token for authentication</p>"
           }
         ]
       }
@@ -2759,6 +2759,14 @@ define({ "api": [
     },
     "error": {
       "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "PLAYLIST_PRIVATE",
+            "description": "<p>You are not allowed to see this playlist.</p>"
+          }
+        ],
         "404": [
           {
             "group": "404",
@@ -3269,6 +3277,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "username",
+            "description": "<p>(Optional) Username for the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "pronouns",
             "description": "<p>(Optional) Pronouns for the User</p>"
           },
@@ -3351,6 +3366,20 @@ define({ "api": [
             "optional": false,
             "field": "USER_INGAMEID_WRONGFORMAT",
             "description": "<p>The ingame ID has the wrong format (P-000-000-000).</p>"
+          },
+          {
+            "group": "406",
+            "optional": false,
+            "field": "USERNAME_INVALID",
+            "description": "<p>Username is not valid!</p>"
+          }
+        ],
+        "409": [
+          {
+            "group": "409",
+            "optional": false,
+            "field": "USERNAME_EMAIL_CONFLICT",
+            "description": "<p>Username is already in use.</p>"
           }
         ]
       }
