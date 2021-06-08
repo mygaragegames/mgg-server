@@ -39,8 +39,6 @@ async function login( username, password ) {
 
 async function loginViaMethod( method, id ) {
     return new Promise((resolve, reject) => {
-        console.log(`LoginViaMethod: ${method}, ${id}`);
-
         let userQuery = {};
         switch(method) {
             case "discord":
@@ -48,9 +46,6 @@ async function loginViaMethod( method, id ) {
         }
 
         getOneUser(userQuery).then((userData) => {
-            console.log("Get User for loginViaMethod");
-            console.log(userData);
-
             let newToken = jwt.sign({ id: userData.id }, process.env.JWT_SECRET_KEY, {
                 expiresIn: 86400
             });
@@ -68,9 +63,6 @@ async function loginViaMethod( method, id ) {
                 });
             });
         }).catch((error) => {
-            console.log("Get user for loginViaMethod Error");
-            console.log(error);
-
             reject(error);
             return;
         });
