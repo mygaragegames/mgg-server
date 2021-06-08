@@ -44,6 +44,8 @@ async function login( username, password ) {
 
 async function loginViaMethod( method, id ) {
     return new Promise((resolve, reject) => {
+        console.log(`LoginViaMethod: ${method}, ${id}`);
+
         let userQuery = {};
         switch(method) {
             case "discord":
