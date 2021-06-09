@@ -4,9 +4,9 @@
   "description": "Coming Soon page for MyGarage.games",
   "main": "server.js",
   "scripts": {
-    "start": "pm2 start server.js --name mgg-api --watch && pm2 log mgg-api",
-    "stop": "pm2 stop mgg-api",
-    "restart": "pm2 restart mgg-api",
+    "start": "pm2 start pm2-server.json && pm2 log mgg-api",
+    "stop": "pm2 stop pm2-server.json",
+    "restart": "pm2 restart pm2-server.json",
     "test:setup": "node tests/setup.js",
     "test:idparser": "node tests/idparser.js",
     "test:usernameparser": "node tests/usernameparser.js",
