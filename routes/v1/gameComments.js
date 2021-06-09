@@ -24,7 +24,7 @@ router.route('/:gameid')
  * 
  * @apiSuccess (200) {Integer} id ID
  * @apiSuccess (200) {String} text Comment Body
- * @apiSuccess (200) {DateTime} createAt DateTime of creation
+ * @apiSuccess (200) {DateTime} createdAt DateTime of creation
  * @apiSuccess (200) {DateTime} updatedAt DateTime of last change
  * @apiSuccess (200) {Integer} gameId ID of the Game from the Comment
  * @apiSuccess (200) {Integer} userId ID of the User who created the Comment
