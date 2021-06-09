@@ -77,8 +77,9 @@ async function getOneHandler(req, res) {
         return;
     }
 
+    let numberRegex = /^\d+$/;
     let searchOptions = undefined;
-    if(Number.isInteger(req.params.userid)) {
+    if(numberRegex.test(req.params.userid)) {
         searchOptions = { id: req.params.userid };
     } else if(isCreatorIDValid(req.params.userid)) {
         searchOptions = { ingameID: req.params.userid };

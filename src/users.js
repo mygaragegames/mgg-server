@@ -39,13 +39,11 @@ function getOneUser( searchOptions, userId = 0, userRoles = []) {
                 {
                     model: Playlist,
                     as: "playlists",
-                    required: false,
                 },
                 {
                     model: GameComment,
                     as: "comments",
                     include: { model: User, as: "user" },
-                    required: false,
                 },
                 {
                     model: Game,
