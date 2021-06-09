@@ -116,35 +116,82 @@ function createRoles() {
 }
 
 function createChannels() {
-    GameChannel.create({
-        id: 1,
+    let channels = [{
         title: "2D",
-        description: "2D Games"
-    });
-    GameChannel.create({
-        id: 2,
+        description: "For games in the second dimension."
+    }, {
         title: "3D",
-        description: "3D Games"
-    });
-    GameChannel.create({
-        id: 3,
+        description: "For games in the third dimension."
+    }, {
         title: "Topdown",
-        description: "Topdown Games"
-    });
-    GameChannel.create({
-        id: 4,
+        description: "For games that have a topdown camera perspective."
+    }, {
         title: "Sidescroller",
-        description: "Sidescroller Games"
-    });
-    GameChannel.create({
-        id: 5,
-        title: "Third-Person",
-        description: "Third-Person Games"
-    });
-    GameChannel.create({
-        id: 6,
-        title: "First-Person",
-        description: "First-Person Games"
+        description: "For games that have a sidescroller camera perspective."
+    }, {
+        title: "Third-person",
+        description: "For games that have a third-person camera perspective."
+    }, {
+        title: "First-person",
+        description: "For games that have a first-person camera perspective."
+    }, {
+        title: "Parody",
+        description: "This game is a parody of an existing game."
+    }, {
+        title: "Music",
+        description: "These games have a heavy focus on music experiences."
+    }, {
+        title: "Story",
+        description: "These games have a heavy focus on story and narrative."
+    }, {
+        title: "Non-interactive",
+        description: "An experience that doesn't require any inputs by the player and instead plays on its own."
+    }, {
+        title: "Endless",
+        description: "These games don't stop but continue and continue and continue and cont-."
+    }, {
+        title: "Time",
+        description: "These games have a heavy focus on time or have elements of time pressure."
+    }, {
+        title: "Casual",
+        description: "These games can be played by anyone, don't be shy, give 'em a try!"
+    }, {
+        title: "Motion-Control",
+        description: "These games utilize the consoles motion control capabilities."
+    }, {
+        title: "IR-Control",
+        description: "These games utilize the consoles infrared sensor capabilities."
+    }, {
+        title: "Puzzle",
+        description: "For games in the puzzle genre."
+    }, {
+        title: "Action",
+        description: "For games in the action genre."
+    }, {
+        title: "Racing",
+        description: "For games in the racing genre."
+    }, {
+        title: "Rhythm",
+        description: "For games in the rhythm genre."
+    }, {
+        title: "Shooter",
+        description: "For games in the shooter genre."
+    }, {
+        title: "Point-And-Click",
+        description: "For games in the point-and-click genre."
+    }, {
+        title: "Utility-And-Tools",
+        description: "These entries are not games but useful utilities and/or tools."
+    }, {
+        title: "Templates-And-Assets",
+        description: "These entries are not games but code snippets, tutorials and templates for other creators."
+    }];
+
+    channels.forEach((channel) => {
+        GameChannel.create({
+            title: channel.title,
+            description: channel.description
+        });
     });
 
     console.log(chalk.cyan('[mgg-server] (Sequelize) Created channels.'));
