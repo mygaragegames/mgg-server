@@ -78,7 +78,7 @@ async function getOneHandler(req, res) {
     }
 
     let searchOptions = undefined;
-    if(parseInt(req.params.userid)) {
+    if(Number.isInteger(req.params.userid)) {
         searchOptions = { id: req.params.userid };
     } else if(isCreatorIDValid(req.params.userid)) {
         searchOptions = { ingameID: req.params.userid };
