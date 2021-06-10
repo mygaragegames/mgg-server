@@ -10,6 +10,7 @@
     "test:setup": "node tests/setup.js",
     "test:idparser": "node tests/idparser.js",
     "test:usernameparser": "node tests/usernameparser.js",
+    "cli:userRoles": "node src/cli/userRoles.js",
     "docs:generate": "apidoc -i routes/ -o docs/generated/ -t docs/template"
   },
   "repository": {
