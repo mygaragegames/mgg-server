@@ -281,7 +281,7 @@ async function putOneHandler(req, res) {
  * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
  */
 async function putUpdateAvatarHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Users) Users->PutUpdateAvatar"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Users) Users->PutUpdateAvatar"));
 
     if(req.params.userid === '' || req.file === undefined) {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: userId, avatar"});
@@ -335,7 +335,7 @@ async function putUpdateAvatarHandler(req, res) {
  * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
  */
 async function deleteUpdateAvatarHandler(req, res) {
-    console.log(chalk.grey("[mgg-server] (Users) Users->DeleteUpdateAvatar"));
+    if(isDev) console.log(chalk.grey("[mgg-server] (Users) Users->DeleteUpdateAvatar"));
 
     if(req.params.userid === '') {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: userId"});
