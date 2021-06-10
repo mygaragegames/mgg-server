@@ -6,7 +6,7 @@ const imageType = require('image-type');
 const uniqid = require('uniqid');
 const path = require("path");
 const { Sequelize } = require('sequelize');
-const { User, Playlist, Game, GameComment } = require('../sequelize');
+const { User, UserRole, Playlist, Game, GameComment } = require('../sequelize');
 const { isUsernameValid, isCreatorIDValid, isEmailValid } = require('./parsers');
 
 function getAllUsers() {
@@ -43,6 +43,7 @@ function getOneUser( searchOptions, userId = 0, userRoles = []) {
                 {
                     model: GameComment,
                     as: "comments",
+                    required: false,
                     include: { model: User, as: "user" },
                 },
                 {
@@ -70,7 +71,7 @@ function getOneUser( searchOptions, userId = 0, userRoles = []) {
                 reject(404);
                 return;
             }
-
+            
             resolve(userData);
         });
     });
