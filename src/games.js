@@ -31,6 +31,11 @@ function getOneGame( searchOptions ) {
             { model: GameChannel, as: "channels" },
             { model: GameComment, as: "comments", include: { model: User, as: "user" } }
         ]}).then((gameData) => {
+            if(gameData === null) {
+                reject(404);
+                return;
+            }
+
             gameData.update({
                 views: gameData.views + 1
             }).then(() => {
