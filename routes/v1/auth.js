@@ -148,7 +148,7 @@ async function putUpdateHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(user.id !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }

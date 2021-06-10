@@ -58,7 +58,7 @@ async function getOneHandler(req, res) {
     }
 
     // Only allow moderators/admins and owners to get playlists
-    if(playlistDetail.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(playlistDetail.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "PLAYLIST_PRIVATE", text: "You are not allowed to see this playlist."});
         return;
     }
@@ -161,7 +161,7 @@ async function putOneHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(playlist.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(playlist.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -201,7 +201,7 @@ async function deleteOneHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(playlist.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(playlist.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -242,7 +242,7 @@ async function postAddHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(playlist.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(playlist.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -285,7 +285,7 @@ async function deleteRemoveHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(playlist.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(playlist.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }

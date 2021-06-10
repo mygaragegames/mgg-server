@@ -67,7 +67,7 @@ async function getOneHandler(req, res) {
 
     // Only allow moderators/admins and owners to get display status 2 games
     if(gameData.displayStatus == 2) {
-        if(gameData.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+        if(gameData.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
             res.status(403).json({name: "GAME_PRIVATE", text: "You are not allowed to see this game."});
             return;
         }
@@ -248,7 +248,7 @@ async function putOneHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(game.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -299,7 +299,7 @@ async function deleteOneHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(game.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -346,7 +346,7 @@ async function putOneCoverHandler(req, res) {
         return;
     }
 
-    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(game.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -398,7 +398,7 @@ async function deleteOneCoverHandler(req, res) {
         return;
     }
 
-    if(game.userId !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(game.userId !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }

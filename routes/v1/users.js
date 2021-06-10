@@ -93,8 +93,17 @@ async function getOneHandler(req, res) {
         return;
     }
 
+    let userRoles = [];
+    await userData.getRoles().then((roles) => {
+        roles.forEach(role => {
+            userRoles.push(role.name);
+        });
+    });
+
     // Dirty hack to make the data editable
     userData = JSON.parse(JSON.stringify(userData));
+
+    userData.roles = userRoles;
 
     // remove security related fields for return
     userData.password = undefined;
@@ -227,7 +236,7 @@ async function putOneHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(user.id !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -287,7 +296,7 @@ async function putUpdateAvatarHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(user.id !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -341,7 +350,7 @@ async function deleteUpdateAvatarHandler(req, res) {
     }
 
     // Check if user is owner or moderator/admin
-    if(user.id !== req.userId && !req.userRoles.includes('moderator', 'admin')) {
+    if(user.id !== req.userId && !['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }

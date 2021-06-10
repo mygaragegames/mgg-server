@@ -101,7 +101,7 @@ async function postOneHandler(req, res) {
         return;
     }
 
-    if(!req.userRoles.includes('moderator', 'admin')) {
+    if(!['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -149,7 +149,7 @@ async function putOneHandler(req, res) {
         return;
     }
 
-    if(!req.userRoles.includes('moderator', 'admin')) {
+    if(!['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
@@ -205,7 +205,7 @@ async function deleteOneHandler(req, res) {
         return;
     }
 
-    if(!req.userRoles.includes('moderator', 'admin')) {
+    if(!['moderator', 'admin'].some(str => req.userRoles.includes(str))) {
         res.status(403).json({name: "AUTHENTICATION_NEEDED", text: "You are not allowed to perform this action."});
         return;
     }
