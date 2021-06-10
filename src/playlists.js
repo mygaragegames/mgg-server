@@ -2,7 +2,7 @@ const chalk = require('chalk');
 const { User, Game, Playlist } = require('../sequelize');
 
 function getOnePlaylist( searchOptions, userId = 0, userRoles = []) {
-    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+    let overrideDisplayStatus = ['moderator', 'admin'].some(str => userRoles.includes(str));
 
     // TODO: Fix honoring displayStatus
 

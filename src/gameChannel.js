@@ -11,7 +11,7 @@ function getGameChannels( searchOptions ) {
 }
 
 function getOneGameChannel( searchOptions, userId = 0, userRoles = []) {
-    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+    let overrideDisplayStatus = ['moderator', 'admin'].some(str => userRoles.includes(str));
 
     return new Promise((resolve, reject) => {
         GameChannel.findOne({

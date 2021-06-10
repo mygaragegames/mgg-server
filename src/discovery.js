@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');
 const { Game, User } = require('../sequelize');
 
 function getNewestGames(userId = 0, userRoles = []) {
-    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+    let overrideDisplayStatus = ['moderator', 'admin'].some(str => userRoles.includes(str));
 
     return new Promise((resolve, reject) => {
         Game.findAll({
@@ -30,7 +30,7 @@ function getNewestGames(userId = 0, userRoles = []) {
 }
 
 function getPopularGames(userId = 0, userRoles = []) {
-    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+    let overrideDisplayStatus = ['moderator', 'admin'].some(str => userRoles.includes(str));
 
     return new Promise((resolve, reject) => {
         Game.findAll({
@@ -56,7 +56,7 @@ function getPopularGames(userId = 0, userRoles = []) {
 }
 
 function getQueryGames(searchQuery, userId, userRoles) {
-    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+    let overrideDisplayStatus = ['moderator', 'admin'].some(str => userRoles.includes(str));
 
     return new Promise((resolve, reject) => {
         Game.findAll({

@@ -30,7 +30,7 @@ function getAllUsers() {
 }
 
 function getOneUser( searchOptions, userId = 0, userRoles = []) {
-    let overrideDisplayStatus = userRoles.includes('moderator', 'admin');
+    let overrideDisplayStatus = ['moderator', 'admin'].some(str => userRoles.includes(str));
 
     return new Promise((resolve, reject) => {
         User.findOne({
