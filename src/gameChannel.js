@@ -4,7 +4,21 @@ const { Game, GameChannel, User } = require('../sequelize');
 
 function getGameChannels( searchOptions ) {
     return new Promise((resolve, reject) => {
-        GameChannel.findAll({ where: searchOptions }).then((gameChannelData) => {
+        GameChannel.findAll({
+                attributes: {
+                    include: [
+                        [Sequelize.fn("COUNT", Sequelize.col("games.id")), "gamesCount"]
+                    ]
+                },
+                where: searchOptions,
+                include: [{
+                    model: Game,
+                    as: "games",
+                    required: false,
+                    attributes: []
+                }],
+                group: ['id']
+            }).then((gameChannelData) => {
             resolve(gameChannelData);
         });
     });

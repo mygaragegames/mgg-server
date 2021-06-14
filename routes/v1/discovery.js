@@ -117,6 +117,7 @@ async function getPopularHandler(req, res) {
 
     let gamesData = await getPopularGames(req.params.page);
 
+    gamesData = parseGameData(gamesData);
 
     res.status(200).json(gamesData);
 }

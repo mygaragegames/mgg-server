@@ -23,6 +23,12 @@ router.route('/:channelid')
  * @apiPermission Public
  * 
  * @apiSuccess (200) {Array} gameChannels Array of GameChannels
+ * @apiSuccess (200) {Integer} gameChannels.id ID
+ * @apiSuccess (200) {String} gameChannels.title Title
+ * @apiSuccess (200) {String} gameChannels.description Description
+ * @apiSuccess (200) {DateTime} gameChannels.createAt DateTime of creation
+ * @apiSuccess (200) {DateTime} gameChannels.updatedAt DateTime of last change
+ * @apiSuccess (200) {Integer} gameChannels.gamesCount The amount of games in this channel
  */
 async function getAllHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (GameChannels) GameChannels->Get"));
