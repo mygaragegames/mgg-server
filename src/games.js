@@ -25,12 +25,18 @@ function getAllGames() {
 
 function getOneGame( searchOptions ) {
     return new Promise((resolve, reject) => {
-        Game.findOne({ where: searchOptions, include: [
-            { model: GameScreenshot, as: "screenshots" },
-            { model: User, as: "user" },
-            { model: GameChannel, as: "channels" },
-            { model: GameComment, as: "comments", include: { model: User, as: "user" } }
-        ]}).then((gameData) => {
+        Game.findOne({
+            where: searchOptions,
+            include: [
+                { model: GameScreenshot, as: "screenshots" },
+                { model: User, as: "user" },
+                { model: GameChannel, as: "channels" },
+                { model: GameComment, as: "comments", include: { model: User, as: "user" } }
+            ],
+            order: [
+                ["comments", 'createdAt', 'DESC']
+            ],
+        }).then((gameData) => {
             if(gameData === null) {
                 reject(404);
                 return;

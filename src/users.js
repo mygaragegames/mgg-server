@@ -61,12 +61,12 @@ function getOneUser( searchOptions, userId = 0, userRoles = []) {
                                 ELSE 2
                             END`)
                         ]
-                    },
-                    order: [
-                        ['games.createdAt', 'DESC']
-                    ],
+                    }
                 }
-            ]
+            ],
+            order: [
+                ["games", 'createdAt', 'DESC']
+            ],
         }).then((userData) => {
             if(userData === null){
                 reject(404);
