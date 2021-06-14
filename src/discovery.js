@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const { Sequelize } = require('sequelize');
 const { Game, User } = require('../sequelize');
 
-function getNewestGames(userId = 0, userRoles = [], page = 0) {
+function getNewestGames(page = 0) {
     return new Promise((resolve, reject) => {
         Game.findAll({
             include: { model: User, as: "user" },
@@ -21,7 +21,25 @@ function getNewestGames(userId = 0, userRoles = [], page = 0) {
     });
 }
 
-function getPopularGames(userId = 0, userRoles = [], page = 0) {
+function getHotThisWeekGames(page = 0) {
+    return new Promise((resolve, reject) => {
+        Game.findAll({
+            include: { model: User, as: "user" },
+            where: {
+                displayStatus: 0
+            },
+            order: [
+                ['views', 'DESC']
+            ],
+            limit: 12,
+            offset: page * 12
+        }).then((games) => {
+            resolve(games);
+        });
+    });
+}
+
+function getPopularGames(page = 0) {
     return new Promise((resolve, reject) => {
         Game.findAll({
             include: { model: User, as: "user" },
@@ -73,6 +91,7 @@ function getQueryGames(searchQuery, userId, userRoles) {
 
 module.exports = {
     getNewestGames,
+    getHotThisWeekGames,
     getPopularGames,
     getQueryGames
 }

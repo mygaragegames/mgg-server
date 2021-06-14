@@ -440,8 +440,62 @@
   },
   {
     "type": "get",
+    "url": "/discovery/hotThisWeek",
+    "title": "Get the 12 newest games",
+    "name": "GetHotThisWeekGames",
+    "group": "Discovery",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>(Optional) JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page (wraps every 12 games)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "games",
+            "description": "<p>Array of Games</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/discovery.js",
+    "groupTitle": "Discovery"
+  },
+  {
+    "type": "get",
     "url": "/discovery/newest",
-    "title": "Get the 15 newest games",
+    "title": "Get the 12 newest games",
     "name": "GetNewestGames",
     "group": "Discovery",
     "permission": [
@@ -458,6 +512,19 @@
             "optional": false,
             "field": "x-access-token",
             "description": "<p>(Optional) JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page (wraps every 12 games)</p>"
           }
         ]
       }
@@ -482,7 +549,7 @@
   {
     "type": "get",
     "url": "/discovery/popular",
-    "title": "Get the 15 most popular games",
+    "title": "Get the 12 most popular games",
     "name": "GetPopularGames",
     "group": "Discovery",
     "permission": [
@@ -499,6 +566,19 @@
             "optional": false,
             "field": "x-access-token",
             "description": "<p>(Optional) JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page (wraps every 12 games)</p>"
           }
         ]
       }
@@ -1147,7 +1227,7 @@
             "group": "200",
             "type": "DateTime",
             "optional": false,
-            "field": "createAt",
+            "field": "createdAt",
             "description": "<p>DateTime of creation</p>"
           },
           {
