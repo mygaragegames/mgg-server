@@ -3,7 +3,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { parseAvatar, parseGameCover } = require('../../src/parsers');
-const { getNewestGames, getHotThisWeekGames, getPopularGames, getQueryGames } = require('../../src/discovery');
+const { getNewestGames, getHotThisWeekGames, getRandomGames, getPopularGames, getQueryGames } = require('../../src/discovery');
 
 let isDev = process.env.NODE_ENV !== 'prod';
 
@@ -12,6 +12,9 @@ router.route('/newest/:page')
 
 router.route('/hotThisWeek/:page')
     .get(auth.optionalToken, getHotThisWeekHandler);
+
+router.route('/random/:page')
+    .get(auth.optionalToken, getRandomHandler);
 
 router.route('/popular/:page')
     .get(auth.optionalToken, getPopularHandler);
@@ -39,32 +42,13 @@ router.route('/find')
 
     let gamesData = await getNewestGames(parseInt(req.params.page));
 
-    // Dirty hack to make the data editable
-    gamesData = JSON.parse(JSON.stringify(gamesData));
-
-    let filteredGames = [];
-    gamesData.forEach((game) => {
-        game.coverFileName = parseGameCover(game.coverFileName);
-
-        // remove security related fields for return
-        game.user.password = undefined;
-        game.user.email = undefined;
-        game.user.loginDiscord = undefined;
-        game.user.loginTwitter = undefined;
-        game.user.loginYouTube = undefined;
-
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
-
-        filteredGames.push(game);
-    });
-    
-    gamesData = filteredGames;
+    gamesData = parseGameData(gamesData);
 
     res.status(200).json(gamesData);
 }
 
 /**
- * @api {get} /discovery/hotThisWeek Get the 12 newest games
+ * @api {get} /discovery/hotThisWeek Get the 12 most popular games released this week
  * @apiName GetHotThisWeekGames
  * @apiGroup Discovery
  * @apiPermission Public
@@ -83,26 +67,32 @@ router.route('/find')
 
     let gamesData = await getHotThisWeekGames(parseInt(req.params.page));
 
-    // Dirty hack to make the data editable
-    gamesData = JSON.parse(JSON.stringify(gamesData));
+    gamesData = parseGameData(gamesData);
 
-    let filteredGames = [];
-    gamesData.forEach((game) => {
-        game.coverFileName = parseGameCover(game.coverFileName);
+    res.status(200).json(gamesData);
+}
 
-        // remove security related fields for return
-        game.user.password = undefined;
-        game.user.email = undefined;
-        game.user.loginDiscord = undefined;
-        game.user.loginTwitter = undefined;
-        game.user.loginYouTube = undefined;
+/**
+ * @api {get} /discovery/random Get the 12 random games
+ * @apiName GetRandomGames
+ * @apiGroup Discovery
+ * @apiPermission Public
+ * 
+ * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
+ * @apiParam {Integer} page Page (wraps every 12 games)
+ * 
+ * @apiSuccess (200) {Array} games Array of Games
+ */
+async function getRandomHandler(req, res) {
+    if(isDev) console.log(chalk.grey("[mgg-server] (Discovery) Random->Get"));
 
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+    if(req.params.page == undefined) {
+        req.params.page = 0;
+    }
 
-        filteredGames.push(game);
-    });
-    
-    gamesData = filteredGames;
+    let gamesData = await getRandomGames(req.params.page);
+
+    gamesData = parseGameData(gamesData);
 
     res.status(200).json(gamesData);
 }
@@ -127,27 +117,6 @@ async function getPopularHandler(req, res) {
 
     let gamesData = await getPopularGames(req.params.page);
 
-    // Dirty hack to make the data editable
-    gamesData = JSON.parse(JSON.stringify(gamesData));
-
-    let filteredGames = [];
-    gamesData.forEach((game) => {
-        game.coverFileName = parseGameCover(game.coverFileName);
-
-
-        // remove security related fields for return
-        game.user.password = undefined;
-        game.user.email = undefined;
-        game.user.loginDiscord = undefined;
-        game.user.loginTwitter = undefined;
-        game.user.loginYouTube = undefined;
-
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
-
-        filteredGames.push(game);
-    });
-    
-    gamesData = filteredGames;
 
     res.status(200).json(gamesData);
 }
@@ -173,6 +142,12 @@ async function getPopularHandler(req, res) {
 
     let gamesData = await getQueryGames(req.body.query, req.userId, req.userRoles);
 
+    gamesData = parseGameData(gamesData);
+
+    res.status(200).json(gamesData);
+}
+
+function parseGameData(gamesData) {
     // Dirty hack to make the data editable
     gamesData = JSON.parse(JSON.stringify(gamesData));
 
@@ -194,7 +169,7 @@ async function getPopularHandler(req, res) {
     
     gamesData = filteredGames;
 
-    res.status(200).json(gamesData);
+    return gamesData;
 }
 
 module.exports = router;
