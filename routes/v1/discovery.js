@@ -7,29 +7,34 @@ const { getPopularGames, getNewestGames, getQueryGames } = require('../../src/di
 
 let isDev = process.env.NODE_ENV !== 'prod';
 
-router.route('/popular')
+router.route('/popular/:page?')
     .get(auth.optionalToken, getPopularHandler);
 
-router.route('/newest')
+router.route('/newest/:page?')
     .get(auth.optionalToken, getNewestHandler);
 
 router.route('/find')
     .post(auth.optionalToken, postFindHandler);
 
 /**
- * @api {get} /discovery/popular Get the 15 most popular games
+ * @api {get} /discovery/popular Get the 16 most popular games
  * @apiName GetPopularGames
  * @apiGroup Discovery
  * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
+ * @apiParam {Integer} page (Optional) Page (wraps every 16 games)
  * 
  * @apiSuccess (200) {Array} games Array of Games
  */
 async function getPopularHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Discovery) Popular->Get"));
 
-    let gamesData = await getPopularGames(req.userId, req.userRoles);
+    if(req.params.page == undefined) {
+        req.params.page = 0;
+    }
+
+    let gamesData = await getPopularGames(req.params.page);
 
     // Dirty hack to make the data editable
     gamesData = JSON.parse(JSON.stringify(gamesData));
@@ -37,6 +42,7 @@ async function getPopularHandler(req, res) {
     let filteredGames = [];
     gamesData.forEach((game) => {
         game.coverFileName = parseGameCover(game.coverFileName);
+
 
         // remove security related fields for return
         game.user.password = undefined;
@@ -56,19 +62,24 @@ async function getPopularHandler(req, res) {
 }
 
 /**
- * @api {get} /discovery/newest Get the 15 newest games
+ * @api {get} /discovery/newest Get the 16 newest games
  * @apiName GetNewestGames
  * @apiGroup Discovery
  * @apiPermission Public
  * 
  * @apiHeader {String} x-access-token (Optional) JWT Token for authentication
+ * @apiParam {Integer} page (Optional) Page (wraps every 16 games)
  * 
  * @apiSuccess (200) {Array} games Array of Games
  */
  async function getNewestHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Discovery) Newest->Get"));
 
-    let gamesData = await getNewestGames(req.userId, req.userRoles);
+    if(req.params.page == undefined) {
+        req.params.page = 0;
+    }
+
+    let gamesData = await getNewestGames(req.params.page);
 
     // Dirty hack to make the data editable
     gamesData = JSON.parse(JSON.stringify(gamesData));
