@@ -1,8 +1,8 @@
 define({
-  "name": "mygarage.games API",
-  "version": "1.0.0",
-  "description": "API documentation for mygarage.games",
-  "title": "mygarage.games API Documentation",
+  "name": "MyGarage.games API",
+  "version": "1.1.0",
+  "description": "API documentation for MyGarage.games",
+  "title": "MyGarage.games API Documentation",
   "url": "https://api.mygarage.games/v1",
   "sampleUrl": null,
   "template": {
@@ -12,7 +12,7 @@ define({
   "apidoc": "0.3.0",
   "generator": {
     "name": "apidoc",
-    "time": "2021-06-14T15:01:18.862Z",
+    "time": "2021-06-14T16:13:39.207Z",
     "url": "https://apidocjs.com",
     "version": "0.28.1"
   }

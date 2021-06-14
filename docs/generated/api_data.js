@@ -441,7 +441,7 @@ define({ "api": [
   {
     "type": "get",
     "url": "/discovery/hotThisWeek",
-    "title": "Get the 12 newest games",
+    "title": "Get the 12 most popular games released this week",
     "name": "GetHotThisWeekGames",
     "group": "Discovery",
     "permission": [
@@ -551,6 +551,60 @@ define({ "api": [
     "url": "/discovery/popular",
     "title": "Get the 12 most popular games",
     "name": "GetPopularGames",
+    "group": "Discovery",
+    "permission": [
+      {
+        "name": "Public"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>(Optional) JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "page",
+            "description": "<p>Page (wraps every 12 games)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Array",
+            "optional": false,
+            "field": "games",
+            "description": "<p>Array of Games</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/discovery.js",
+    "groupTitle": "Discovery"
+  },
+  {
+    "type": "get",
+    "url": "/discovery/random",
+    "title": "Get the 12 random games",
+    "name": "GetRandomGames",
     "group": "Discovery",
     "permission": [
       {
@@ -795,6 +849,48 @@ define({ "api": [
             "optional": false,
             "field": "gameChannels",
             "description": "<p>Array of GameChannels</p>"
+          },
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "gameChannels.id",
+            "description": "<p>ID</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "gameChannels.title",
+            "description": "<p>Title</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "gameChannels.description",
+            "description": "<p>Description</p>"
+          },
+          {
+            "group": "200",
+            "type": "DateTime",
+            "optional": false,
+            "field": "gameChannels.createAt",
+            "description": "<p>DateTime of creation</p>"
+          },
+          {
+            "group": "200",
+            "type": "DateTime",
+            "optional": false,
+            "field": "gameChannels.updatedAt",
+            "description": "<p>DateTime of last change</p>"
+          },
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "gameChannels.gamesCount",
+            "description": "<p>The amount of games in this channel</p>"
           }
         ]
       }

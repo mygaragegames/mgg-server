@@ -1,8 +1,8 @@
 {
-    "name": "mygarage.games API",
-    "version": "1.0.0",
-    "description": "API documentation for mygarage.games",
-    "title": "mygarage.games API Documentation",
+    "name": "MyGarage.games API",
+    "version": "1.1.0",
+    "description": "API documentation for MyGarage.games",
+    "title": "MyGarage.games API Documentation",
     "url" : "https://api.mygarage.games/v1",
     "sampleUrl": null,
     "template": {
