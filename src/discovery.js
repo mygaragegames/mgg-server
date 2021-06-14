@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const chalk = require('chalk');
 const { Sequelize } = require('sequelize');
 const { Game, User } = require('../sequelize');
+const moment = require('moment');
 
 function getNewestGames(page = 0) {
     return new Promise((resolve, reject) => {
@@ -26,7 +27,10 @@ function getHotThisWeekGames(page = 0) {
         Game.findAll({
             include: { model: User, as: "user" },
             where: {
-                displayStatus: 0
+                displayStatus: 0,
+                createdAt: {
+                    [Sequelize.Op.gte]: moment().subtract(7, 'days').toDate()
+                }
             },
             order: [
                 ['views', 'DESC']
