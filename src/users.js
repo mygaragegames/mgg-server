@@ -143,7 +143,7 @@ function updateUser( user, newData ) {
             return;
         }
 
-        if(!isSocialDiscordValid(newData.socialDiscord)) {
+        if(newData.socialDiscord != undefined && !isSocialDiscordValid(newData.socialDiscord)) {
             reject(415);
             return;
         }
