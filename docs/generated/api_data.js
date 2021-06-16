@@ -1723,6 +1723,20 @@ define({ "api": [
             "optional": false,
             "field": "youtubeID",
             "description": "<p>(Optional) Trailer YouTube-URL of the Game</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "themeFont",
+            "description": "<p>Font for the theme of the Game's page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "themeColor",
+            "description": "<p>Primary color for the theme of the Game's page</p>"
           }
         ]
       }
@@ -1778,6 +1792,27 @@ define({ "api": [
             "optional": false,
             "field": "displayStatus",
             "description": "<p>Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private</p>"
+          },
+          {
+            "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "themeFont",
+            "description": "<p>Font for the theme of the Game's page</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "themeColor",
+            "description": "<p>Primary color for the theme of the Game's page</p>"
+          },
+          {
+            "group": "200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "isInQueue",
+            "description": "<p>Was this game manually checked by a moderator?</p>"
           },
           {
             "group": "200",
@@ -2119,6 +2154,27 @@ define({ "api": [
           },
           {
             "group": "200",
+            "type": "Integer",
+            "optional": false,
+            "field": "game.themeFont",
+            "description": "<p>Font for the theme of the Game's page</p>"
+          },
+          {
+            "group": "200",
+            "type": "String",
+            "optional": false,
+            "field": "game.themeColor",
+            "description": "<p>Primary color for the theme of the Game's page</p>"
+          },
+          {
+            "group": "200",
+            "type": "Boolean",
+            "optional": false,
+            "field": "game.isInQueue",
+            "description": "<p>Was this game manually checked by a moderator?</p>"
+          },
+          {
+            "group": "200",
             "type": "DateTime",
             "optional": false,
             "field": "game.createAt",
@@ -2274,6 +2330,20 @@ define({ "api": [
             "optional": false,
             "field": "youtubeID",
             "description": "<p>(Optional) Trailer YouTube-URL of the Game</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "themeFont",
+            "description": "<p>Font for the theme of the Game's page</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "themeColor",
+            "description": "<p>Primary color for the theme of the Game's page</p>"
           }
         ]
       }
@@ -2441,7 +2511,7 @@ define({ "api": [
     "groupTitle": "Games"
   },
   {
-    "type": "post",
+    "type": "put",
     "url": "/ban/:userId",
     "title": "Bans a User",
     "name": "BanUser",
@@ -2535,7 +2605,163 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "routes/v1/moderation.js",
+    "filename": "routes/v1/modBan.js",
+    "groupTitle": "Moderation"
+  },
+  {
+    "type": "delete",
+    "url": "/queue/:gameId",
+    "title": "Deletes a game from the moderation queue",
+    "name": "DeleteFromModerationQueue",
+    "group": "Moderation",
+    "permission": [
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "gameId",
+            "description": "<p>The ID of the User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "optional": false,
+            "field": "GAME_UPDATED",
+            "description": "<p>Game was deleted from the moderation queue</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "GAME_NOT_FOUND",
+            "description": "<p>There is no game with the id <code>gameId</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/modQueue.js",
+    "groupTitle": "Moderation"
+  },
+  {
+    "type": "get",
+    "url": "/queue",
+    "title": "Get all games in the moderation queue",
+    "name": "GetModerationQueue",
+    "group": "Moderation",
+    "permission": [
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "200": [
+          {
+            "group": "200",
+            "type": "Object",
+            "optional": false,
+            "field": "game",
+            "description": "<p>Object of the Game</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/modQueue.js",
     "groupTitle": "Moderation"
   },
   {
@@ -2623,7 +2849,7 @@ define({ "api": [
       }
     },
     "version": "0.0.0",
-    "filename": "routes/v1/moderation.js",
+    "filename": "routes/v1/modBan.js",
     "groupTitle": "Moderation"
   },
   {
@@ -3734,6 +3960,12 @@ define({ "api": [
             "optional": false,
             "field": "USERNAME_INVALID",
             "description": "<p>Username is not valid!</p>"
+          },
+          {
+            "group": "406",
+            "optional": false,
+            "field": "USER_DISCORD_INVALID",
+            "description": "<p>Discord is not valid!</p>"
           }
         ],
         "409": [
