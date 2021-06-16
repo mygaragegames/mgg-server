@@ -3,16 +3,16 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { getOneUser } = require('../../src/users');
-const { banUser, unbanUser } = require('../../src/moderation');
+const { banUser, unbanUser } = require('../../src/modBan');
 
 let isDev = process.env.NODE_ENV !== 'prod';
 
-router.route('/ban/:userid')
+router.route('/:userid')
     .put(auth.verifyToken, putBanHandler)
     .delete(auth.verifyToken, deleteBanHandler);
 
 /**
- * @api {post} /ban/:userId Bans a User
+ * @api {put} /ban/:userId Bans a User
  * @apiName BanUser
  * @apiGroup Moderation
  * @apiPermission User
@@ -72,7 +72,7 @@ async function putBanHandler(req, res) {
  * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
  * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
  */
- async function deleteBanHandler(req, res) {
+async function deleteBanHandler(req, res) {
     if(isDev) console.log(chalk.grey("[mgg-server] (Moderation) Ban->Delete"));
 
     let user = await getOneUser({ id: parseInt(req.params.userid) }).catch(() => { return null; });

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseGameCover, parseUser } = require('../../src/parsers');
+const { parseGameData } = require('../../src/parsers');
 const { getNewestGames, getHotThisWeekGames, getRandomGames, getPopularGames, getQueryGames } = require('../../src/discovery');
 
 let isDev = process.env.NODE_ENV !== 'prod';
@@ -146,25 +146,6 @@ async function getPopularHandler(req, res) {
     gamesData = parseGameData(gamesData);
 
     res.status(200).json(gamesData);
-}
-
-function parseGameData(gamesData) {
-    // Dirty hack to make the data editable
-    gamesData = JSON.parse(JSON.stringify(gamesData));
-
-    let filteredGames = [];
-    gamesData.forEach((game) => {
-        game.coverFileName = parseGameCover(game.coverFileName);
-
-        // remove security related fields for return
-        game.user = parseUser(game.user);
-
-        filteredGames.push(game);
-    });
-    
-    gamesData = filteredGames;
-
-    return gamesData;
 }
 
 module.exports = router;

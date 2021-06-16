@@ -94,6 +94,25 @@ function parseUser(user) {
     return user;
 }
 
+function parseGameData(gamesData) {
+    // Dirty hack to make the data editable
+    gamesData = JSON.parse(JSON.stringify(gamesData));
+
+    let filteredGames = [];
+    gamesData.forEach((game) => {
+        game.coverFileName = parseGameCover(game.coverFileName);
+
+        // remove security related fields for return
+        game.user = parseUser(game.user);
+
+        filteredGames.push(game);
+    });
+    
+    gamesData = filteredGames;
+
+    return gamesData;
+}
+
 module.exports = {
     parseAvatar,
     parseGameScreenshot,
@@ -106,5 +125,6 @@ module.exports = {
     isSocialDiscordValid,
     isSocialYouTubeValid,
     getYoutubeID,
-    parseUser
+    parseUser,
+    parseGameData
 }
