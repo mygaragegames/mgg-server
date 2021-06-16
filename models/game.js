@@ -18,5 +18,11 @@ module.exports = (sequelize, type) => {
         youtubeID: type.STRING,
         displayStatus: type.INTEGER,
         views: type.INTEGER,
+        isInQueue: {
+            type: type.BOOLEAN,
+            defaultValue: true,
+        },
+        themeFont: type.INTEGER,
+        themeColor: type.STRING,
     });
 }
