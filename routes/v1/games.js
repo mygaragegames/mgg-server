@@ -40,6 +40,9 @@ router.route('/:gameid/cover')
  * @apiSuccess (200) {String} game.coverFileName URL of the cover
  * @apiSuccess (200) {String} game.youtubeID Trailer YouTube-ID of the Game
  * @apiSuccess (200) {Integer} game.displayStatus Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
+ * @apiSuccess (200) {Integer} game.themeFont Font for the theme of the Game's page
+ * @apiSuccess (200) {String} game.themeColor Primary color for the theme of the Game's page
+ * @apiSuccess (200) {Boolean} game.isInQueue Was this game manually checked by a moderator?
  * @apiSuccess (200) {DateTime} game.createAt DateTime of creation
  * @apiSuccess (200) {DateTime} game.updatedAt DateTime of last change
  * @apiSuccess (200) {Integer} game.userId ID of the User who created the Game
@@ -115,6 +118,8 @@ async function getOneHandler(req, res) {
  * @apiParam {String} ingameID Ingame-ID (Syntax: G-000-000-000)
  * @apiParam {Integer} displayStatus (Optional) Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
  * @apiParam {String} youtubeID (Optional) Trailer YouTube-URL of the Game
+ * @apiParam {Integer} themeFont Font for the theme of the Game's page
+ * @apiParam {String} themeColor Primary color for the theme of the Game's page
  * 
  * @apiSuccess (200) {Integer} id ID
  * @apiSuccess (200) {String} title Title
@@ -123,6 +128,9 @@ async function getOneHandler(req, res) {
  * @apiSuccess (200) {String} coverFileName URL of the cover
  * @apiSuccess (200) {String} youtubeID (Optional) Trailer YouTube-ID of the Game
  * @apiSuccess (200) {Integer} displayStatus Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
+ * @apiSuccess (200) {Integer} themeFont Font for the theme of the Game's page
+ * @apiSuccess (200) {String} themeColor Primary color for the theme of the Game's page
+ * @apiSuccess (200) {Boolean} isInQueue Was this game manually checked by a moderator?
  * @apiSuccess (200) {DateTime} createAt DateTime of creation
  * @apiSuccess (200) {DateTime} updatedAt DateTime of last change
  * @apiSuccess (200) {Integer} userId ID of the User who created the Game
@@ -154,6 +162,8 @@ async function postOneHandler(req, res) {
         description: req.body.description,
         displayStatus: filteredDisplayStatus,
         youtubeID: getYoutubeID(req.body.youtubeID),
+        themeFont: req.body.themeFont,
+        themeColor: req.body.themeColor,
         userId: req.user.id
     };
 
@@ -197,6 +207,8 @@ async function postOneHandler(req, res) {
  * @apiParam {String} ingameID (Optional) Ingame-ID (Syntax: G-000-000-000)
  * @apiParam {Integer} displayStatus (Optional) Visibility of the Game. 0 = Public, 1 = Hidden, 2 = Private
  * @apiParam {String} youtubeID (Optional) Trailer YouTube-URL of the Game
+ * @apiParam {Integer} themeFont Font for the theme of the Game's page
+ * @apiParam {String} themeColor Primary color for the theme of the Game's page
  * 
  * @apiSuccess (201) GAME_UPDATED Game was updated.
  * @apiError (400) GAME_GAMEID_WRONGFORMAT The ingame ID has the wrong format (G-000-000-000).
@@ -228,6 +240,9 @@ async function putOneHandler(req, res) {
         description: req.body.description,
         displayStatus: filteredDisplayStatus,
         youtubeID: getYoutubeID(req.body.youtubeID),
+        themeFont: req.body.themeFont,
+        themeColor: req.body.themeColor,
+        isInQueue: true
     };
 
     let game = await getOneGame({ id: parseInt(req.params.gameid) }).catch(() => { return null; });
