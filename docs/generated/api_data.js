@@ -2442,6 +2442,192 @@ define({ "api": [
   },
   {
     "type": "post",
+    "url": "/ban/:userId",
+    "title": "Bans a User",
+    "name": "BanUser",
+    "group": "Moderation",
+    "permission": [
+      {
+        "name": "User"
+      },
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The ID of the User</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "reason",
+            "description": "<p>Ban reason (displayed to user)</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "optional": false,
+            "field": "USER_UPDATED",
+            "description": "<p>User was banned.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "USER_NOT_FOUND",
+            "description": "<p>There is no user with the id <code>userId</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/moderation.js",
+    "groupTitle": "Moderation"
+  },
+  {
+    "type": "delete",
+    "url": "/ban/:userId",
+    "title": "Deletes the ban of a User",
+    "name": "UnbanUser",
+    "group": "Moderation",
+    "permission": [
+      {
+        "name": "Moderator"
+      },
+      {
+        "name": "Admin"
+      }
+    ],
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "x-access-token",
+            "description": "<p>JWT Token for authentication</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "userId",
+            "description": "<p>The ID of the User</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "201": [
+          {
+            "group": "201",
+            "optional": false,
+            "field": "USER_UPDATED",
+            "description": "<p>User was unbanned.</p>"
+          }
+        ]
+      }
+    },
+    "error": {
+      "fields": {
+        "403": [
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_BANNED",
+            "description": "<p>Your account was banned. (Reason included in body)</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_WRONG",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          },
+          {
+            "group": "403",
+            "optional": false,
+            "field": "AUTHENTICATION_NEEDED",
+            "description": "<p>You are not allowed to perform this action.</p>"
+          }
+        ],
+        "404": [
+          {
+            "group": "404",
+            "optional": false,
+            "field": "USER_NOT_FOUND",
+            "description": "<p>There is no user with the id <code>userId</code></p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "routes/v1/moderation.js",
+    "groupTitle": "Moderation"
+  },
+  {
+    "type": "post",
     "url": "/playlists/:playlistId/add/:gameId",
     "title": "Adds a Game to a Playlist",
     "name": "AddToPlaylist",
