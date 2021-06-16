@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseGameCover, parseAvatar } = require('../../src/parsers');
+const { parseGameCover, parseUser } = require('../../src/parsers');
 const { getGameChannels, getOneGameChannel, createGameChannel, updateGameChannel, deleteGameChannel } = require('../../src/gameChannel');
 
 let isDev = process.env.NODE_ENV !== 'prod';
@@ -72,12 +72,7 @@ async function getOneHandler(req, res) {
         game.coverFileName = parseGameCover(game.coverFileName);
 
         // remove security related fields for return
-        game.user.password = undefined;
-        game.user.email = undefined;
-        game.user.loginDiscord = undefined;
-        game.user.loginTwitter = undefined;
-        game.user.loginYouTube = undefined;
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+        game.user = parseUser(game.user);
     });
 
     res.status(200).json(gameChannelData);

@@ -10,5 +10,6 @@ router.use('/gameComments', require('./gameComments'));
 router.use('/gameChannels', require('./gameChannels'));
 router.use('/users', require('./users'));
 router.use('/playlists', require('./playlists'));
+router.use('/moderation', require('./moderation'));
 
 module.exports = router;

@@ -67,6 +67,17 @@ function getYoutubeID(url) {
     return (match && match[2].length == 11)? match[2] : undefined;
 }
 
+function parseUser(user) {
+    user.password = undefined;
+    user.email = undefined;
+    user.loginDiscord = undefined;
+    user.loginTwitter = undefined;
+    user.loginGoogle = undefined;
+    user.avatarFileName = parseAvatar(user.avatarFileName);
+
+    return user;
+}
+
 module.exports = {
     parseAvatar,
     parseGameScreenshot,
@@ -76,5 +87,6 @@ module.exports = {
     isEmailValid,
     isCreatorIDValid,
     isGameIDValid,
-    getYoutubeID
+    getYoutubeID,
+    parseUser
 }

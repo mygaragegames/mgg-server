@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameCover } = require('../../src/parsers');
+const { parseGameCover, parseUser } = require('../../src/parsers');
 const { getNewestGames, getHotThisWeekGames, getRandomGames, getPopularGames, getQueryGames } = require('../../src/discovery');
 
 let isDev = process.env.NODE_ENV !== 'prod';
@@ -157,13 +157,7 @@ function parseGameData(gamesData) {
         game.coverFileName = parseGameCover(game.coverFileName);
 
         // remove security related fields for return
-        game.user.password = undefined;
-        game.user.email = undefined;
-        game.user.loginDiscord = undefined;
-        game.user.loginTwitter = undefined;
-        game.user.loginYouTube = undefined;
-
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+        game.user = parseUser(game.user);
 
         filteredGames.push(game);
     });

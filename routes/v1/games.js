@@ -3,7 +3,7 @@ const multer = require('multer');
 const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameScreenshot, parseGameCover, getYoutubeID } = require('../../src/parsers');
+const { parseUser, parseGameScreenshot, parseGameCover, getYoutubeID } = require('../../src/parsers');
 const { getOneGame, createGame, deleteGame, updateGame, saveGameCover, deleteGameCover } = require('../../src/games');
 const { getOnePlaylist } = require('../../src/playlists');
 
@@ -89,22 +89,11 @@ async function getOneHandler(req, res) {
     gameData.coverFileName = parseGameCover(gameData.coverFileName);
 
     // remove security related fields for return
-    gameData.user.password = undefined;
-    gameData.user.email = undefined;
-    gameData.user.loginDiscord = undefined;
-    gameData.user.loginTwitter = undefined;
-    gameData.user.loginYouTube = undefined;
-
-    gameData.user.avatarFileName = parseAvatar(gameData.user.avatarFileName);
+    gameData.user = parseUser(gameData.user);
 
     gameData.comments.forEach((comment) => {
         // remove security related fields for return
-        comment.user.password = undefined;
-        comment.user.email = undefined;
-        comment.user.loginDiscord = undefined;
-        comment.user.loginTwitter = undefined;
-        comment.user.loginYouTube = undefined;
-        comment.user.avatarFileName = parseAvatar(comment.user.avatarFileName);
+        comment.user = parseUser(comment.user);
     });
 
     gameData.screenshots.forEach((gameScreenshot) => {

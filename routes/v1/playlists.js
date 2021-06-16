@@ -3,7 +3,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const auth = require('../../middlewares/auth');
 const { User, Game } = require('../../sequelize');
-const { parseAvatar, parseGameCover } = require('../../src/parsers');
+const { parseUser, parseGameCover } = require('../../src/parsers');
 const { getOnePlaylist, createPlaylist, updatePlaylist, deletePlaylist } = require('../../src/playlists');
 
 let isDev = process.env.NODE_ENV !== 'prod';
@@ -62,23 +62,13 @@ async function getOneHandler(req, res) {
         res.status(403).json({name: "PLAYLIST_PRIVATE", text: "You are not allowed to see this playlist."});
         return;
     }
-    
-    playlistDetail.user.password = undefined;
-    playlistDetail.user.email = undefined;
-    playlistDetail.user.loginDiscord = undefined;
-    playlistDetail.user.loginTwitter = undefined;
-    playlistDetail.user.loginYouTube = undefined;
-    playlistDetail.user.avatarFileName = parseAvatar(playlistDetail.user.avatarFileName);
+
+    playlistDetail.user = parseUser(playlistDetail.user);
 
     playlistDetail.games.forEach(game => {
         game.coverFileName = parseGameCover(game.coverFileName);
         
-        game.user.password = undefined;
-        game.user.email = undefined;
-        game.user.loginDiscord = undefined;
-        game.user.loginTwitter = undefined;
-        game.user.loginYouTube = undefined;
-        game.user.avatarFileName = parseAvatar(game.user.avatarFileName);
+        game.user = parseUser(game.user);
     });
 
     res.status(200).json(playlistDetail);

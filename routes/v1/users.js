@@ -4,7 +4,7 @@ const router = express.Router();
 const chalk = require('chalk');
 const path = require('path');
 const auth = require('../../middlewares/auth');
-const { parseAvatar, parseGameCover, isUsernameValid, isCreatorIDValid } = require('../../src/parsers');
+const { parseAvatar, parseGameCover, isUsernameValid, isCreatorIDValid, parseUser } = require('../../src/parsers');
 const { User } = require('../../sequelize');
 const { getAllUsers, getOneUser, createUser, updateUser, setAvatar, deleteAvatar } = require('../../src/users');
 
@@ -106,9 +106,7 @@ async function getOneHandler(req, res) {
     userData.roles = userRoles;
 
     // remove security related fields for return
-    userData.password = undefined;
-    userData.email = undefined;
-    userData.avatarFileName = parseAvatar(userData.avatarFileName);
+    userData = parseUser(userData);
 
     let filteredGames = [];
     userData.games.forEach((game) => {
@@ -166,9 +164,7 @@ async function postOneHandler(req, res) {
 
     createUser( data ).then((userData) => {
         // remove security related fields for return
-        userData.password = undefined;
-        userData.email = undefined;
-        userData.avatarFileName = parseAvatar(userData.avatarFileName);
+        userData = parseUser(userData);
 
         res.status(201).json(userData);
     }).catch((error) => {
