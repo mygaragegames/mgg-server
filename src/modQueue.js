@@ -13,7 +13,7 @@ function getQueueGames() {
                 isInQueue: true
             },
             order: [
-                ['views', 'DESC']
+                ['updatedAt', 'ASC']
             ]
         }).then((games) => {
             resolve(games);
