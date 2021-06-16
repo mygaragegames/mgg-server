@@ -60,6 +60,22 @@ function isGameIDValid(unfilteredGameID) {
     return gameIDRegex.test(unfilteredGameID);
 }
 
+function isSocialDiscordValid(unfilteredDiscord) {
+    let discordRegex = /^.{3,32}#[0-9]{4}$/g;
+
+    if(unfilteredDiscord === "") { return true; }
+
+    return discordRegex.test(unfilteredDiscord);
+}
+
+function isSocialYouTubeValid(unfilteredYouTube) {
+    let youtubeRegex = /^(?:https|http)\:\/\/(?:[\w]+\.)?youtube\.com\/(?:c\/|channel\/|user\/)?([\w-]{1,})$/g;
+
+    if(unfilteredYouTube === "") { return true; }
+
+    return youtubeRegex.test(unfilteredYouTube);
+}
+
 // Source: https://stackoverflow.com/posts/9102270/revisions
 function getYoutubeID(url) {
     var regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -87,6 +103,8 @@ module.exports = {
     isEmailValid,
     isCreatorIDValid,
     isGameIDValid,
+    isSocialDiscordValid,
+    isSocialYouTubeValid,
     getYoutubeID,
     parseUser
 }

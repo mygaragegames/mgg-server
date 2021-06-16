@@ -209,6 +209,7 @@ async function postOneHandler(req, res) {
  * @apiError (406) USER_INGAMEID_WRONGFORMAT The ingame ID has the wrong format (P-000-000-000).
  * @apiError (409) USERNAME_EMAIL_CONFLICT Username is already in use.
  * @apiError (406) USERNAME_INVALID Username is not valid!
+ * @apiError (406) USER_DISCORD_INVALID Discord is not valid!
  * @apiError (403) AUTHENTICATION_BANNED Your account was banned. (Reason included in body)
  * @apiError (403) AUTHENTICATION_WRONG You are not allowed to perform this action.
  * @apiError (403) AUTHENTICATION_NEEDED You are not allowed to perform this action.
@@ -254,6 +255,9 @@ async function putOneHandler(req, res) {
                 return;
             case 418:
                 res.status(406).json({name: "USERNAME_INVALID", text: "Username is not valid!"});
+                return;
+            case 415:
+                res.status(406).json({name: "USER_DISCORD_INVALID", text: "Discord is not valid!"});
                 return;
         }
     });

@@ -96,6 +96,11 @@ function createUser( data ) {
             return;
         }
 
+        if(!isSocialDiscordValid(data.socialDiscord)) {
+            reject(415);
+            return;
+        }
+
         if(data.ingameID != undefined && !isCreatorIDValid(data.ingameID)) {
             reject(400);
             return;
