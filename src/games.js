@@ -44,6 +44,8 @@ function getOneGame( searchOptions ) {
 
             gameData.update({
                 views: gameData.views + 1
+            }, {
+                silent: true
             }).then(() => {
                 resolve(gameData);
             }).catch((error) => {
