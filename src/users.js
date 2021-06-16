@@ -7,7 +7,7 @@ const uniqid = require('uniqid');
 const path = require("path");
 const { Sequelize } = require('sequelize');
 const { User, UserRole, Playlist, Game, GameComment } = require('../sequelize');
-const { isUsernameValid, isCreatorIDValid, isEmailValid } = require('./parsers');
+const { isUsernameValid, isCreatorIDValid, isEmailValid, isSocialDiscordValid } = require('./parsers');
 
 function getAllUsers() {
     return new Promise((resolve, reject) => {
@@ -96,11 +96,6 @@ function createUser( data ) {
             return;
         }
 
-        if(!isSocialDiscordValid(data.socialDiscord)) {
-            reject(415);
-            return;
-        }
-
         if(data.ingameID != undefined && !isCreatorIDValid(data.ingameID)) {
             reject(400);
             return;
@@ -145,6 +140,11 @@ function updateUser( user, newData ) {
 
         if(newData.ingameID != undefined && !isCreatorIDValid(newData.ingameID)) {
             reject(406);
+            return;
+        }
+
+        if(!isSocialDiscordValid(newData.socialDiscord)) {
+            reject(415);
             return;
         }
 
