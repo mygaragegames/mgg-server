@@ -53,7 +53,7 @@ function isCreatorIDValid(unfilteredCreatorID) {
 }
 
 function isGameIDValid(unfilteredGameID) {
-    let gameIDRegex = /^G-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}-[a-zA-Z0-9]{3}$/g;
+    let gameIDRegex = /^G-[0-9B-DF-HJ-NP-TV-Y]{3}-[0-9B-DF-HJ-NP-TV-Y]{3}-[0-9B-DF-HJ-NP-TV-Y]{3}$/g;
 
     if(unfilteredGameID === "") { return true; }
 
