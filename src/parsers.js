@@ -53,7 +53,7 @@ function isCreatorIDValid(unfilteredCreatorID) {
 }
 
 function isGameIDRegexValid(gameID) {
-    let gameIDRegex = /^G(-[0-9B-DF-HJ-NPRTV-Y]{3}){3}$/g;
+    const gameIDRegex = /^G(-[0-9B-DF-HJ-NPRTV-Y]{3}){3}$/g;
     return gameIDRegex.test(gameID);
 }
 
@@ -69,16 +69,16 @@ function toBytesInt32(num) {
 function isGameIDChecksumValid(gameID) {
     const charset = '0123456789BCDFGHJKLMNPRTVWXY';
     const magic = 0xDEAD9ED5;
-    const access_key = '97b08aad';
-    const key_bytes = [...access_key].map(value => value.charCodeAt(0));
+    const accessKey = '97b08aad';
+    const keyBytes = [...accessKey].map(value => value.charCodeAt(0));
     // get data id
     gameID = gameID.slice(1).replace(/-/g, '');
     const num = [...gameID].reduce(
-        (data_id, char) => data_id * 28 + charset.indexOf(char), 0
+        (dataID, char) => dataID * 28 + charset.indexOf(char), 0
     ) ^ magic;
     const dataID = toBytesInt32(num);
     // calculate checksum
-    const key = key_bytes.reduce((key, value) => {
+    const key = keyBytes.reduce((key, value) => {
         key ^= value;
         key = (key << 4) | (key >> 4);
         key &= 0xFF;
@@ -89,7 +89,7 @@ function isGameIDChecksumValid(gameID) {
 }
 
 function isGameIDValid(gameID) {
-    if(gameID === "") { return true; }
+    if (gameID === '') { return true; }
     return isGameIDRegexValid(gameID) && isGameIDChecksumValid(gameID);
 }
 
