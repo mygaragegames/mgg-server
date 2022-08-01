@@ -161,6 +161,9 @@ async function postOneHandler(req, res) {
         res.status(400).json({name: "MISSING_FIELDS", text: "Required fields: username, password, email"});
         return;
     }
+	
+	res.status(500).json({name: "REGISTRATION_DISABLED", text: "Registration is disabled for now."});
+	return;
 
     createUser( data ).then((userData) => {
         // remove security related fields for return
